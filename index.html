@@ -1107,16 +1107,34 @@
     }
 
     // Save brand kit
+    let _selectedWidget = null;
+
+    function selectWidget(widgetName) {
+      _selectedWidget = widgetName;
+      document.getElementById('active-widget-info').style.display = 'block';
+      document.getElementById('widget-name').textContent = widgetName.charAt(0).toUpperCase() + widgetName.slice(1);
+      
+      // Highlight selected widget
+      document.querySelectorAll('[onclick^="selectWidget"]').forEach(el => {
+        el.style.borderColor = 'var(--border)';
+        el.style.transform = 'scale(1)';
+      });
+      event.target.closest('[onclick^="selectWidget"]').style.borderColor = 'var(--purple)';
+      event.target.closest('[onclick^="selectWidget"]').style.transform = 'scale(1.02)';
+    }
+
     function saveBrandKit() {
+      if (!_selectedWidget) {
+        alert('Please select a widget template first');
+        return;
+      }
+
       const brandKit = {
+        widget: _selectedWidget,
         primary: document.getElementById('brand-primary').value,
         accent: document.getElementById('brand-accent').value,
         font: document.getElementById('brand-font').value,
-        fontSize: document.getElementById('brand-font-size').value,
-        shape: document.getElementById('brand-shape').value,
-        size: document.getElementById('brand-size').value,
-        style: document.getElementById('brand-style').value,
-        background: document.getElementById('brand-bg').value
+        fontSize: document.getElementById('brand-font-size').value
       };
 
       if (_currentUser) {
@@ -1125,7 +1143,7 @@
       }
 
       localStorage.setItem('blogger_brand_kit', JSON.stringify(brandKit));
-      alert('✓ Brand kit saved! Your recipes will use these settings everywhere.');
+      alert('✓ Brand kit saved! Your ' + _selectedWidget + ' widget will be used for all future recipes and cookbooks.');
     }
 
     // Initialize
