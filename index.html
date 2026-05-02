@@ -610,7 +610,10 @@
           </select>
         </div>
 
-        <button class="btn" onclick="saveBrandKit()" style="margin-top: 1.5rem;">✓ Save Brand Kit</button>
+        <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+          <button class="btn" onclick="previewBrandKit()" style="flex: 1; background: var(--gold); color: var(--ink);">👁 Preview Your Widget</button>
+          <button class="btn" onclick="saveBrandKit()" style="flex: 1;">✓ Save Brand Kit</button>
+        </div>
       </div>
 
       <h3 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 1rem;">Preview</h3>
@@ -1123,6 +1126,76 @@
       event.target.closest('[onclick^="selectWidget"]').style.transform = 'scale(1.02)';
     }
 
+    function previewBrandKit() {
+      if (!_selectedWidget) {
+        alert('Please select a widget template first');
+        return;
+      }
+
+      const primary = document.getElementById('brand-primary').value;
+      const accent = document.getElementById('brand-accent').value;
+      const font = document.getElementById('brand-font').value;
+
+      let preview = '';
+
+      if (_selectedWidget === 'elegant') {
+        preview = `
+          <div style="background: white; padding: 1.5rem;">
+            <div style="font-family: '${font}', serif; font-size: 1.4rem; font-weight: 700; color: ${primary}; margin-bottom: 0.5rem;">Creamy Tuscan Chicken</div>
+            <div style="font-size: 0.85rem; color: #7A5C3A; margin-bottom: 1rem;">Italian · 30 min · Easy</div>
+            <button style="background: ${primary}; color: white; border: none; border-radius: 6px; padding: 0.6rem 1.2rem; font-weight: 700; font-size: 0.85rem; cursor: pointer; width: 100%;">📖 Save to My Cookbook</button>
+          </div>
+        `;
+      } else if (_selectedWidget === 'rustic') {
+        preview = `
+          <div style="background: white; padding: 1.5rem; border-top: 3px solid ${primary};">
+            <div style="font-family: 'Georgia', serif; font-size: 1.4rem; font-weight: 700; color: ${primary}; margin-bottom: 0.5rem;">Creamy Tuscan Chicken</div>
+            <div style="font-size: 0.85rem; color: #7A5C3A; margin-bottom: 1rem;">Italian · 30 min · Easy</div>
+            <button style="background: ${primary}; color: white; border: none; border-radius: 0; padding: 0.6rem 1.2rem; font-weight: 700; font-size: 0.85rem; cursor: pointer; width: 100%;">📖 Save to My Cookbook</button>
+          </div>
+        `;
+      } else if (_selectedWidget === 'modern') {
+        preview = `
+          <div style="background: #1a1a1a; padding: 1.5rem; color: white;">
+            <div style="font-family: 'Lato', sans-serif; font-size: 1.4rem; font-weight: 700; color: ${accent}; margin-bottom: 0.5rem; text-transform: uppercase;">Creamy Tuscan Chicken</div>
+            <div style="font-size: 0.85rem; color: #ccc; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.1em;">Italian · 30 min · Easy</div>
+            <button style="background: ${accent}; color: #1a1a1a; border: none; border-radius: 2px; padding: 0.6rem 1.2rem; font-weight: 700; font-size: 0.85rem; cursor: pointer; width: 100%;">📖 Save to My Cookbook</button>
+          </div>
+        `;
+      } else if (_selectedWidget === 'minimalist') {
+        preview = `
+          <div style="background: white; padding: 1.5rem;">
+            <div style="font-family: 'Lato', sans-serif; font-size: 1.3rem; font-weight: 700; color: ${primary}; margin-bottom: 0.5rem;">Creamy Tuscan Chicken</div>
+            <div style="font-size: 0.8rem; color: #888; margin-bottom: 1rem;">Italian · 30 min · Easy</div>
+            <button style="background: ${primary}; color: white; border: none; border-radius: 4px; padding: 0.6rem 1.2rem; font-weight: 700; font-size: 0.85rem; cursor: pointer; width: 100%;">Save Recipe</button>
+          </div>
+        `;
+      } else if (_selectedWidget === 'colorful') {
+        preview = `
+          <div style="background: white; padding: 1.5rem;">
+            <div style="background: linear-gradient(135deg, ${primary}, ${accent}); height: 30px; border-radius: 8px; margin-bottom: 1rem;"></div>
+            <div style="font-family: '${font}', serif; font-size: 1.4rem; font-weight: 700; color: ${primary}; margin-bottom: 0.5rem;">Creamy Tuscan Chicken</div>
+            <div style="font-size: 0.85rem; color: #666; margin-bottom: 1rem;">Italian · 30 min · Easy</div>
+            <button style="background: linear-gradient(135deg, ${primary}, ${accent}); color: white; border: none; border-radius: 6px; padding: 0.6rem 1.2rem; font-weight: 700; font-size: 0.85rem; cursor: pointer; width: 100%;">📖 Save to My Cookbook</button>
+          </div>
+        `;
+      } else if (_selectedWidget === 'professional') {
+        preview = `
+          <div style="background: white;">
+            <div style="background: ${primary}; padding: 1rem; color: white; text-align: center; font-weight: 700;">Your Recipe</div>
+            <div style="padding: 1.5rem;">
+              <div style="font-family: 'Georgia', serif; font-size: 1.3rem; font-weight: 700; color: ${primary}; margin-bottom: 0.5rem;">Creamy Tuscan Chicken</div>
+              <div style="font-size: 0.85rem; color: #555; margin-bottom: 1rem;">Italian · 30 min · Easy</div>
+              <button style="background: ${primary}; color: white; border: none; border-radius: 0; padding: 0.6rem 1.2rem; font-weight: 700; font-size: 0.85rem; cursor: pointer; width: 100%;">📖 Save to My Cookbook</button>
+            </div>
+          </div>
+        `;
+      }
+
+      document.getElementById('preview-widget').innerHTML = preview;
+      document.getElementById('modal-preview').classList.add('active');
+    }
+
     function saveBrandKit() {
       if (!_selectedWidget) {
         alert('Please select a widget template first');
@@ -1164,5 +1237,20 @@
       }
     });
   </script>
+  <!-- Brand Kit Preview Modal -->
+  <div id="modal-preview" class="modal">
+    <div class="modal-content" style="max-width: 500px;">
+      <div class="modal-header">
+        <span>Your Widget Preview</span>
+        <button class="close-btn" onclick="closeModal('modal-preview')">✕</button>
+      </div>
+      <p style="color: var(--brown); margin-bottom: 1.5rem; text-align: center; font-style: italic;">This is how your recipes will look to readers</p>
+      <div id="preview-widget" style="border: 1px solid var(--border); border-radius: 10px; overflow: hidden; padding: 1.5rem;">
+        <!-- Preview will be rendered here -->
+      </div>
+      <button class="btn" onclick="closeModal('modal-preview')" style="width: 100%; margin-top: 1.5rem;">Close Preview</button>
+    </div>
+  </div>
+
 </body>
 </html>
