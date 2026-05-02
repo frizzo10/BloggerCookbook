@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blogger Dashboard — Blogger Cookbook</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --purple: #4A2C8A;
+      --purple-dark: #3A1F6E;
+      --gold: #D4A820;
+      --paper: #FDFAF6;
+      --ink: #1A0E05;
+      --ink2: #2C1A0A;
+      --brown: #7A5C3A;
+      --border: #D8C8B0;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Lato', sans-serif;
+      background: var(--paper);
+      color: var(--ink);
+      line-height: 1.6;
+    }
+
+    nav {
+      background: var(--purple);
+      color: white;
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 12px rgba(74, 44, 138, 0.4);
+    }
+
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #F5D060;
+    }
+
+    .nav-right {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .nav-btn {
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+      font-size: 0.9rem;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      transition: background 0.2s;
+    }
+
+    .nav-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .nav-btn.active {
+      background: var(--gold);
+      color: var(--ink);
+      font-weight: 700;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+
+    .page {
+      display: none;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      color: var(--ink2);
+      margin-bottom: 0.5rem;
+    }
+
+    .page-desc {
+      color: var(--brown);
+      font-size: 0.95rem;
+      margin-bottom: 2rem;
+      font-style: italic;
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.5rem;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(74, 44, 138, 0.08);
+    }
+
+    .stat-value {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--purple);
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+      font-size: 0.8rem;
+      color: var(--brown);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 700;
+    }
+
+    /* Buttons */
+    .btn {
+      background: var(--purple);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 0.75rem 1.5rem;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s;
+      font-family: inherit;
+    }
+
+    .btn:hover {
+      background: var(--purple-dark);
+    }
+
+    .btn-outline {
+      background: white;
+      color: var(--purple);
+      border: 1.5px solid var(--purple);
+    }
+
+    .btn-outline:hover {
+      background: var(--paper);
+    }
+
+    /* Recipe Card */
+    .recipe-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      box-shadow: 0 2px 8px rgba(74, 44, 138, 0.08);
+      transition: all 0.2s;
+    }
+
+    .recipe-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(74, 44, 138, 0.12);
+    }
+
+    .recipe-info h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      color: var(--ink2);
+      margin-bottom: 0.3rem;
+    }
+
+    .recipe-meta {
+      font-size: 0.85rem;
+      color: var(--brown);
+      margin-bottom: 0.5rem;
+    }
+
+    .recipe-stats {
+      display: flex;
+      gap: 1.5rem;
+      margin-top: 0.75rem;
+      font-size: 0.9rem;
+    }
+
+    .recipe-stat {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+
+    .recipe-stat-value {
+      font-weight: 700;
+      color: var(--purple);
+      font-size: 1.1rem;
+    }
+
+    .recipe-stat-label {
+      font-size: 0.75rem;
+      color: var(--brown);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    /* Form */
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    label {
+      display: block;
+      font-weight: 700;
+      color: var(--ink2);
+      margin-bottom: 0.4rem;
+      font-size: 0.9rem;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 0.95rem;
+      color: var(--ink);
+    }
+
+    input:focus, textarea:focus, select:focus {
+      outline: none;
+      border-color: var(--purple);
+      box-shadow: 0 0 0 3px rgba(74, 44, 138, 0.1);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 12px;
+      padding: 2rem;
+      max-width: 600px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    .modal-header {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--ink2);
+      margin-bottom: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--brown);
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    @media (max-width: 768px) {
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+
+      nav {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .recipe-card {
+        flex-direction: column;
+      }
+
+      .recipe-stats {
+        margin-top: 1rem;
+      }
+
+      h2 {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="logo">✦ Blogger Dashboard</div>
+    <div class="nav-right">
+      <button class="nav-btn active" onclick="showPage('dashboard')">Dashboard</button>
+      <button class="nav-btn" onclick="showPage('recipes')">My Recipes</button>
+      <button class="nav-btn" onclick="showPage('cookbooks')">Cookbooks</button>
+      <button class="nav-btn" onclick="showPage('earnings')">Earnings</button>
+      <button class="nav-btn" onclick="signOut()">Sign out</button>
+    </div>
+  </nav>
+
+  <div class="container">
+    <!-- Dashboard Page -->
+    <div id="page-dashboard" class="page active">
+      <h2>✦ Your Dashboard</h2>
+      <p class="page-desc">Welcome back! Here's how your recipes are performing.</p>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-value" id="stat-saves">—</div>
+          <div class="stat-label">Recipe Saves</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-cooks">—</div>
+          <div class="stat-label">Times Cooked</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-clicks">—</div>
+          <div class="stat-label">Blog Clicks</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-revenue">—</div>
+          <div class="stat-label">Revenue (30 days)</div>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2rem;">
+        <button class="btn" onclick="showPage('recipes'); document.querySelector('[onclick*=\"showPage\"]').classList.remove('active'); document.querySelectorAll('.nav-btn')[1].classList.add('active')">
+          📄 Share a Recipe
+        </button>
+        <button class="btn btn-outline" onclick="showPage('cookbooks'); document.querySelector('[onclick*=\"showPage\"]').classList.remove('active'); document.querySelectorAll('.nav-btn')[2].classList.add('active')">
+          📚 Build a Cookbook
+        </button>
+      </div>
+
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 1rem;">Top Recipes (Last 30 Days)</h3>
+      <div id="top-recipes-list">
+        <p style="color: var(--brown); font-style: italic; text-align: center; padding: 2rem 0;">No recipes shared yet. Get started!</p>
+      </div>
+    </div>
+
+    <!-- My Recipes Page -->
+    <div id="page-recipes" class="page">
+      <h2>📄 My Recipes</h2>
+      <p class="page-desc">Share recipes from your blog and track their performance.</p>
+
+      <button class="btn" onclick="openShareRecipeModal()" style="margin-bottom: 1.5rem;">+ Share a Recipe</button>
+
+      <div id="recipes-list">
+        <p style="color: var(--brown); font-style: italic; text-align: center; padding: 2rem 0;">No recipes shared yet.</p>
+      </div>
+    </div>
+
+    <!-- Cookbooks Page -->
+    <div id="page-cookbooks" class="page">
+      <h2>📚 Cookbooks</h2>
+      <p class="page-desc">Create and publish branded cookbooks your readers keep forever.</p>
+
+      <button class="btn" onclick="openNewCookbookModal()" style="margin-bottom: 1.5rem;">+ Create Cookbook</button>
+
+      <div id="cookbooks-list">
+        <p style="color: var(--brown); font-style: italic; text-align: center; padding: 2rem 0;">No cookbooks yet. Create your first one!</p>
+      </div>
+    </div>
+
+    <!-- Earnings Page -->
+    <div id="page-earnings" class="page">
+      <h2>💰 Earnings</h2>
+      <p class="page-desc">Track your revenue from the 30% revenue share program.</p>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-value" id="earn-total">—</div>
+          <div class="stat-label">Total Earned</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="earn-month">—</div>
+          <div class="stat-label">This Month</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="earn-pending">—</div>
+          <div class="stat-label">Pending Payout</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="earn-subs">—</div>
+          <div class="stat-label">Active Subscribers</div>
+        </div>
+      </div>
+
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 1rem;">How It Works</h3>
+      <div style="background: var(--paper); border: 1px solid var(--border); border-radius: 10px; padding: 1.5rem;">
+        <p style="margin-bottom: 1rem;">You earn <strong>$0.90/month</strong> for every Pro subscriber who came from your recipe saves. Payments are made via Stripe Connect on the 15th of each month.</p>
+        <p style="margin-bottom: 1rem;">✓ <strong>Lifetime attribution</strong> — you keep earning as long as they stay subscribed</p>
+        <p>✓ <strong>No content quota</strong> — share 1 recipe or 100, same 30% rate</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Share Recipe Modal -->
+  <div id="modal-share-recipe" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span>Share a Recipe</span>
+        <button class="close-btn" onclick="closeModal('modal-share-recipe')">✕</button>
+      </div>
+      <div class="form-group">
+        <label>Recipe URL or Name</label>
+        <input type="text" id="recipe-url" placeholder="https://yourblog.com/recipe or Recipe Name">
+      </div>
+      <div class="form-group">
+        <label>Recipe Title</label>
+        <input type="text" id="recipe-title" placeholder="e.g., Creamy Tuscan Garlic Chicken">
+      </div>
+      <div class="form-group">
+        <label>Cuisine</label>
+        <input type="text" id="recipe-cuisine" placeholder="e.g., Italian, Thai, Mexican">
+      </div>
+      <div class="form-group">
+        <label>Cooking Time</label>
+        <input type="text" id="recipe-time" placeholder="e.g., 30 min">
+      </div>
+      <div class="form-group">
+        <label>Difficulty</label>
+        <select id="recipe-difficulty">
+          <option value="">Select difficulty…</option>
+          <option value="Easy">Easy</option>
+          <option value="Medium">Medium</option>
+          <option value="Hard">Hard</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Description</label>
+        <textarea id="recipe-desc" placeholder="Brief description of your recipe…"></textarea>
+      </div>
+      <div style="display: flex; gap: 0.75rem;">
+        <button class="btn" onclick="saveRecipe()">Share Recipe</button>
+        <button class="btn btn-outline" onclick="closeModal('modal-share-recipe')">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- New Cookbook Modal -->
+  <div id="modal-new-cookbook" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span>Create a Cookbook</span>
+        <button class="close-btn" onclick="closeModal('modal-new-cookbook')">✕</button>
+      </div>
+      <div class="form-group">
+        <label>Cookbook Title</label>
+        <input type="text" id="cookbook-title" placeholder="e.g., Weeknight Dinners, Dessert Classics">
+      </div>
+      <div class="form-group">
+        <label>Description</label>
+        <textarea id="cookbook-desc" placeholder="What is this cookbook about?"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Primary Color</label>
+        <input type="color" id="cookbook-color" value="#4A2C8A">
+      </div>
+      <div style="display: flex; gap: 0.75rem;">
+        <button class="btn" onclick="saveCookbook()">Create Cookbook</button>
+        <button class="btn btn-outline" onclick="closeModal('modal-new-cookbook')">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let _currentUser = null;
+    let _recipes = [];
+    let _cookbooks = [];
+
+    // Load user from localStorage
+    function loadUser() {
+      const stored = localStorage.getItem('blogger_user');
+      if (stored) {
+        _currentUser = JSON.parse(stored);
+      }
+    }
+
+    // Save user to localStorage
+    function saveUser() {
+      if (_currentUser) {
+        localStorage.setItem('blogger_user', JSON.stringify(_currentUser));
+      }
+    }
+
+    // Load recipes from localStorage
+    function loadRecipes() {
+      const stored = localStorage.getItem('blogger_recipes') || '[]';
+      _recipes = JSON.parse(stored);
+    }
+
+    // Save recipes to localStorage
+    function saveRecipes() {
+      localStorage.setItem('blogger_recipes', JSON.stringify(_recipes));
+    }
+
+    // Load cookbooks from localStorage
+    function loadCookbooks() {
+      const stored = localStorage.getItem('blogger_cookbooks') || '[]';
+      _cookbooks = JSON.parse(stored);
+    }
+
+    // Save cookbooks to localStorage
+    function saveCookbooks() {
+      localStorage.setItem('blogger_cookbooks', JSON.stringify(_cookbooks));
+    }
+
+    // Page navigation
+    function showPage(pageName) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.getElementById('page-' + pageName).classList.add('active');
+
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+      event.target.classList.add('active');
+
+      if (pageName === 'dashboard') loadDashboard();
+      if (pageName === 'recipes') loadRecipesList();
+      if (pageName === 'cookbooks') loadCookbooksList();
+      if (pageName === 'earnings') loadEarnings();
+    }
+
+    // Load dashboard stats
+    function loadDashboard() {
+      const totalSaves = _recipes.reduce((sum, r) => sum + (r.saves || 0), 0);
+      const totalCooks = _recipes.reduce((sum, r) => sum + (r.cooks || 0), 0);
+      const totalClicks = _recipes.reduce((sum, r) => sum + (r.clicks || 0), 0);
+      const revenue = (totalSaves * 0.003).toFixed(2); // $0.003 per save avg
+
+      document.getElementById('stat-saves').textContent = totalSaves.toLocaleString();
+      document.getElementById('stat-cooks').textContent = totalCooks.toLocaleString();
+      document.getElementById('stat-clicks').textContent = totalClicks.toLocaleString();
+      document.getElementById('stat-revenue').textContent = '$' + revenue;
+
+      // Top recipes
+      const topRecipes = [..._recipes].sort((a, b) => (b.saves || 0) - (a.saves || 0)).slice(0, 3);
+      const html = topRecipes.length ? topRecipes.map(r => `
+        <div class="recipe-card">
+          <div class="recipe-info">
+            <h3>${r.title || 'Recipe'}</h3>
+            <div class="recipe-meta">${r.cuisine || 'Uncategorized'} · ${r.time || '?'} · ${r.difficulty || '?'}</div>
+            <div class="recipe-stats">
+              <div class="recipe-stat">
+                <div class="recipe-stat-value">${r.saves || 0}</div>
+                <div class="recipe-stat-label">Saves</div>
+              </div>
+              <div class="recipe-stat">
+                <div class="recipe-stat-value">${r.cooks || 0}</div>
+                <div class="recipe-stat-label">Cooks</div>
+              </div>
+              <div class="recipe-stat">
+                <div class="recipe-stat-value">${r.clicks || 0}</div>
+                <div class="recipe-stat-label">Clicks</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `).join('') : '<p style="color: var(--brown); font-style: italic; text-align: center; padding: 2rem 0;">No recipes shared yet.</p>';
+
+      document.getElementById('top-recipes-list').innerHTML = html;
+    }
+
+    // Load recipes list
+    function loadRecipesList() {
+      const html = _recipes.length ? _recipes.map((r, i) => `
+        <div class="recipe-card">
+          <div class="recipe-info">
+            <h3>${r.title || 'Recipe'}</h3>
+            <div class="recipe-meta">${r.cuisine || 'Uncategorized'} · ${r.time || '?'} · ${r.difficulty || '?'}</div>
+            <div class="recipe-stats">
+              <div class="recipe-stat">
+                <div class="recipe-stat-value">${r.saves || 0}</div>
+                <div class="recipe-stat-label">Saves</div>
+              </div>
+              <div class="recipe-stat">
+                <div class="recipe-stat-value">${r.cooks || 0}</div>
+                <div class="recipe-stat-label">Cooks</div>
+              </div>
+              <div class="recipe-stat">
+                <div class="recipe-stat-value">${r.clicks || 0}</div>
+                <div class="recipe-stat-label">Clicks</div>
+              </div>
+            </div>
+          </div>
+          <button class="btn btn-outline" onclick="deleteRecipe(${i})">Delete</button>
+        </div>
+      `).join('') : '<p style="color: var(--brown); font-style: italic; text-align: center; padding: 2rem 0;">No recipes yet.</p>';
+
+      document.getElementById('recipes-list').innerHTML = html;
+    }
+
+    // Load cookbooks list
+    function loadCookbooksList() {
+      const html = _cookbooks.length ? _cookbooks.map((c, i) => `
+        <div class="recipe-card">
+          <div class="recipe-info">
+            <h3>${c.title || 'Cookbook'}</h3>
+            <div class="recipe-meta">${c.desc || 'No description'}</div>
+          </div>
+          <button class="btn btn-outline" onclick="deleteCookbook(${i})">Delete</button>
+        </div>
+      `).join('') : '<p style="color: var(--brown); font-style: italic; text-align: center; padding: 2rem 0;">No cookbooks yet.</p>';
+
+      document.getElementById('cookbooks-list').innerHTML = html;
+    }
+
+    // Load earnings
+    function loadEarnings() {
+      const totalSaves = _recipes.reduce((sum, r) => sum + (r.saves || 0), 0);
+      const revenue = totalSaves * 0.003; // $0.003 per save
+      const monthlyRevenue = (totalSaves * 0.003 * 0.33).toFixed(2); // Estimate monthly
+      const activeSubs = Math.floor(totalSaves * 0.5); // Assume 50% conversion
+
+      document.getElementById('earn-total').textContent = '$' + revenue.toFixed(2);
+      document.getElementById('earn-month').textContent = '$' + monthlyRevenue;
+      document.getElementById('earn-pending').textContent = '$' + (monthlyRevenue * 0.1).toFixed(2);
+      document.getElementById('earn-subs').textContent = activeSubs;
+    }
+
+    // Modal functions
+    function openShareRecipeModal() {
+      document.getElementById('modal-share-recipe').classList.add('active');
+    }
+
+    function openNewCookbookModal() {
+      document.getElementById('modal-new-cookbook').classList.add('active');
+    }
+
+    function closeModal(modalId) {
+      document.getElementById(modalId).classList.remove('active');
+    }
+
+    // Save recipe
+    function saveRecipe() {
+      const recipe = {
+        id: Date.now(),
+        title: document.getElementById('recipe-title').value,
+        url: document.getElementById('recipe-url').value,
+        cuisine: document.getElementById('recipe-cuisine').value,
+        time: document.getElementById('recipe-time').value,
+        difficulty: document.getElementById('recipe-difficulty').value,
+        desc: document.getElementById('recipe-desc').value,
+        saves: Math.floor(Math.random() * 100),
+        cooks: Math.floor(Math.random() * 50),
+        clicks: Math.floor(Math.random() * 30),
+        createdAt: new Date()
+      };
+
+      _recipes.push(recipe);
+      saveRecipes();
+      closeModal('modal-share-recipe');
+      document.getElementById('recipe-title').value = '';
+      document.getElementById('recipe-url').value = '';
+      document.getElementById('recipe-cuisine').value = '';
+      document.getElementById('recipe-time').value = '';
+      document.getElementById('recipe-difficulty').value = '';
+      document.getElementById('recipe-desc').value = '';
+      loadRecipesList();
+      alert('✓ Recipe shared! Check your dashboard to see stats.');
+    }
+
+    // Delete recipe
+    function deleteRecipe(i) {
+      if (confirm('Delete this recipe?')) {
+        _recipes.splice(i, 1);
+        saveRecipes();
+        loadRecipesList();
+      }
+    }
+
+    // Save cookbook
+    function saveCookbook() {
+      const cookbook = {
+        id: Date.now(),
+        title: document.getElementById('cookbook-title').value,
+        desc: document.getElementById('cookbook-desc').value,
+        color: document.getElementById('cookbook-color').value,
+        recipes: [],
+        createdAt: new Date()
+      };
+
+      _cookbooks.push(cookbook);
+      saveCookbooks();
+      closeModal('modal-new-cookbook');
+      document.getElementById('cookbook-title').value = '';
+      document.getElementById('cookbook-desc').value = '';
+      loadCookbooksList();
+      alert('✓ Cookbook created! You can now add recipes to it.');
+    }
+
+    // Delete cookbook
+    function deleteCookbook(i) {
+      if (confirm('Delete this cookbook?')) {
+        _cookbooks.splice(i, 1);
+        saveCookbooks();
+        loadCookbooksList();
+      }
+    }
+
+    // Sign out
+    function signOut() {
+      if (confirm('Sign out?')) {
+        _currentUser = null;
+        localStorage.removeItem('blogger_user');
+        alert('Signed out. Redirecting to marketing site...');
+        window.location.href = 'https://bloggercookbook.com';
+      }
+    }
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', function() {
+      loadUser();
+      loadRecipes();
+      loadCookbooks();
+      
+      if (!_currentUser) {
+        const name = prompt('Welcome! What\'s your name?');
+        if (name) {
+          _currentUser = { id: Date.now(), name: name, email: name + '@blogger.local' };
+          saveUser();
+        } else {
+          window.location.href = 'https://bloggercookbook.com';
+        }
+      }
+
+      loadDashboard();
+    });
+
+    // Close modal on escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        document.querySelectorAll('.modal.active').forEach(m => m.classList.remove('active'));
+      }
+    });
+  </script>
+</body>
+</html>

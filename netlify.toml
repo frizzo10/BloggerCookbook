@@ -1,0 +1,7 @@
+[build]
+  command = "echo 'Static site'"
+  publish = "."
+
+[dev]
+  publish = "."
+  command = "python -m http.server 8000"
