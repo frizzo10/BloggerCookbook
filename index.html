@@ -520,7 +520,7 @@
       <h2>🎨 Brand Studio</h2>
       <p class="page-desc">Customize how your recipes look across all platforms.</p>
 
-      <div style="background: white; border: 1px solid var(--border); border-radius: 10px; padding: 2rem;">
+      <div style="background: white; border: 1px solid var(--border); border-radius: 10px; padding: 2rem; margin-bottom: 2rem;">
         <h3 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 1.5rem;">Your Brand Kit</h3>
         
         <div class="form-group">
@@ -541,14 +541,125 @@
 
         <div class="form-group">
           <label>Font Style</label>
-          <select id="brand-font" style="padding: 0.75rem; border: 1px solid var(--border); border-radius: 6px; font-size: 0.95rem;">
+          <select id="brand-font" style="padding: 0.75rem; border: 1px solid var(--border); border-radius: 6px; font-size: 0.95rem; width: 100%;">
             <option value="Playfair Display">Playfair Display (Serif)</option>
             <option value="Georgia">Georgia (Serif)</option>
+            <option value="Cormorant Garamond">Cormorant Garamond (Serif)</option>
             <option value="Lato">Lato (Sans)</option>
+            <option value="Roboto">Roboto (Sans)</option>
+            <option value="Courier New">Courier New (Mono)</option>
+            <option value="Comic Sans MS">Comic Sans MS (Fun)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Font Size</label>
+          <select id="brand-font-size" style="padding: 0.75rem; border: 1px solid var(--border); border-radius: 6px; font-size: 0.95rem; width: 100%;">
+            <option value="small">Small</option>
+            <option value="medium" selected>Medium</option>
+            <option value="large">Large</option>
+            <option value="xl">Extra Large</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Card Shape</label>
+          <select id="brand-shape" style="padding: 0.75rem; border: 1px solid var(--border); border-radius: 6px; font-size: 0.95rem; width: 100%;">
+            <option value="sharp">Sharp Corners</option>
+            <option value="soft" selected>Soft Corners</option>
+            <option value="round">Very Round</option>
+            <option value="pill">Pill-shaped</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Card Style</label>
+          <select id="brand-style" style="padding: 0.75rem; border: 1px solid var(--border); border-radius: 6px; font-size: 0.95rem; width: 100%;">
+            <option value="flat">Flat (No shadow)</option>
+            <option value="shadow" selected>Shadow</option>
+            <option value="border">Border Only</option>
+            <option value="gradient">Gradient</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Background Color</label>
+          <select id="brand-bg" style="padding: 0.75rem; border: 1px solid var(--border); border-radius: 6px; font-size: 0.95rem; width: 100%;">
+            <option value="dark">Dark</option>
+            <option value="parchment">Parchment</option>
+            <option value="white" selected>White</option>
+            <option value="brand">Brand Color</option>
           </select>
         </div>
 
         <button class="btn" onclick="saveBrandKit()" style="margin-top: 1.5rem;">✓ Save Brand Kit</button>
+      </div>
+
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 1rem;">Preview</h3>
+      <div style="background: white; border: 1px solid var(--border); border-radius: 10px; padding: 2rem;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
+          <!-- Elegant Style Preview -->
+          <div style="border: 1px solid var(--border); border-radius: 10px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,.1);">
+            <div style="background: white; padding: 1.5rem;">
+              <div style="font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 700; color: #4A2C8A; margin-bottom: 0.5rem;">Tuscan Chicken</div>
+              <div style="font-size: 0.85rem; color: var(--brown); margin-bottom: 1rem;">Italian · 30 min · Easy</div>
+              <div style="display: flex; gap: 1rem; font-size: 0.9rem;">
+                <div style="text-align: center;">
+                  <div style="font-weight: 700; color: #4A2C8A; font-size: 1.2rem;">342</div>
+                  <div style="font-size: 0.75rem; color: var(--brown); text-transform: uppercase; letter-spacing: 0.06em;">Saves</div>
+                </div>
+                <div style="text-align: center;">
+                  <div style="font-weight: 700; color: #4A2C8A; font-size: 1.2rem;">89</div>
+                  <div style="font-size: 0.75rem; color: var(--brown); text-transform: uppercase; letter-spacing: 0.06em;">Clicks</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Rustic Style Preview -->
+          <div style="border: 3px solid #8B7355; border-radius: 0; overflow: hidden; background: #F5E6D3;">
+            <div style="background: white; padding: 1.5rem;">
+              <div style="font-family: 'Georgia', serif; font-size: 1.4rem; font-weight: 700; color: #8B4513; margin-bottom: 0.5rem;">Tuscan Chicken</div>
+              <div style="font-size: 0.85rem; color: #8B7355; margin-bottom: 1rem;">Italian · 30 min · Easy</div>
+              <div style="display: flex; gap: 1rem; font-size: 0.9rem;">
+                <div style="text-align: center;">
+                  <div style="font-weight: 700; color: #8B4513; font-size: 1.2rem;">342</div>
+                  <div style="font-size: 0.75rem; color: #8B7355; text-transform: uppercase; letter-spacing: 0.06em;">Saves</div>
+                </div>
+                <div style="text-align: center;">
+                  <div style="font-weight: 700; color: #8B4513; font-size: 1.2rem;">89</div>
+                  <div style="font-size: 0.75rem; color: #8B7355; text-transform: uppercase; letter-spacing: 0.06em;">Clicks</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Modern Style Preview -->
+          <div style="border: 1px solid #333; border-radius: 2px; overflow: hidden; background: #000;">
+            <div style="background: #1a1a1a; padding: 1.5rem; color: white;">
+              <div style="font-family: 'Lato', sans-serif; font-size: 1.4rem; font-weight: 700; color: #FFD700; margin-bottom: 0.5rem;">TUSCAN CHICKEN</div>
+              <div style="font-size: 0.85rem; color: #ccc; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.1em;">Italian · 30 min · Easy</div>
+              <div style="display: flex; gap: 1rem; font-size: 0.9rem;">
+                <div style="text-align: center;">
+                  <div style="font-weight: 700; color: #FFD700; font-size: 1.2rem;">342</div>
+                  <div style="font-size: 0.75rem; color: #999; text-transform: uppercase; letter-spacing: 0.06em;">Saves</div>
+                </div>
+                <div style="text-align: center;">
+                  <div style="font-weight: 700; color: #FFD700; font-size: 1.2rem;">89</div>
+                  <div style="font-size: 0.75rem; color: #999; text-transform: uppercase; letter-spacing: 0.06em;">Clicks</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <h4 style="font-family: 'Playfair Display', serif; font-size: 1.1rem; margin-top: 2rem; margin-bottom: 1rem;">How readers see your recipes</h4>
+        <p style="color: var(--brown); font-size: 0.9rem; margin-bottom: 1rem;">Your brand kit applies to every recipe you share. When readers open a saved recipe from your blog, they see your colors, fonts, and style — keeping them connected to your brand.</p>
+        <div style="background: var(--paper); border: 1px solid var(--border); border-radius: 10px; padding: 1rem;">
+          <p style="font-size: 0.85rem; color: var(--brown);"><strong>✓ Same brand on all platforms</strong> — TikTok, Instagram, Pinterest links all use your kit</p>
+          <p style="font-size: 0.85rem; color: var(--brown); margin-top: 0.5rem;"><strong>✓ Recognizable</strong> — Readers instantly know it's your recipe</p>
+          <p style="font-size: 0.85rem; color: var(--brown); margin-top: 0.5rem;"><strong>✓ Updates live</strong> — Change your kit anytime, all shared recipes update automatically</p>
+        </div>
       </div>
     </div>
   </div>
