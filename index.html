@@ -1114,16 +1114,10 @@
 
     function selectWidget(widgetName) {
       _selectedWidget = widgetName;
-      document.getElementById('active-widget-info').style.display = 'block';
-      document.getElementById('widget-name').textContent = widgetName.charAt(0).toUpperCase() + widgetName.slice(1);
-      
-      // Highlight selected widget
-      document.querySelectorAll('[onclick^="selectWidget"]').forEach(el => {
-        el.style.borderColor = 'var(--border)';
-        el.style.transform = 'scale(1)';
-      });
-      event.target.closest('[onclick^="selectWidget"]').style.borderColor = 'var(--purple)';
-      event.target.closest('[onclick^="selectWidget"]').style.transform = 'scale(1.02)';
+      if (document.getElementById('active-widget-info')) {
+        document.getElementById('active-widget-info').style.display = 'block';
+        document.getElementById('widget-name').textContent = widgetName.charAt(0).toUpperCase() + widgetName.slice(1);
+      }
     }
 
     function previewBrandKit() {
