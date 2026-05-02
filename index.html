@@ -573,6 +573,16 @@
         </div>
 
         <div class="form-group">
+          <label>Card Size</label>
+          <select id="brand-size" style="padding: 0.75rem; border: 1px solid var(--border); border-radius: 6px; font-size: 0.95rem; width: 100%;">
+            <option value="compact">Compact (Small widget)</option>
+            <option value="regular" selected>Regular (Standard size)</option>
+            <option value="large">Large (Big widget)</option>
+            <option value="xl">Extra Large (Full card)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
           <label>Card Style</label>
           <select id="brand-style" style="padding: 0.75rem; border: 1px solid var(--border); border-radius: 6px; font-size: 0.95rem; width: 100%;">
             <option value="flat">Flat (No shadow)</option>
@@ -1093,7 +1103,12 @@
       const brandKit = {
         primary: document.getElementById('brand-primary').value,
         accent: document.getElementById('brand-accent').value,
-        font: document.getElementById('brand-font').value
+        font: document.getElementById('brand-font').value,
+        fontSize: document.getElementById('brand-font-size').value,
+        shape: document.getElementById('brand-shape').value,
+        size: document.getElementById('brand-size').value,
+        style: document.getElementById('brand-style').value,
+        background: document.getElementById('brand-bg').value
       };
 
       if (_currentUser) {
@@ -1101,7 +1116,8 @@
         saveUser();
       }
 
-      alert('✓ Brand kit saved!');
+      localStorage.setItem('blogger_brand_kit', JSON.stringify(brandKit));
+      alert('✓ Brand kit saved! Your recipes will use these settings everywhere.');
     }
 
     // Initialize
