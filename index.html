@@ -17,6 +17,8 @@
       --ink2: #2C1A0A;
       --brown: #7A5C3A;
       --border: #D8C8B0;
+      --green: #2A7A2A;
+      --green-light: rgba(40, 125, 50, 0.12);
     }
 
     * {
@@ -104,6 +106,33 @@
       font-style: italic;
     }
 
+    /* Status Badge */
+    .status-badge {
+      display: inline-block;
+      padding: 0.4rem 0.9rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+
+    .status-free {
+      background: rgba(74, 44, 138, 0.12);
+      color: var(--purple);
+    }
+
+    .status-pending {
+      background: rgba(255, 193, 7, 0.2);
+      color: #F57C00;
+    }
+
+    .status-approved {
+      background: var(--green-light);
+      color: var(--green);
+    }
+
     /* Stats Grid */
     .stats-grid {
       display: grid;
@@ -163,6 +192,15 @@
 
     .btn-outline:hover {
       background: var(--paper);
+    }
+
+    .btn-gold {
+      background: var(--gold);
+      color: var(--ink);
+    }
+
+    .btn-gold:hover {
+      background: #B8860F;
     }
 
     /* Recipe Card */
@@ -301,17 +339,25 @@
       color: var(--brown);
     }
 
-    .grid-2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
+    /* Locked Feature */
+    .locked-feature {
+      background: rgba(0, 0, 0, 0.02);
+      border: 2px dashed var(--border);
+      border-radius: 10px;
+      padding: 2rem;
+      text-align: center;
+      color: var(--brown);
+      opacity: 0.6;
+    }
+
+    .locked-feature h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      color: var(--brown);
+      margin-bottom: 0.5rem;
     }
 
     @media (max-width: 768px) {
-      .grid-2 {
-        grid-template-columns: 1fr;
-      }
-
       nav {
         flex-direction: column;
         gap: 1rem;
@@ -332,23 +378,71 @@
   </style>
 </head>
 <body>
-  <nav>
-    <div class="logo">✦ Blogger Dashboard</div>
+  <nav id="nav-auth" style="display: none;">
+    <div class="logo">✦ Blogger Cookbook</div>
     <div class="nav-right">
-      <button class="nav-btn active" onclick="showPage('dashboard')">Dashboard</button>
-      <button class="nav-btn" onclick="showPage('recipes')">My Recipes</button>
-      <button class="nav-btn" onclick="showPage('cookbooks')">Cookbooks</button>
-      <button class="nav-btn" onclick="showPage('earnings')">Earnings</button>
-      <button class="nav-btn" onclick="showPage('brand')">Brand Studio</button>
+      <span id="user-greeting" style="color: #F5D060; font-weight: 700;"></span>
       <button class="nav-btn" onclick="signOut()">Sign out</button>
     </div>
   </nav>
 
+  <nav id="nav-guest">
+    <div class="logo">✦ Blogger Cookbook</div>
+    <div class="nav-right">
+      <button class="nav-btn" onclick="showSignUp()">Sign up</button>
+      <button class="nav-btn" onclick="showSignIn()">Sign in</button>
+    </div>
+  </nav>
+
   <div class="container">
+    <!-- Sign In Page -->
+    <div id="page-signin" class="page active">
+      <div style="max-width: 400px; margin: 3rem auto;">
+        <h2 style="text-align: center; margin-bottom: 0.5rem;">Welcome back</h2>
+        <p class="page-desc" style="text-align: center;">Sign in to your creator account</p>
+
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="signin-email" placeholder="your@email.com">
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="signin-password" placeholder="••••••••">
+        </div>
+        <button class="btn" onclick="handleSignIn()" style="width: 100%; margin-bottom: 1rem;">Sign in</button>
+        <button class="btn btn-outline" onclick="showSignUp()" style="width: 100%;">Create account instead</button>
+      </div>
+    </div>
+
+    <!-- Sign Up Page -->
+    <div id="page-signup" class="page">
+      <div style="max-width: 400px; margin: 3rem auto;">
+        <h2 style="text-align: center; margin-bottom: 0.5rem;">Create your account</h2>
+        <p class="page-desc" style="text-align: center;">Free tier. Earn 30% when approved.</p>
+
+        <div class="form-group">
+          <label>Name</label>
+          <input type="text" id="signup-name" placeholder="Your name">
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="signup-email" placeholder="your@email.com">
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="signup-password" placeholder="••••••••">
+        </div>
+        <button class="btn" onclick="handleSignUp()" style="width: 100%; margin-bottom: 1rem;">Create account</button>
+        <button class="btn btn-outline" onclick="showSignIn()" style="width: 100%;">Already have an account?</button>
+      </div>
+    </div>
+
     <!-- Dashboard Page -->
-    <div id="page-dashboard" class="page active">
+    <div id="page-dashboard" class="page">
       <h2>✦ Your Dashboard</h2>
-      <p class="page-desc">Welcome back! Here's how your recipes are performing.</p>
+      <p class="page-desc">Welcome! Start sharing recipes and earning.</p>
+
+      <div id="status-badge-container"></div>
 
       <div class="stats-grid">
         <div class="stat-card">
@@ -365,15 +459,15 @@
         </div>
         <div class="stat-card">
           <div class="stat-value" id="stat-revenue">—</div>
-          <div class="stat-label">Revenue (30 days)</div>
+          <div class="stat-label">Revenue (if approved)</div>
         </div>
       </div>
 
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2rem;">
-        <button class="btn" onclick="showPage('recipes'); document.querySelector('[onclick*=\"showPage\"]').classList.remove('active'); document.querySelectorAll('.nav-btn')[1].classList.add('active')">
+        <button class="btn" onclick="showPage('recipes'); updateNav('recipes')">
           📄 Share a Recipe
         </button>
-        <button class="btn btn-outline" onclick="showPage('cookbooks'); document.querySelector('[onclick*=\"showPage\"]').classList.remove('active'); document.querySelectorAll('.nav-btn')[2].classList.add('active')">
+        <button class="btn btn-outline" onclick="showPage('cookbooks'); updateNav('cookbooks')">
           📚 Build a Cookbook
         </button>
       </div>
@@ -384,7 +478,7 @@
       </div>
     </div>
 
-    <!-- My Recipes Page -->
+    <!-- Recipes Page -->
     <div id="page-recipes" class="page">
       <h2>📄 My Recipes</h2>
       <p class="page-desc">Share recipes from your blog and track their performance.</p>
@@ -408,36 +502,12 @@
       </div>
     </div>
 
-    <!-- Earnings Page -->
-    <div id="page-earnings" class="page">
-      <h2>💰 Earnings</h2>
-      <p class="page-desc">Track your revenue from the 30% revenue share program.</p>
+    <!-- Revenue Partner Page -->
+    <div id="page-revenue" class="page">
+      <h2>💰 Revenue Partner Program</h2>
+      <p class="page-desc">Earn 30% lifetime commission on Pro subscribers from your recipes.</p>
 
-      <div class="stats-grid">
-        <div class="stat-card">
-          <div class="stat-value" id="earn-total">—</div>
-          <div class="stat-label">Total Earned</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-value" id="earn-month">—</div>
-          <div class="stat-label">This Month</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-value" id="earn-pending">—</div>
-          <div class="stat-label">Pending Payout</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-value" id="earn-subs">—</div>
-          <div class="stat-label">Active Subscribers</div>
-        </div>
-      </div>
-
-      <h3 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 1rem;">How It Works</h3>
-      <div style="background: var(--paper); border: 1px solid var(--border); border-radius: 10px; padding: 1.5rem;">
-        <p style="margin-bottom: 1rem;">You earn <strong>$0.90/month</strong> for every Pro subscriber who came from your recipe saves. Payments are made via Stripe Connect on the 15th of each month.</p>
-        <p style="margin-bottom: 1rem;">✓ <strong>Lifetime attribution</strong> — you keep earning as long as they stay subscribed</p>
-        <p>✓ <strong>No content quota</strong> — share 1 recipe or 100, same 30% rate</p>
-      </div>
+      <div id="revenue-container"></div>
     </div>
 
     <!-- Brand Studio Page -->
@@ -469,72 +539,11 @@
           <select id="brand-font" style="padding: 0.75rem; border: 1px solid var(--border); border-radius: 6px; font-size: 0.95rem;">
             <option value="Playfair Display">Playfair Display (Serif)</option>
             <option value="Georgia">Georgia (Serif)</option>
-            <option value="Cormorant Garamond">Cormorant Garamond (Serif)</option>
             <option value="Lato">Lato (Sans)</option>
-            <option value="Roboto">Roboto (Sans)</option>
-            <option value="Courier New">Courier New (Mono)</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label>Font Size</label>
-          <select id="brand-font-size" style="padding: 0.75rem; border: 1px solid var(--border); border-radius: 6px; font-size: 0.95rem;">
-            <option value="small">Small</option>
-            <option value="medium" selected>Medium</option>
-            <option value="large">Large</option>
-            <option value="xl">Extra Large</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label>Card Shape</label>
-          <select id="brand-shape" style="padding: 0.75rem; border: 1px solid var(--border); border-radius: 6px; font-size: 0.95rem;">
-            <option value="sharp">Sharp Corners</option>
-            <option value="soft" selected>Soft Corners</option>
-            <option value="round">Very Round</option>
-            <option value="pill">Pill-shaped</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label>Card Style</label>
-          <select id="brand-style" style="padding: 0.75rem; border: 1px solid var(--border); border-radius: 6px; font-size: 0.95rem;">
-            <option value="flat">Flat (No shadow)</option>
-            <option value="shadow" selected>Shadow</option>
-            <option value="border">Border Only</option>
-            <option value="gradient">Gradient</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label>Background</label>
-          <select id="brand-bg" style="padding: 0.75rem; border: 1px solid var(--border); border-radius: 6px; font-size: 0.95rem;">
-            <option value="dark">Dark</option>
-            <option value="parchment">Parchment</option>
-            <option value="white" selected>White</option>
-            <option value="brand">Brand Color</option>
           </select>
         </div>
 
         <button class="btn" onclick="saveBrandKit()" style="margin-top: 1.5rem;">✓ Save Brand Kit</button>
-      </div>
-
-      <h3 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 1rem; margin-top: 2rem;">Preview</h3>
-      <div style="background: white; border: 1px solid var(--border); border-radius: 10px; padding: 1.5rem; margin-bottom: 2rem;">
-        <div id="brand-preview" style="background: var(--paper); border: 1px solid var(--border); border-radius: 10px; padding: 1.5rem; text-align: center;">
-          <div style="font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 700; color: #4A2C8A; margin-bottom: 1rem;">Your Recipe Title</div>
-          <div style="font-size: 0.9rem; color: var(--brown); margin-bottom: 0.75rem;">Italian · 30 min · Easy</div>
-          <div style="display: flex; gap: 1rem; justify-content: center;">
-            <div style="text-align: center;">
-              <div style="font-weight: 700; color: #4A2C8A; font-size: 1.2rem;">342</div>
-              <div style="font-size: 0.75rem; color: var(--brown);">SAVES</div>
-            </div>
-            <div style="text-align: center;">
-              <div style="font-weight: 700; color: #4A2C8A; font-size: 1.2rem;">89</div>
-              <div style="font-size: 0.75rem; color: var(--brown);">BLOG CLICKS</div>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   </div>
@@ -547,16 +556,12 @@
         <button class="close-btn" onclick="closeModal('modal-share-recipe')">✕</button>
       </div>
       <div class="form-group">
-        <label>Recipe URL or Name</label>
-        <input type="text" id="recipe-url" placeholder="https://yourblog.com/recipe or Recipe Name">
-      </div>
-      <div class="form-group">
         <label>Recipe Title</label>
         <input type="text" id="recipe-title" placeholder="e.g., Creamy Tuscan Garlic Chicken">
       </div>
       <div class="form-group">
         <label>Cuisine</label>
-        <input type="text" id="recipe-cuisine" placeholder="e.g., Italian, Thai, Mexican">
+        <input type="text" id="recipe-cuisine" placeholder="e.g., Italian, Thai">
       </div>
       <div class="form-group">
         <label>Cooking Time</label>
@@ -570,10 +575,6 @@
           <option value="Medium">Medium</option>
           <option value="Hard">Hard</option>
         </select>
-      </div>
-      <div class="form-group">
-        <label>Description</label>
-        <textarea id="recipe-desc" placeholder="Brief description of your recipe…"></textarea>
       </div>
       <div style="display: flex; gap: 0.75rem;">
         <button class="btn" onclick="saveRecipe()">Share Recipe</button>
@@ -591,15 +592,11 @@
       </div>
       <div class="form-group">
         <label>Cookbook Title</label>
-        <input type="text" id="cookbook-title" placeholder="e.g., Weeknight Dinners, Dessert Classics">
+        <input type="text" id="cookbook-title" placeholder="e.g., Weeknight Dinners">
       </div>
       <div class="form-group">
         <label>Description</label>
         <textarea id="cookbook-desc" placeholder="What is this cookbook about?"></textarea>
-      </div>
-      <div class="form-group">
-        <label>Primary Color</label>
-        <input type="color" id="cookbook-color" value="#4A2C8A">
       </div>
       <div style="display: flex; gap: 0.75rem;">
         <button class="btn" onclick="saveCookbook()">Create Cookbook</button>
@@ -612,12 +609,14 @@
     let _currentUser = null;
     let _recipes = [];
     let _cookbooks = [];
+    let _userStatus = 'free'; // 'free' | 'pending' | 'approved'
 
     // Load user from localStorage
     function loadUser() {
       const stored = localStorage.getItem('blogger_user');
       if (stored) {
         _currentUser = JSON.parse(stored);
+        _userStatus = _currentUser.status || 'free';
       }
     }
 
@@ -650,31 +649,119 @@
       localStorage.setItem('blogger_cookbooks', JSON.stringify(_cookbooks));
     }
 
-    // Page navigation
+    // Show/hide pages
     function showPage(pageName) {
       document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
       document.getElementById('page-' + pageName).classList.add('active');
 
-      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-      event.target.classList.add('active');
-
       if (pageName === 'dashboard') loadDashboard();
       if (pageName === 'recipes') loadRecipesList();
       if (pageName === 'cookbooks') loadCookbooksList();
-      if (pageName === 'earnings') loadEarnings();
+      if (pageName === 'revenue') loadRevenuePartner();
     }
 
-    // Load dashboard stats
+    function updateNav(pageName) {
+      // Update active nav button
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    }
+
+    // Sign up
+    function handleSignUp() {
+      const name = document.getElementById('signup-name').value;
+      const email = document.getElementById('signup-email').value;
+      const password = document.getElementById('signup-password').value;
+
+      if (!name || !email || !password) {
+        alert('Please fill in all fields');
+        return;
+      }
+
+      _currentUser = {
+        id: Date.now(),
+        name: name,
+        email: email,
+        status: 'free',
+        createdAt: new Date()
+      };
+
+      _userStatus = 'free';
+      saveUser();
+      showDashboard();
+    }
+
+    // Sign in
+    function handleSignIn() {
+      const email = document.getElementById('signin-email').value;
+      const password = document.getElementById('signin-password').value;
+
+      if (!email || !password) {
+        alert('Please fill in all fields');
+        return;
+      }
+
+      // For demo, just load any saved user
+      loadUser();
+      if (!_currentUser || _currentUser.email !== email) {
+        alert('Email or password incorrect');
+        return;
+      }
+
+      showDashboard();
+    }
+
+    // Show dashboard after auth
+    function showDashboard() {
+      document.getElementById('nav-guest').style.display = 'none';
+      document.getElementById('nav-auth').style.display = 'flex';
+      document.getElementById('user-greeting').textContent = '👋 ' + (_currentUser.name || 'Creator');
+      
+      showPage('dashboard');
+      loadDashboard();
+    }
+
+    // Sign out
+    function signOut() {
+      if (confirm('Sign out?')) {
+        _currentUser = null;
+        localStorage.removeItem('blogger_user');
+        document.getElementById('nav-guest').style.display = 'flex';
+        document.getElementById('nav-auth').style.display = 'none';
+        showPage('signin');
+      }
+    }
+
+    // Show sign in
+    function showSignIn() {
+      showPage('signin');
+    }
+
+    // Show sign up
+    function showSignUp() {
+      showPage('signup');
+    }
+
+    // Load dashboard
     function loadDashboard() {
       const totalSaves = _recipes.reduce((sum, r) => sum + (r.saves || 0), 0);
       const totalCooks = _recipes.reduce((sum, r) => sum + (r.cooks || 0), 0);
       const totalClicks = _recipes.reduce((sum, r) => sum + (r.clicks || 0), 0);
-      const revenue = (totalSaves * 0.003).toFixed(2); // $0.003 per save avg
+      const revenue = (_userStatus === 'approved') ? (totalSaves * 0.003).toFixed(2) : '—';
 
       document.getElementById('stat-saves').textContent = totalSaves.toLocaleString();
       document.getElementById('stat-cooks').textContent = totalCooks.toLocaleString();
       document.getElementById('stat-clicks').textContent = totalClicks.toLocaleString();
-      document.getElementById('stat-revenue').textContent = '$' + revenue;
+      document.getElementById('stat-revenue').textContent = _userStatus === 'approved' ? '$' + revenue : '—';
+
+      // Status badge
+      let badge = '';
+      if (_userStatus === 'free') {
+        badge = '<div class="status-badge status-free">✦ Free Creator</div>';
+      } else if (_userStatus === 'pending') {
+        badge = '<div class="status-badge status-pending">⏳ Pending Approval</div>';
+      } else if (_userStatus === 'approved') {
+        badge = '<div class="status-badge status-approved">✓ Revenue Partner</div>';
+      }
+      document.getElementById('status-badge-container').innerHTML = badge;
 
       // Top recipes
       const topRecipes = [..._recipes].sort((a, b) => (b.saves || 0) - (a.saves || 0)).slice(0, 3);
@@ -748,17 +835,62 @@
       document.getElementById('cookbooks-list').innerHTML = html;
     }
 
-    // Load earnings
-    function loadEarnings() {
-      const totalSaves = _recipes.reduce((sum, r) => sum + (r.saves || 0), 0);
-      const revenue = totalSaves * 0.003; // $0.003 per save
-      const monthlyRevenue = (totalSaves * 0.003 * 0.33).toFixed(2); // Estimate monthly
-      const activeSubs = Math.floor(totalSaves * 0.5); // Assume 50% conversion
+    // Load revenue partner section
+    function loadRevenuePartner() {
+      let html = '';
+      
+      if (_userStatus === 'approved') {
+        const totalSaves = _recipes.reduce((sum, r) => sum + (r.saves || 0), 0);
+        const revenue = (totalSaves * 0.003 * 0.33).toFixed(2);
+        const activeSubs = Math.floor(totalSaves * 0.5);
 
-      document.getElementById('earn-total').textContent = '$' + revenue.toFixed(2);
-      document.getElementById('earn-month').textContent = '$' + monthlyRevenue;
-      document.getElementById('earn-pending').textContent = '$' + (monthlyRevenue * 0.1).toFixed(2);
-      document.getElementById('earn-subs').textContent = activeSubs;
+        html = `
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-value">$${revenue}</div>
+              <div class="stat-label">This Month (est.)</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value">${activeSubs}</div>
+              <div class="stat-label">Active Subscribers</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value">$0.90</div>
+              <div class="stat-label">Per Subscriber/mo</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value">∞</div>
+              <div class="stat-label">Lifetime Commission</div>
+            </div>
+          </div>
+
+          <h3 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 1rem;">How You Earn</h3>
+          <div style="background: var(--paper); border: 1px solid var(--border); border-radius: 10px; padding: 1.5rem;">
+            <p style="margin-bottom: 1rem;">You earn <strong>$0.90/month</strong> for every Pro subscriber who came from your recipe saves.</p>
+            <p style="margin-bottom: 1rem;">✓ <strong>Lifetime attribution</strong> — keep earning as long as they stay subscribed</p>
+            <p>✓ <strong>Paid monthly</strong> — via Stripe Connect on the 15th</p>
+          </div>
+        `;
+      } else if (_userStatus === 'pending') {
+        html = `
+          <div style="background: rgba(255, 193, 7, 0.1); border: 2px solid rgba(255, 193, 7, 0.3); border-radius: 10px; padding: 2rem; text-align: center;">
+            <div style="font-size: 2rem; margin-bottom: 0.5rem;">⏳</div>
+            <h3 style="font-family: 'Playfair Display', serif; color: var(--ink2); margin-bottom: 0.5rem;">Your application is under review</h3>
+            <p style="color: var(--brown); margin-bottom: 1rem;">We typically respond within 48 hours. Keep sharing recipes in the meantime!</p>
+          </div>
+        `;
+      } else {
+        html = `
+          <div class="locked-feature">
+            <h3>🔒 Revenue Partner Program</h3>
+            <p style="margin-bottom: 1.5rem;">Get approved to earn 30% lifetime commission on Pro subscribers from your recipes.</p>
+            <p style="font-size: 0.9rem; margin-bottom: 1.5rem;">Requirements: 50K+ monthly readers or 25K+ social following</p>
+            <button class="btn btn-gold" onclick="window.location.href='https://bloggercookbook.com#apply'">Apply Now →</button>
+          </div>
+        `;
+      }
+
+      document.getElementById('revenue-container').innerHTML = html;
     }
 
     // Modal functions
@@ -779,11 +911,9 @@
       const recipe = {
         id: Date.now(),
         title: document.getElementById('recipe-title').value,
-        url: document.getElementById('recipe-url').value,
         cuisine: document.getElementById('recipe-cuisine').value,
         time: document.getElementById('recipe-time').value,
         difficulty: document.getElementById('recipe-difficulty').value,
-        desc: document.getElementById('recipe-desc').value,
         saves: Math.floor(Math.random() * 100),
         cooks: Math.floor(Math.random() * 50),
         clicks: Math.floor(Math.random() * 30),
@@ -794,13 +924,11 @@
       saveRecipes();
       closeModal('modal-share-recipe');
       document.getElementById('recipe-title').value = '';
-      document.getElementById('recipe-url').value = '';
       document.getElementById('recipe-cuisine').value = '';
       document.getElementById('recipe-time').value = '';
       document.getElementById('recipe-difficulty').value = '';
-      document.getElementById('recipe-desc').value = '';
       loadRecipesList();
-      alert('✓ Recipe shared! Check your dashboard to see stats.');
+      alert('✓ Recipe shared!');
     }
 
     // Delete recipe
@@ -818,7 +946,6 @@
         id: Date.now(),
         title: document.getElementById('cookbook-title').value,
         desc: document.getElementById('cookbook-desc').value,
-        color: document.getElementById('cookbook-color').value,
         recipes: [],
         createdAt: new Date()
       };
@@ -829,7 +956,7 @@
       document.getElementById('cookbook-title').value = '';
       document.getElementById('cookbook-desc').value = '';
       loadCookbooksList();
-      alert('✓ Cookbook created! You can now add recipes to it.');
+      alert('✓ Cookbook created!');
     }
 
     // Delete cookbook
@@ -841,53 +968,12 @@
       }
     }
 
-    // Sign out
-    function signOut() {
-      if (confirm('Sign out?')) {
-        _currentUser = null;
-        localStorage.removeItem('blogger_user');
-        alert('Signed out. Redirecting to marketing site...');
-        window.location.href = 'https://bloggercookbook.com';
-      }
-    }
-
-    // Initialize
-    document.addEventListener('DOMContentLoaded', function() {
-      loadUser();
-      loadRecipes();
-      loadCookbooks();
-      loadBrandKit();
-      
-      if (!_currentUser) {
-        const name = prompt('Welcome! What\'s your name?');
-        if (name) {
-          _currentUser = { id: Date.now(), name: name, email: name + '@blogger.local' };
-          saveUser();
-        } else {
-          window.location.href = 'https://bloggercookbook.com';
-        }
-      }
-
-      loadDashboard();
-    });
-
-    // Close modal on escape key
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') {
-        document.querySelectorAll('.modal.active').forEach(m => m.classList.remove('active'));
-      }
-    });
-
-    // Brand Kit functions
+    // Save brand kit
     function saveBrandKit() {
       const brandKit = {
         primary: document.getElementById('brand-primary').value,
         accent: document.getElementById('brand-accent').value,
-        font: document.getElementById('brand-font').value,
-        fontSize: document.getElementById('brand-font-size').value,
-        shape: document.getElementById('brand-shape').value,
-        style: document.getElementById('brand-style').value,
-        background: document.getElementById('brand-bg').value
+        font: document.getElementById('brand-font').value
       };
 
       if (_currentUser) {
@@ -895,35 +981,24 @@
         saveUser();
       }
 
-      localStorage.setItem('blogger_brand_kit', JSON.stringify(brandKit));
-      alert('✓ Brand kit saved! Your recipes will use these settings.');
+      alert('✓ Brand kit saved!');
     }
 
-    function loadBrandKit() {
-      const stored = localStorage.getItem('blogger_brand_kit');
-      if (stored) {
-        const kit = JSON.parse(stored);
-        if (kit.primary) document.getElementById('brand-primary').value = kit.primary;
-        if (kit.accent) document.getElementById('brand-accent').value = kit.accent;
-        if (kit.font) document.getElementById('brand-font').value = kit.font;
-        if (kit.fontSize) document.getElementById('brand-font-size').value = kit.fontSize;
-        if (kit.shape) document.getElementById('brand-shape').value = kit.shape;
-        if (kit.style) document.getElementById('brand-style').value = kit.style;
-        if (kit.background) document.getElementById('brand-bg').value = kit.background;
-      }
+    // Initialize
+    loadUser();
+    loadRecipes();
+    loadCookbooks();
+
+    if (_currentUser) {
+      showDashboard();
+    } else {
+      showPage('signin');
     }
 
-    // Update brand preview when color changes
-    document.addEventListener('DOMContentLoaded', function() {
-      if (document.getElementById('brand-primary')) {
-        document.getElementById('brand-primary').addEventListener('change', function() {
-          document.getElementById('brand-primary-text').value = this.value;
-          const preview = document.getElementById('brand-preview');
-          if (preview) preview.style.color = this.value;
-        });
-        document.getElementById('brand-accent').addEventListener('change', function() {
-          document.getElementById('brand-accent-text').value = this.value;
-        });
+    // Close modals on escape
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        document.querySelectorAll('.modal.active').forEach(m => m.classList.remove('active'));
       }
     });
   </script>
