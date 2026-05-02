@@ -575,7 +575,31 @@
 
       <!-- Customization -->
       <div style="background: white; border: 1px solid var(--border); border-radius: 10px; padding: 2rem;">
-        <h3 style="font-family: 'Playfair Display', serif; font-size: 1.2rem; margin-bottom: 1.5rem;">Customize Your Colors</h3>
+        <h3 style="font-family: 'Playfair Display', serif; font-size: 1.2rem; margin-bottom: 1.5rem;">Customize Your Widget</h3>
+        
+        <h4 style="font-family: 'Playfair Display', serif; font-size: 1rem; margin-bottom: 1rem; color: var(--ink2);">Size & Shape</h4>
+
+        <div class="form-group">
+          <label>Widget Size</label>
+          <select id="brand-size" style="padding: 0.75rem; border: 1px solid var(--border); border-radius: 6px; font-size: 0.95rem; width: 100%;">
+            <option value="compact">Compact (Small)</option>
+            <option value="regular" selected>Regular (Standard)</option>
+            <option value="large">Large (Big)</option>
+            <option value="xl">Extra Large (Full)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Widget Shape</label>
+          <select id="brand-shape" style="padding: 0.75rem; border: 1px solid var(--border); border-radius: 6px; font-size: 0.95rem; width: 100%;">
+            <option value="sharp">Sharp Corners</option>
+            <option value="soft" selected>Soft Corners</option>
+            <option value="round">Very Round</option>
+            <option value="pill">Pill-shaped</option>
+          </select>
+        </div>
+
+        <h4 style="font-family: 'Playfair Display', serif; font-size: 1rem; margin-bottom: 1rem; color: var(--ink2); margin-top: 1.5rem;">Colors</h4>
         
         <div class="form-group">
           <label>Primary Color</label>
@@ -601,7 +625,7 @@
           </div>
         </div>
 
-        <h3 style="font-family: 'Playfair Display', serif; font-size: 1.2rem; margin-bottom: 1.5rem; margin-top: 2rem;">Typography</h3>
+        <h4 style="font-family: 'Playfair Display', serif; font-size: 1rem; margin-bottom: 1rem; color: var(--ink2); margin-top: 1.5rem;">Typography</h4>
 
         <div class="form-group">
           <label>Font</label>
@@ -615,8 +639,13 @@
 
         <div style="display: flex; gap: 1rem; margin-top: 2rem;">
           <button class="btn" onclick="previewBrandKit()" style="flex: 1; background: var(--gold); color: var(--ink);">👁 Preview</button>
-          <button class="btn" onclick="saveBrandKit()" style="flex: 1;">✓ Save</button>
+          <button class="btn" onclick="saveBrandKit()" style="flex: 1;">✓ Save Brand Kit</button>
         </div>
+      </div>
+
+      <div style="background: var(--paper); border: 1px solid var(--border); border-radius: 10px; padding: 1.5rem; margin-top: 2rem;">
+        <h4 style="font-family: 'Playfair Display', serif; margin-bottom: 0.75rem;">✓ Applied everywhere</h4>
+        <p style="font-size: 0.9rem; color: var(--brown);">When readers save from your TikTok, Instagram, or blog — they see YOUR widget with YOUR colors, shape, and style. Change anytime and all recipes update instantly.</p>
       </div>
     </div>
   </div>
