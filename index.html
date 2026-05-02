@@ -381,7 +381,12 @@
   <nav id="nav-auth" style="display: none;">
     <div class="logo">✦ Blogger Cookbook</div>
     <div class="nav-right">
-      <span id="user-greeting" style="color: #F5D060; font-weight: 700;"></span>
+      <button class="nav-btn" onclick="showPage('dashboard'); updateNav('dashboard')">Dashboard</button>
+      <button class="nav-btn" onclick="showPage('recipes'); updateNav('recipes')">My Recipes</button>
+      <button class="nav-btn" onclick="showPage('cookbooks'); updateNav('cookbooks')">Cookbooks</button>
+      <button class="nav-btn" onclick="showPage('revenue'); updateNav('revenue')">Revenue</button>
+      <button class="nav-btn" onclick="showPage('brand'); updateNav('brand')">Brand Studio</button>
+      <span id="user-greeting" style="color: #F5D060; font-weight: 700; margin-right: 1rem;"></span>
       <button class="nav-btn" onclick="signOut()">Sign out</button>
     </div>
   </nav>
@@ -662,7 +667,11 @@
 
     function updateNav(pageName) {
       // Update active nav button
-      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('#nav-auth .nav-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('#nav-auth .nav-btn').forEach((b, i) => {
+        const pages = ['dashboard', 'recipes', 'cookbooks', 'revenue', 'brand'];
+        if (pages[i] === pageName) b.classList.add('active');
+      });
     }
 
     // Sign up
