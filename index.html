@@ -400,8 +400,57 @@
   </nav>
 
   <div class="container">
+    <!-- Welcome Page -->
+    <div id="page-welcome" class="page active">
+      <div style="max-width: 600px; margin: 0 auto; padding: 4rem 1rem; text-align: center;">
+        <div style="font-size: 4rem; margin-bottom: 1rem;">🍳</div>
+        <h1 style="font-family: 'Playfair Display', serif; font-size: 3rem; margin-bottom: 0.5rem;">Blogger Cookbook</h1>
+        <p style="font-size: 1.3rem; color: var(--brown); margin-bottom: 3rem; line-height: 1.6;">Turn your recipes into a shareable cookbook. Build your creator brand. Earn 30% commission.</p>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 3rem;">
+          <div style="background: var(--paper); border: 1px solid var(--border); border-radius: 10px; padding: 2rem;">
+            <div style="font-size: 2rem; margin-bottom: 1rem;">📚</div>
+            <h3 style="font-family: 'Playfair Display', serif; margin-bottom: 0.5rem;">For Creators</h3>
+            <p style="font-size: 0.9rem; color: var(--brown);">Share recipes, build cookbooks, track readers, earn commission</p>
+          </div>
+          <div style="background: var(--paper); border: 1px solid var(--border); border-radius: 10px; padding: 2rem;">
+            <div style="font-size: 2rem; margin-bottom: 1rem;">👨‍🍳</div>
+            <h3 style="font-family: 'Playfair Display', serif; margin-bottom: 0.5rem;">For Readers</h3>
+            <p style="font-size: 0.9rem; color: var(--brown);">Save recipes from your favorite creators into personalized cookbooks</p>
+          </div>
+        </div>
+
+        <div style="background: linear-gradient(135deg, rgba(74,44,138,0.1), rgba(212,168,32,0.1)); border: 1px solid rgba(74,44,138,0.2); border-radius: 10px; padding: 2rem; margin-bottom: 3rem;">
+          <h3 style="font-family: 'Playfair Display', serif; font-size: 1.2rem; margin-bottom: 1rem;">Creator Program</h3>
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; font-size: 0.9rem;">
+            <div>
+              <div style="font-weight: 700; color: var(--purple); margin-bottom: 0.3rem;">30%</div>
+              <div style="color: var(--brown);">Lifetime commission per subscriber</div>
+            </div>
+            <div>
+              <div style="font-weight: 700; color: var(--purple); margin-bottom: 0.3rem;">Free</div>
+              <div style="color: var(--brown);">Start anytime, no fees</div>
+            </div>
+            <div>
+              <div style="font-weight: 700; color: var(--purple); margin-bottom: 0.3rem;">Brand</div>
+              <div style="color: var(--brown);">Full control of your look</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 1rem; flex-direction: column;">
+          <button class="btn" onclick="showSignUp()" style="padding: 1rem; font-size: 1.1rem; font-weight: 700;">Start Creating Free</button>
+          <button class="btn btn-outline" onclick="showSignIn()" style="padding: 1rem; font-size: 1rem;">Already have an account?</button>
+        </div>
+
+        <p style="color: var(--brown); font-size: 0.85rem; margin-top: 2rem; line-height: 1.6;">
+          No credit card required. Free tier forever. Apply for Revenue Partner program when you're ready.
+        </p>
+      </div>
+    </div>
+
     <!-- Sign In Page -->
-    <div id="page-signin" class="page active">
+    <div id="page-signin" class="page">
       <div style="max-width: 400px; margin: 3rem auto;">
         <h2 style="text-align: center; margin-bottom: 0.5rem;">Welcome back</h2>
         <p class="page-desc" style="text-align: center;">Sign in to your creator account</p>
@@ -1733,7 +1782,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (_currentUser) {
       showDashboard();
     } else {
-      showPage('signin');
+      showPage('welcome');
     }
 
     // Close modals on escape
