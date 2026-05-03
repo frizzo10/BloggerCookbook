@@ -516,140 +516,564 @@
     </div>
 
     <!-- Brand Studio Page -->
-    <div id="page-brand" class="page">
-      <h2>🎨 Brand Studio</h2>
-      <p class="page-desc">Choose your widget. Customize once. Apply to all recipes.</p>
+<div id="page-brand" class="page">
+  <div style="max-width: 900px; margin: 0 auto; padding: 2rem 1rem;">
+    <!-- Progress Bar -->
+    <div style="margin-bottom: 2rem;">
+      <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+        <span id="step-counter" style="font-weight: 700; color: var(--purple);">Step 1 of 8</span>
+        <button class="btn btn-outline" onclick="resetWizard()" style="padding: 0.4rem 0.8rem; font-size: 0.8rem;">Start Over</button>
+      </div>
+      <div style="background: var(--border); height: 4px; border-radius: 2px; overflow: hidden;">
+        <div id="progress-bar" style="background: var(--purple); height: 100%; width: 12.5%; transition: width 0.3s;"></div>
+      </div>
+    </div>
 
-      <!-- Widget Selection -->
-      <h3 style="font-family: 'Playfair Display', serif; font-size: 1.2rem; margin-bottom: 1rem; margin-top: 0;">Select Your Widget</h3>
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
-        <div id="widget-elegant" onclick="selectWidget('elegant')" style="border: 3px solid var(--border); border-radius: 10px; overflow: hidden; cursor: pointer; transition: all 0.3s; background: white;">
-          <div style="background: white; padding: 1rem;">
-            <div style="font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700; color: #4A2C8A; margin-bottom: 0.3rem;">Recipe Name</div>
-            <div style="font-size: 0.75rem; color: var(--brown);">Cuisine · Time · Level</div>
-            <button style="background: #4A2C8A; color: white; border: none; border-radius: 6px; padding: 0.5rem; font-size: 0.7rem; cursor: pointer; width: 100%; margin-top: 0.5rem;">Save</button>
+    <!-- STEP 1: TEMPLATES -->
+    <div id="step-1" class="wizard-step" style="display: block;">
+      <h2 style="font-family: 'Playfair Display', serif; margin-bottom: 0.5rem;">Step 1: Choose Your Widget</h2>
+      <p style="color: var(--brown); margin-bottom: 2rem;">Select the template that matches your blog's vibe</p>
+      
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+        <!-- Elegant -->
+        <div onclick="selectTemplate('elegant')" class="template-option" style="border: 3px solid var(--border); border-radius: 10px; overflow: hidden; cursor: pointer; padding: 1rem; text-align: center; transition: all 0.3s;">
+          <div style="background: white; padding: 1rem; border-radius: 6px; margin-bottom: 0.5rem;">
+            <div style="font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; color: #4A2C8A;">Recipe</div>
+            <div style="font-size: 0.75rem; color: #666;">Cuisine · Time</div>
+            <button style="background: #4A2C8A; color: white; border: none; border-radius: 6px; padding: 0.4rem; font-size: 0.65rem; width: 100%; margin-top: 0.5rem;">Save</button>
           </div>
-          <div style="background: var(--paper); padding: 0.75rem; text-align: center; border-top: 1px solid var(--border);">
-            <div style="font-weight: 700; font-size: 0.8rem;">Elegant</div>
-          </div>
+          <div style="font-weight: 700;">Elegant</div>
+          <div style="font-size: 0.75rem; color: var(--brown);">Soft, sophisticated</div>
         </div>
 
-        <div id="widget-rustic" onclick="selectWidget('rustic')" style="border: 3px solid #8B7355; border-radius: 0; overflow: hidden; cursor: pointer; transition: all 0.3s; background: #F5E6D3;">
-          <div style="background: white; padding: 1rem;">
-            <div style="font-family: 'Georgia', serif; font-size: 1.1rem; font-weight: 700; color: #8B4513; margin-bottom: 0.3rem;">Recipe Name</div>
-            <div style="font-size: 0.75rem; color: #8B7355;">Cuisine · Time · Level</div>
-            <button style="background: #8B4513; color: white; border: none; border-radius: 0; padding: 0.5rem; font-size: 0.7rem; cursor: pointer; width: 100%; margin-top: 0.5rem;">Save</button>
+        <!-- Rustic -->
+        <div onclick="selectTemplate('rustic')" class="template-option" style="border: 3px solid #8B7355; border-radius: 0; overflow: hidden; cursor: pointer; padding: 1rem; text-align: center; transition: all 0.3s; background: #F5E6D3;">
+          <div style="background: white; padding: 1rem; border-radius: 0; margin-bottom: 0.5rem;">
+            <div style="font-family: 'Georgia', serif; font-size: 1rem; font-weight: 700; color: #8B4513;">Recipe</div>
+            <div style="font-size: 0.75rem; color: #666;">Cuisine · Time</div>
+            <button style="background: #8B4513; color: white; border: none; border-radius: 0; padding: 0.4rem; font-size: 0.65rem; width: 100%; margin-top: 0.5rem;">Save</button>
           </div>
-          <div style="background: #F5E6D3; padding: 0.75rem; text-align: center; border-top: 3px solid #8B7355;">
-            <div style="font-weight: 700; font-size: 0.8rem; color: #8B4513;">Rustic</div>
-          </div>
+          <div style="font-weight: 700; color: #8B4513;">Rustic</div>
+          <div style="font-size: 0.75rem; color: #8B7355;">Warm, homey</div>
         </div>
 
-        <div id="widget-modern" onclick="selectWidget('modern')" style="border: 3px solid #333; border-radius: 2px; overflow: hidden; cursor: pointer; transition: all 0.3s; background: #1a1a1a;">
-          <div style="background: #1a1a1a; padding: 1rem; color: white;">
-            <div style="font-family: 'Lato', sans-serif; font-size: 1.1rem; font-weight: 700; color: #FFD700; margin-bottom: 0.3rem; text-transform: uppercase;">Recipe Name</div>
-            <div style="font-size: 0.75rem; color: #ccc;">Cuisine · Time · Level</div>
-            <button style="background: #FFD700; color: #1a1a1a; border: none; border-radius: 2px; padding: 0.5rem; font-size: 0.7rem; cursor: pointer; width: 100%; margin-top: 0.5rem; font-weight: 700;">Save</button>
+        <!-- Modern -->
+        <div onclick="selectTemplate('modern')" class="template-option" style="border: 3px solid #333; border-radius: 2px; overflow: hidden; cursor: pointer; padding: 1rem; text-align: center; transition: all 0.3s; background: #1a1a1a; color: white;">
+          <div style="background: #1a1a1a; padding: 1rem; border-radius: 2px; margin-bottom: 0.5rem;">
+            <div style="font-family: 'Lato', sans-serif; font-size: 1rem; font-weight: 700; color: #FFD700;">RECIPE</div>
+            <div style="font-size: 0.75rem; color: #ccc;">CUISINE · TIME</div>
+            <button style="background: #FFD700; color: #1a1a1a; border: none; border-radius: 2px; padding: 0.4rem; font-size: 0.65rem; width: 100%; margin-top: 0.5rem;">Save</button>
           </div>
-          <div style="background: #1a1a1a; padding: 0.75rem; text-align: center; border-top: 3px solid #333;">
-            <div style="font-weight: 700; font-size: 0.8rem; color: #FFD700;">Modern</div>
-          </div>
+          <div style="font-weight: 700;">Modern</div>
+          <div style="font-size: 0.75rem; color: #ccc;">Bold, clean</div>
         </div>
 
-        <div id="widget-minimalist" onclick="selectWidget('minimalist')" style="border: 2px solid #ddd; border-radius: 4px; overflow: hidden; cursor: pointer; transition: all 0.3s; background: white;">
+        <!-- Minimalist -->
+        <div onclick="selectTemplate('minimalist')" class="template-option" style="border: 2px solid #ddd; border-radius: 4px; overflow: hidden; cursor: pointer; padding: 1rem; text-align: center; transition: all 0.3s;">
+          <div style="background: white; padding: 1rem; border-radius: 4px; margin-bottom: 0.5rem;">
+            <div style="font-family: 'Lato', sans-serif; font-size: 1rem; font-weight: 700; color: #333;">Recipe</div>
+            <div style="font-size: 0.75rem; color: #888;">Cuisine · Time</div>
+            <button style="background: #333; color: white; border: none; border-radius: 4px; padding: 0.4rem; font-size: 0.65rem; width: 100%; margin-top: 0.5rem;">Save</button>
+          </div>
+          <div style="font-weight: 700;">Minimalist</div>
+          <div style="font-size: 0.75rem; color: var(--brown);">Simple, light</div>
+        </div>
+
+        <!-- Colorful -->
+        <div onclick="selectTemplate('colorful')" class="template-option" style="border: 3px solid #FF6B6B; border-radius: 12px; overflow: hidden; cursor: pointer; padding: 1rem; text-align: center; transition: all 0.3s;">
+          <div style="background: linear-gradient(135deg, #FF6B6B, #FF8787); height: 20px; border-radius: 8px; margin-bottom: 0.5rem;"></div>
+          <div style="background: white; padding: 1rem; border-radius: 8px; margin-bottom: 0.5rem;">
+            <div style="font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; color: #FF6B6B;">Recipe</div>
+            <div style="font-size: 0.75rem; color: #666;">Cuisine · Time</div>
+            <button style="background: linear-gradient(135deg, #FF6B6B, #FF8787); color: white; border: none; border-radius: 6px; padding: 0.4rem; font-size: 0.65rem; width: 100%; margin-top: 0.5rem;">Save</button>
+          </div>
+          <div style="font-weight: 700; color: #FF6B6B;">Colorful</div>
+          <div style="font-size: 0.75rem; color: var(--brown);">Vibrant, fun</div>
+        </div>
+
+        <!-- Professional -->
+        <div onclick="selectTemplate('professional')" class="template-option" style="border: 2px solid #2C3E50; border-radius: 0; overflow: hidden; cursor: pointer; padding: 0; transition: all 0.3s;">
+          <div style="background: #2C3E50; color: white; padding: 0.5rem; font-size: 0.7rem; font-weight: 700;">YOUR RECIPE</div>
           <div style="background: white; padding: 1rem;">
-            <div style="font-family: 'Lato', sans-serif; font-size: 1.1rem; font-weight: 700; color: #333; margin-bottom: 0.3rem;">Recipe Name</div>
-            <div style="font-size: 0.75rem; color: #888;">Cuisine · Time · Level</div>
-            <button style="background: #333; color: white; border: none; border-radius: 4px; padding: 0.5rem; font-size: 0.7rem; cursor: pointer; width: 100%; margin-top: 0.5rem;">Save</button>
+            <div style="font-family: 'Georgia', serif; font-size: 1rem; font-weight: 700; color: #2C3E50;">Recipe</div>
+            <div style="font-size: 0.75rem; color: #666;">Cuisine · Time</div>
+            <button style="background: #2C3E50; color: white; border: none; border-radius: 0; padding: 0.4rem; font-size: 0.65rem; width: 100%; margin-top: 0.5rem;">Save</button>
           </div>
-          <div style="background: #f8f8f8; padding: 0.75rem; text-align: center; border-top: 1px solid #ddd;">
-            <div style="font-weight: 700; font-size: 0.8rem;">Minimalist</div>
+          <div style="font-weight: 700;">Professional</div>
+          <div style="font-size: 0.75rem; color: var(--brown);">Corporate, formal</div>
+        </div>
+
+        <!-- Minimal Dark -->
+        <div onclick="selectTemplate('minimal-dark')" class="template-option" style="border: 1px solid #444; border-radius: 6px; overflow: hidden; cursor: pointer; padding: 1rem; text-align: center; transition: all 0.3s; background: #0f0f0f; color: white;">
+          <div style="background: #1a1a1a; padding: 1rem; border-radius: 4px; margin-bottom: 0.5rem;">
+            <div style="font-family: 'Lato', sans-serif; font-size: 1rem; font-weight: 700; color: white;">Recipe</div>
+            <div style="font-size: 0.75rem; color: #999;">Cuisine · Time</div>
+            <button style="background: white; color: #1a1a1a; border: none; border-radius: 4px; padding: 0.4rem; font-size: 0.65rem; width: 100%; margin-top: 0.5rem; font-weight: 700;">Save</button>
           </div>
+          <div style="font-weight: 700;">Dark Minimal</div>
+          <div style="font-size: 0.75rem; color: #999;">Sleek, modern</div>
+        </div>
+
+        <!-- Playful -->
+        <div onclick="selectTemplate('playful')" class="template-option" style="border: 3px dashed #FF69B4; border-radius: 20px; overflow: hidden; cursor: pointer; padding: 1rem; text-align: center; transition: all 0.3s; background: #FFF0F5;">
+          <div style="background: white; padding: 1rem; border-radius: 16px; margin-bottom: 0.5rem;">
+            <div style="font-family: 'Comic Sans MS', cursive; font-size: 1rem; font-weight: 700; color: #FF69B4;">Recipe 🍳</div>
+            <div style="font-size: 0.75rem; color: #FF69B4;">Cuisine · Time</div>
+            <button style="background: #FF69B4; color: white; border: none; border-radius: 16px; padding: 0.4rem; font-size: 0.65rem; width: 100%; margin-top: 0.5rem; font-weight: 700;">Save 💕</button>
+          </div>
+          <div style="font-weight: 700; color: #FF69B4;">Playful</div>
+          <div style="font-size: 0.75rem; color: var(--brown);">Fun, friendly</div>
+        </div>
+
+        <!-- Clean Card -->
+        <div onclick="selectTemplate('clean')" class="template-option" style="border: none; border-radius: 16px; overflow: hidden; cursor: pointer; padding: 1rem; text-align: center; transition: all 0.3s; background: white; box-shadow: 0 4px 16px rgba(0,0,0,0.1);">
+          <div style="padding: 1rem;">
+            <div style="font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; color: #7B68EE;">Recipe</div>
+            <div style="font-size: 0.75rem; color: #666;">Cuisine · Time</div>
+            <button style="background: #7B68EE; color: white; border: none; border-radius: 12px; padding: 0.4rem; font-size: 0.65rem; width: 100%; margin-top: 0.5rem;">Save</button>
+          </div>
+          <div style="font-weight: 700;">Clean Card</div>
+          <div style="font-size: 0.75rem; color: var(--brown);">Elegant, floating</div>
         </div>
       </div>
 
-      <div id="active-widget-info" style="background: rgba(42, 125, 50, 0.12); border: 2px solid rgba(42, 125, 50, 0.3); border-radius: 10px; padding: 1rem; margin-bottom: 2rem; display: none; text-align: center;">
-        <div style="font-weight: 700; color: #2A7A2A;">✓ <span id="widget-name"></span> Widget Selected</div>
-        <div style="font-size: 0.9rem; color: var(--brown); margin-top: 0.3rem;">Used for all your recipes and cookbooks</div>
+      <div style="display: flex; justify-content: flex-end; gap: 1rem;">
+        <button class="btn btn-outline" onclick="previousStep()" style="display: none;">← Back</button>
+        <button class="btn" onclick="nextStep()">Next →</button>
       </div>
+    </div>
 
-      <!-- Customization -->
-      <div style="background: white; border: 1px solid var(--border); border-radius: 10px; padding: 2rem;">
-        <h3 style="font-family: 'Playfair Display', serif; font-size: 1.2rem; margin-bottom: 1.5rem;">Customize Your Widget</h3>
-        
-        <h4 style="font-family: 'Playfair Display', serif; font-size: 1rem; margin-bottom: 1rem; color: var(--ink2);">Size & Shape</h4>
+    <!-- STEP 2: COLORS -->
+    <div id="step-2" class="wizard-step" style="display: none;">
+      <h2 style="font-family: 'Playfair Display', serif; margin-bottom: 0.5rem;">Step 2: Choose Your Colors</h2>
+      <p style="color: var(--brown); margin-bottom: 2rem;">Match your blog's color scheme</p>
 
-        <div class="form-group">
-          <label>Widget Size</label>
-          <select id="brand-size" style="padding: 0.75rem; border: 1px solid var(--border); border-radius: 6px; font-size: 0.95rem; width: 100%;">
-            <option value="compact">Compact (Small)</option>
-            <option value="regular" selected>Regular (Standard)</option>
-            <option value="large">Large (Big)</option>
-            <option value="xl">Extra Large (Full)</option>
-          </select>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem;">
+        <div>
+          <label style="display: block; font-weight: 700; margin-bottom: 0.5rem;">Primary Color</label>
+          <input type="color" id="wiz-primary" value="#4A2C8A" style="width: 100%; height: 80px; border: 2px solid var(--border); border-radius: 8px; cursor: pointer;">
+          <p style="font-size: 0.85rem; color: var(--brown); margin-top: 0.5rem;">Main brand color (buttons, titles)</p>
         </div>
 
-        <div class="form-group">
-          <label>Widget Shape</label>
-          <select id="brand-shape" style="padding: 0.75rem; border: 1px solid var(--border); border-radius: 6px; font-size: 0.95rem; width: 100%;">
-            <option value="sharp">Sharp Corners</option>
-            <option value="soft" selected>Soft Corners</option>
-            <option value="round">Very Round</option>
-            <option value="pill">Pill-shaped</option>
-          </select>
+        <div>
+          <label style="display: block; font-weight: 700; margin-bottom: 0.5rem;">Accent Color</label>
+          <input type="color" id="wiz-accent" value="#D4A820" style="width: 100%; height: 80px; border: 2px solid var(--border); border-radius: 8px; cursor: pointer;">
+          <p style="font-size: 0.85rem; color: var(--brown); margin-top: 0.5rem;">Highlights, hovers</p>
         </div>
 
-        <h4 style="font-family: 'Playfair Display', serif; font-size: 1rem; margin-bottom: 1rem; color: var(--ink2); margin-top: 1.5rem;">Colors</h4>
-        
-        <div class="form-group">
-          <label>Primary Color</label>
-          <div style="display: flex; gap: 1rem; align-items: center;">
-            <input type="color" id="brand-primary" value="#4A2C8A" style="width: 120px; height: 80px; border: 2px solid var(--border); border-radius: 8px; cursor: pointer;">
-            <div style="flex: 1;">
-              <div style="font-weight: 700; color: var(--ink2); margin-bottom: 0.3rem;">Primary</div>
-              <div style="font-size: 0.85rem; color: var(--brown); margin-bottom: 0.5rem;">Main color for your widget</div>
-              <input type="text" id="brand-primary-text" value="#4A2C8A" style="width: 100%; padding: 0.5rem; border: 1px solid var(--border); border-radius: 4px;">
-            </div>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label>Accent Color</label>
-          <div style="display: flex; gap: 1rem; align-items: center;">
-            <input type="color" id="brand-accent" value="#D4A820" style="width: 120px; height: 80px; border: 2px solid var(--border); border-radius: 8px; cursor: pointer;">
-            <div style="flex: 1;">
-              <div style="font-weight: 700; color: var(--ink2); margin-bottom: 0.3rem;">Accent</div>
-              <div style="font-size: 0.85rem; color: var(--brown); margin-bottom: 0.5rem;">Buttons and highlights</div>
-              <input type="text" id="brand-accent-text" value="#D4A820" style="width: 100%; padding: 0.5rem; border: 1px solid var(--border); border-radius: 4px;">
-            </div>
-          </div>
-        </div>
-
-        <h4 style="font-family: 'Playfair Display', serif; font-size: 1rem; margin-bottom: 1rem; color: var(--ink2); margin-top: 1.5rem;">Typography</h4>
-
-        <div class="form-group">
-          <label>Font</label>
-          <select id="brand-font" style="padding: 0.75rem; border: 1px solid var(--border); border-radius: 6px; font-size: 0.95rem; width: 100%;">
-            <option value="Playfair Display">Playfair Display</option>
-            <option value="Georgia">Georgia</option>
-            <option value="Lato">Lato</option>
-            <option value="Cormorant Garamond">Cormorant Garamond</option>
-          </select>
-        </div>
-
-        <div style="display: flex; gap: 1rem; margin-top: 2rem;">
-          <button class="btn" onclick="previewBrandKit()" style="flex: 1; background: var(--gold); color: var(--ink);">👁 Preview</button>
-          <button class="btn" onclick="saveBrandKit()" style="flex: 1;">✓ Save Brand Kit</button>
+        <div>
+          <label style="display: block; font-weight: 700; margin-bottom: 0.5rem;">Background Color</label>
+          <input type="color" id="wiz-bg" value="#FFFFFF" style="width: 100%; height: 80px; border: 2px solid var(--border); border-radius: 8px; cursor: pointer;">
+          <p style="font-size: 0.85rem; color: var(--brown); margin-top: 0.5rem;">Widget background</p>
         </div>
       </div>
 
-      <div style="background: var(--paper); border: 1px solid var(--border); border-radius: 10px; padding: 1.5rem; margin-top: 2rem;">
-        <h4 style="font-family: 'Playfair Display', serif; margin-bottom: 0.75rem;">✓ Applied everywhere</h4>
-        <p style="font-size: 0.9rem; color: var(--brown);">When readers save from your TikTok, Instagram, or blog — they see YOUR widget with YOUR colors, shape, and style. Change anytime and all recipes update instantly.</p>
+      <div style="display: flex; justify-content: space-between; gap: 1rem; margin-top: 2rem;">
+        <button class="btn btn-outline" onclick="previousStep()">← Back</button>
+        <button class="btn" onclick="nextStep()">Next →</button>
+      </div>
+    </div>
+
+    <!-- STEP 3: FONTS -->
+    <div id="step-3" class="wizard-step" style="display: none;">
+      <h2 style="font-family: 'Playfair Display', serif; margin-bottom: 0.5rem;">Step 3: Choose Your Font</h2>
+      <p style="color: var(--brown); margin-bottom: 2rem;">Sets the tone for your recipes</p>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+        <div onclick="selectFont('Playfair Display')" class="font-option" style="border: 2px solid var(--border); padding: 1rem; border-radius: 8px; cursor: pointer; transition: all 0.3s;">
+          <div style="font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700;">Recipe Title</div>
+          <div style="font-size: 0.8rem; color: var(--brown);">Elegant & Serif</div>
+        </div>
+
+        <div onclick="selectFont('Georgia')" class="font-option" style="border: 2px solid var(--border); padding: 1rem; border-radius: 8px; cursor: pointer; transition: all 0.3s;">
+          <div style="font-family: 'Georgia', serif; font-size: 1.3rem; font-weight: 700;">Recipe Title</div>
+          <div style="font-size: 0.8rem; color: var(--brown);">Classic & Traditional</div>
+        </div>
+
+        <div onclick="selectFont('Cormorant Garamond')" class="font-option" style="border: 2px solid var(--border); padding: 1rem; border-radius: 8px; cursor: pointer; transition: all 0.3s;">
+          <div style="font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-weight: 700;">Recipe Title</div>
+          <div style="font-size: 0.8rem; color: var(--brown);">Luxury & Refined</div>
+        </div>
+
+        <div onclick="selectFont('Lato')" class="font-option" style="border: 2px solid var(--border); padding: 1rem; border-radius: 8px; cursor: pointer; transition: all 0.3s;">
+          <div style="font-family: 'Lato', sans-serif; font-size: 1.3rem; font-weight: 700;">Recipe Title</div>
+          <div style="font-size: 0.8rem; color: var(--brown);">Clean & Modern</div>
+        </div>
+
+        <div onclick="selectFont('Roboto')" class="font-option" style="border: 2px solid var(--border); padding: 1rem; border-radius: 8px; cursor: pointer; transition: all 0.3s;">
+          <div style="font-family: 'Roboto', sans-serif; font-size: 1.3rem; font-weight: 700;">Recipe Title</div>
+          <div style="font-size: 0.8rem; color: var(--brown);">Geometric & Bold</div>
+        </div>
+
+        <div onclick="selectFont('Comic Sans MS')" class="font-option" style="border: 2px solid var(--border); padding: 1rem; border-radius: 8px; cursor: pointer; transition: all 0.3s;">
+          <div style="font-family: 'Comic Sans MS', cursive; font-size: 1.3rem; font-weight: 700;">Recipe Title</div>
+          <div style="font-size: 0.8rem; color: var(--brown);">Playful & Fun</div>
+        </div>
+
+        <div onclick="selectFont('Courier New')" class="font-option" style="border: 2px solid var(--border); padding: 1rem; border-radius: 8px; cursor: pointer; transition: all 0.3s;">
+          <div style="font-family: 'Courier New', monospace; font-size: 1.3rem; font-weight: 700;">Recipe Title</div>
+          <div style="font-size: 0.8rem; color: var(--brown);">Technical & Code</div>
+        </div>
+
+        <div onclick="selectFont('system')" class="font-option" style="border: 2px solid var(--border); padding: 1rem; border-radius: 8px; cursor: pointer; transition: all 0.3s;">
+          <div style="font-size: 1.3rem; font-weight: 700;">Recipe Title</div>
+          <div style="font-size: 0.8rem; color: var(--brown);">System Default</div>
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; gap: 1rem;">
+        <button class="btn btn-outline" onclick="previousStep()">← Back</button>
+        <button class="btn" onclick="nextStep()">Next →</button>
+      </div>
+    </div>
+
+    <!-- STEP 4: CARD STYLING -->
+    <div id="step-4" class="wizard-step" style="display: none;">
+      <h2 style="font-family: 'Playfair Display', serif; margin-bottom: 0.5rem;">Step 4: Card Styling</h2>
+      <p style="color: var(--brown); margin-bottom: 2rem;">How your recipe widget looks</p>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+        <div onclick="selectCardStyle('flat')" class="card-style-option" style="border: 2px solid var(--border); padding: 1rem; border-radius: 8px; cursor: pointer; transition: all 0.3s;">
+          <div style="background: white; border: 1px solid #ddd; border-radius: 8px; padding: 1rem; margin-bottom: 1rem;">
+            <div style="font-weight: 700; font-size: 0.9rem;">Recipe Card</div>
+          </div>
+          <div style="font-weight: 700;">Flat</div>
+          <div style="font-size: 0.8rem; color: var(--brown);">No shadow</div>
+        </div>
+
+        <div onclick="selectCardStyle('shadow')" class="card-style-option" style="border: 2px solid var(--border); padding: 1rem; border-radius: 8px; cursor: pointer; transition: all 0.3s;">
+          <div style="background: white; border: none; border-radius: 8px; padding: 1rem; margin-bottom: 1rem; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+            <div style="font-weight: 700; font-size: 0.9rem;">Recipe Card</div>
+          </div>
+          <div style="font-weight: 700;">Shadow</div>
+          <div style="font-size: 0.8rem; color: var(--brown);">Soft drop shadow</div>
+        </div>
+
+        <div onclick="selectCardStyle('border')" class="card-style-option" style="border: 2px solid var(--border); padding: 1rem; border-radius: 8px; cursor: pointer; transition: all 0.3s;">
+          <div style="background: white; border: 2px solid #4A2C8A; border-radius: 8px; padding: 1rem; margin-bottom: 1rem;">
+            <div style="font-weight: 700; font-size: 0.9rem;">Recipe Card</div>
+          </div>
+          <div style="font-weight: 700;">Border</div>
+          <div style="font-size: 0.8rem; color: var(--brown);">Colored border</div>
+        </div>
+
+        <div onclick="selectCardStyle('gradient')" class="card-style-option" style="border: 2px solid var(--border); padding: 1rem; border-radius: 8px; cursor: pointer; transition: all 0.3s;">
+          <div style="background: linear-gradient(135deg, rgba(74,44,138,0.1), transparent); border: 1px solid #4A2C8A; border-radius: 8px; padding: 1rem; margin-bottom: 1rem;">
+            <div style="font-weight: 700; font-size: 0.9rem;">Recipe Card</div>
+          </div>
+          <div style="font-weight: 700;">Gradient</div>
+          <div style="font-size: 0.8rem; color: var(--brown);">Gradient background</div>
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; gap: 1rem;">
+        <button class="btn btn-outline" onclick="previousStep()">← Back</button>
+        <button class="btn" onclick="nextStep()">Next →</button>
+      </div>
+    </div>
+
+    <!-- STEP 5: BUTTON STYLE -->
+    <div id="step-5" class="wizard-step" style="display: none;">
+      <h2 style="font-family: 'Playfair Display', serif; margin-bottom: 0.5rem;">Step 5: Button Style</h2>
+      <p style="color: var(--brown); margin-bottom: 2rem;">How readers interact with your recipe</p>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+        <div onclick="selectButtonStyle('rounded')" class="button-style-option" style="border: 2px solid var(--border); padding: 1.5rem; border-radius: 8px; cursor: pointer; transition: all 0.3s; text-align: center;">
+          <button style="background: #4A2C8A; color: white; border: none; border-radius: 20px; padding: 0.75rem 1.5rem; font-weight: 700; cursor: pointer; margin-bottom: 1rem;">Save Recipe</button>
+          <div style="font-weight: 700;">Rounded</div>
+          <div style="font-size: 0.8rem; color: var(--brown);">Pill-shaped</div>
+        </div>
+
+        <div onclick="selectButtonStyle('square')" class="button-style-option" style="border: 2px solid var(--border); padding: 1.5rem; border-radius: 8px; cursor: pointer; transition: all 0.3s; text-align: center;">
+          <button style="background: #4A2C8A; color: white; border: none; border-radius: 0; padding: 0.75rem 1.5rem; font-weight: 700; cursor: pointer; margin-bottom: 1rem;">Save Recipe</button>
+          <div style="font-weight: 700;">Square</div>
+          <div style="font-size: 0.8rem; color: var(--brown);">Sharp corners</div>
+        </div>
+
+        <div onclick="selectButtonStyle('ghost')" class="button-style-option" style="border: 2px solid var(--border); padding: 1.5rem; border-radius: 8px; cursor: pointer; transition: all 0.3s; text-align: center;">
+          <button style="background: transparent; color: #4A2C8A; border: 2px solid #4A2C8A; border-radius: 6px; padding: 0.75rem 1.5rem; font-weight: 700; cursor: pointer; margin-bottom: 1rem;">Save Recipe</button>
+          <div style="font-weight: 700;">Ghost</div>
+          <div style="font-size: 0.8rem; color: var(--brown);">Outline only</div>
+        </div>
+
+        <div onclick="selectButtonStyle('filled')" class="button-style-option" style="border: 2px solid var(--border); padding: 1.5rem; border-radius: 8px; cursor: pointer; transition: all 0.3s; text-align: center;">
+          <button style="background: #4A2C8A; color: white; border: 3px solid #4A2C8A; border-radius: 4px; padding: 0.75rem 1.5rem; font-weight: 700; cursor: pointer; margin-bottom: 1rem;">Save Recipe</button>
+          <div style="font-weight: 700;">Filled</div>
+          <div style="font-size: 0.8rem; color: var(--brown);">Bold & solid</div>
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; gap: 1rem;">
+        <button class="btn btn-outline" onclick="previousStep()">← Back</button>
+        <button class="btn" onclick="nextStep()">Next →</button>
+      </div>
+    </div>
+
+    <!-- STEP 6: LAYOUT -->
+    <div id="step-6" class="wizard-step" style="display: none;">
+      <h2 style="font-family: 'Playfair Display', serif; margin-bottom: 0.5rem;">Step 6: Widget Layout</h2>
+      <p style="color: var(--brown); margin-bottom: 2rem;">How spacious your widget feels</p>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+        <div onclick="selectLayout('compact')" class="layout-option" style="border: 2px solid var(--border); padding: 1rem; border-radius: 8px; cursor: pointer; transition: all 0.3s;">
+          <div style="background: white; border: 1px solid #ddd; border-radius: 6px; padding: 0.5rem; margin-bottom: 1rem; font-size: 0.8rem;">
+            <div style="font-weight: 700; font-size: 0.85rem; margin-bottom: 0.2rem;">Recipe</div>
+            <div style="font-size: 0.7rem; color: #999; margin-bottom: 0.3rem;">Info</div>
+            <button style="width: 100%; padding: 0.3rem; font-size: 0.7rem;">Save</button>
+          </div>
+          <div style="font-weight: 700;">Compact</div>
+          <div style="font-size: 0.8rem; color: var(--brown);">Tight spacing</div>
+        </div>
+
+        <div onclick="selectLayout('regular')" class="layout-option" style="border: 2px solid var(--border); padding: 1rem; border-radius: 8px; cursor: pointer; transition: all 0.3s;">
+          <div style="background: white; border: 1px solid #ddd; border-radius: 6px; padding: 1rem; margin-bottom: 1rem;">
+            <div style="font-weight: 700; margin-bottom: 0.4rem;">Recipe Title</div>
+            <div style="font-size: 0.8rem; color: #999; margin-bottom: 0.6rem;">Info</div>
+            <button style="width: 100%; padding: 0.5rem;">Save</button>
+          </div>
+          <div style="font-weight: 700;">Regular</div>
+          <div style="font-size: 0.8rem; color: var(--brown);">Standard spacing</div>
+        </div>
+
+        <div onclick="selectLayout('spread')" class="layout-option" style="border: 2px solid var(--border); padding: 1rem; border-radius: 8px; cursor: pointer; transition: all 0.3s;">
+          <div style="background: white; border: 1px solid #ddd; border-radius: 6px; padding: 1.5rem; margin-bottom: 1rem;">
+            <div style="font-weight: 700; font-size: 1.1rem; margin-bottom: 0.8rem;">Recipe Title</div>
+            <div style="font-size: 0.9rem; color: #999; margin-bottom: 1rem;">Cuisine · Time</div>
+            <button style="width: 100%; padding: 0.7rem; font-size: 0.95rem;">Save</button>
+          </div>
+          <div style="font-weight: 700;">Spread</div>
+          <div style="font-size: 0.8rem; color: var(--brown);">Spacious & relaxed</div>
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; gap: 1rem;">
+        <button class="btn btn-outline" onclick="previousStep()">← Back</button>
+        <button class="btn" onclick="nextStep()">Next →</button>
+      </div>
+    </div>
+
+    <!-- STEP 7: ANIMATIONS -->
+    <div id="step-7" class="wizard-step" style="display: none;">
+      <h2 style="font-family: 'Playfair Display', serif; margin-bottom: 0.5rem;">Step 7: Hover Animation</h2>
+      <p style="color: var(--brown); margin-bottom: 2rem;">How your widget responds when readers hover</p>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+        <div onclick="selectAnimation('none')" class="animation-option" style="border: 2px solid var(--border); padding: 1rem; border-radius: 8px; cursor: pointer; transition: all 0.3s;">
+          <div style="background: white; border: 1px solid #ddd; border-radius: 6px; padding: 1rem; margin-bottom: 1rem;">
+            <div style="font-weight: 700;">Recipe</div>
+          </div>
+          <div style="font-weight: 700;">None</div>
+          <div style="font-size: 0.8rem; color: var(--brown);">No movement</div>
+        </div>
+
+        <div onclick="selectAnimation('fade')" class="animation-option" style="border: 2px solid var(--border); padding: 1rem; border-radius: 8px; cursor: pointer; transition: all 0.3s;">
+          <div style="background: white; border: 1px solid #ddd; border-radius: 6px; padding: 1rem; margin-bottom: 1rem; opacity: 0.7;">
+            <div style="font-weight: 700;">Recipe</div>
+          </div>
+          <div style="font-weight: 700;">Fade</div>
+          <div style="font-size: 0.8rem; color: var(--brown);">Opacity changes</div>
+        </div>
+
+        <div onclick="selectAnimation('scale')" class="animation-option" style="border: 2px solid var(--border); padding: 1rem; border-radius: 8px; cursor: pointer; transition: all 0.3s;">
+          <div style="background: white; border: 1px solid #ddd; border-radius: 6px; padding: 1rem; margin-bottom: 1rem; transform: scale(1.05);">
+            <div style="font-weight: 700;">Recipe</div>
+          </div>
+          <div style="font-weight: 700;">Scale</div>
+          <div style="font-size: 0.8rem; color: var(--brown);">Grows slightly</div>
+        </div>
+
+        <div onclick="selectAnimation('slide')" class="animation-option" style="border: 2px solid var(--border); padding: 1rem; border-radius: 8px; cursor: pointer; transition: all 0.3s;">
+          <div style="background: white; border: 1px solid #ddd; border-radius: 6px; padding: 1rem; margin-bottom: 1rem; transform: translateY(-4px);">
+            <div style="font-weight: 700;">Recipe</div>
+          </div>
+          <div style="font-weight: 700;">Slide</div>
+          <div style="font-size: 0.8rem; color: var(--brown);">Lifts up</div>
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; gap: 1rem;">
+        <button class="btn btn-outline" onclick="previousStep()">← Back</button>
+        <button class="btn" onclick="nextStep()">Next →</button>
+      </div>
+    </div>
+
+    <!-- STEP 8: PREVIEW & SAVE -->
+    <div id="step-8" class="wizard-step" style="display: none;">
+      <h2 style="font-family: 'Playfair Display', serif; margin-bottom: 0.5rem;">Step 8: Preview & Save</h2>
+      <p style="color: var(--brown); margin-bottom: 2rem;">Here's your complete brand kit. Love it? Save it. Don't? Go back and adjust.</p>
+
+      <div style="background: white; border: 1px solid var(--border); border-radius: 10px; padding: 2rem; margin-bottom: 2rem;">
+        <h3 style="font-family: 'Playfair Display', serif; margin-bottom: 1.5rem;">Your Widget Preview</h3>
+        <div id="final-preview" style="border: 1px solid var(--border); border-radius: 10px; padding: 2rem; background: var(--paper); text-align: center;">
+          <!-- Preview will be rendered here -->
+        </div>
+      </div>
+
+      <div style="background: var(--paper); border: 1px solid var(--border); border-radius: 10px; padding: 1.5rem; margin-bottom: 2rem;">
+        <h4 style="font-family: 'Playfair Display', serif; margin-bottom: 0.75rem;">Your Settings</h4>
+        <div id="summary-text" style="font-size: 0.9rem; color: var(--brown); line-height: 1.8;"></div>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; gap: 1rem;">
+        <button class="btn btn-outline" onclick="previousStep()">← Back to adjust</button>
+        <button class="btn" onclick="saveBrandKit()" style="flex: 1;">✓ Save Brand Kit</button>
       </div>
     </div>
   </div>
+</div>
 
+<style>
+.template-option:hover, .font-option:hover, .card-style-option:hover, .button-style-option:hover, .layout-option:hover, .animation-option:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(74, 44, 138, 0.15);
+  border-color: var(--purple);
+}
+
+.template-option.selected, .font-option.selected, .card-style-option.selected, .button-style-option.selected, .layout-option.selected, .animation-option.selected {
+  border-color: var(--purple);
+  background: rgba(74, 44, 138, 0.05);
+  box-shadow: 0 0 0 3px rgba(74, 44, 138, 0.1);
+}
+</style>
+
+<script>
+let _wizardState = {
+  template: null,
+  primaryColor: '#4A2C8A',
+  accentColor: '#D4A820',
+  backgroundColor: '#FFFFFF',
+  font: 'Playfair Display',
+  cardStyle: 'shadow',
+  buttonStyle: 'rounded',
+  layout: 'regular',
+  animation: 'none'
+};
+
+let _currentStep = 1;
+
+function updateStepUI() {
+  document.querySelectorAll('.wizard-step').forEach(s => s.style.display = 'none');
+  document.getElementById('step-' + _currentStep).style.display = 'block';
+  document.getElementById('step-counter').textContent = 'Step ' + _currentStep + ' of 8';
+  document.getElementById('progress-bar').style.width = (_currentStep * 12.5) + '%';
+  window.scrollTo(0, 0);
+}
+
+function nextStep() {
+  if (_currentStep < 8) {
+    _currentStep++;
+    updateStepUI();
+    if (_currentStep === 8) renderPreview();
+  }
+}
+
+function previousStep() {
+  if (_currentStep > 1) {
+    _currentStep--;
+    updateStepUI();
+  }
+}
+
+function resetWizard() {
+  if (confirm('Start over? Your current choices will be lost.')) {
+    _wizardState = {
+      template: null,
+      primaryColor: '#4A2C8A',
+      accentColor: '#D4A820',
+      backgroundColor: '#FFFFFF',
+      font: 'Playfair Display',
+      cardStyle: 'shadow',
+      buttonStyle: 'rounded',
+      layout: 'regular',
+      animation: 'none'
+    };
+    _currentStep = 1;
+    updateStepUI();
+  }
+}
+
+function selectTemplate(name) {
+  _wizardState.template = name;
+  document.querySelectorAll('.template-option').forEach(t => t.classList.remove('selected'));
+  document.getElementById('widget-' + name).classList.add('selected');
+}
+
+function selectFont(font) {
+  _wizardState.font = font;
+  document.querySelectorAll('.font-option').forEach(f => f.classList.remove('selected'));
+  event.currentTarget.classList.add('selected');
+}
+
+function selectCardStyle(style) {
+  _wizardState.cardStyle = style;
+  document.querySelectorAll('.card-style-option').forEach(c => c.classList.remove('selected'));
+  event.currentTarget.classList.add('selected');
+}
+
+function selectButtonStyle(style) {
+  _wizardState.buttonStyle = style;
+  document.querySelectorAll('.button-style-option').forEach(b => b.classList.remove('selected'));
+  event.currentTarget.classList.add('selected');
+}
+
+function selectLayout(layout) {
+  _wizardState.layout = layout;
+  document.querySelectorAll('.layout-option').forEach(l => l.classList.remove('selected'));
+  event.currentTarget.classList.add('selected');
+}
+
+function selectAnimation(anim) {
+  _wizardState.animation = anim;
+  document.querySelectorAll('.animation-option').forEach(a => a.classList.remove('selected'));
+  event.currentTarget.classList.add('selected');
+}
+
+function renderPreview() {
+  const s = _wizardState;
+  const shadow = s.cardStyle === 'shadow' ? 'box-shadow: 0 4px 12px rgba(0,0,0,0.1);' : '';
+  const border = s.cardStyle === 'border' ? 'border: 2px solid ' + s.primaryColor + ';' : '';
+  const gradient = s.cardStyle === 'gradient' ? 'background: linear-gradient(135deg, rgba(' + parseInt(s.primaryColor.slice(1,3), 16) + ',' + parseInt(s.primaryColor.slice(3,5), 16) + ',' + parseInt(s.primaryColor.slice(5,7), 16) + ',0.05), transparent);' : '';
+  
+  let preview = '<div style="background: ' + s.backgroundColor + '; border-radius: 8px; padding: 1.5rem; ' + shadow + border + gradient + '">';
+  preview += '<div style="font-family: \'' + s.font + '\', serif; font-size: 1.4rem; font-weight: 700; color: ' + s.primaryColor + '; margin-bottom: 0.5rem;">Creamy Tuscan Chicken</div>';
+  preview += '<div style="font-size: 0.85rem; color: #666; margin-bottom: 1rem;">Italian · 30 min · Easy</div>';
+  preview += '<button style="background: ' + s.primaryColor + '; color: white; border: none; border-radius: ' + (s.buttonStyle === 'rounded' ? '20' : s.buttonStyle === 'square' ? '0' : s.buttonStyle === 'ghost' ? '6' : '4') + 'px; padding: 0.75rem 1.5rem; font-weight: 700; width: 100%; cursor: pointer;">📖 Save to My Cookbook</button>';
+  preview += '</div>';
+  
+  document.getElementById('final-preview').innerHTML = preview;
+  
+  let summary = 'Template: <strong>' + (s.template || 'Not selected') + '</strong><br>';
+  summary += 'Colors: <strong>' + s.primaryColor + '</strong> (primary), <strong>' + s.accentColor + '</strong> (accent)<br>';
+  summary += 'Font: <strong>' + s.font + '</strong><br>';
+  summary += 'Card: <strong>' + s.cardStyle + '</strong> | Button: <strong>' + s.buttonStyle + '</strong><br>';
+  summary += 'Layout: <strong>' + s.layout + '</strong> | Hover: <strong>' + s.animation + '</strong>';
+  document.getElementById('summary-text').innerHTML = summary;
+}
+
+function saveBrandKit() {
+  if (!_wizardState.template) {
+    alert('Please go back and select a widget template');
+    _currentStep = 1;
+    updateStepUI();
+    return;
+  }
+  
+  if (_currentUser) {
+    _currentUser.brandKit = _wizardState;
+    saveUser();
+  }
+  
+  localStorage.setItem('blogger_brand_kit', JSON.stringify(_wizardState));
+  alert('✓ Brand Kit Saved!\n\nYour ' + _wizardState.template + ' widget will be used for all your recipes and cookbooks.\n\nYou can change it anytime from Brand Studio.');
+  showPage('dashboard');
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  if (document.getElementById('step-1')) {
+    updateStepUI();
+  }
+});
+</script>
   <!-- Share Recipe Modal -->
   <div id="modal-share-recipe" class="modal">
     <div class="modal-content">
@@ -1077,106 +1501,145 @@
     // Save brand kit
     let _selectedWidget = null;
 
-    function selectWidget(widgetName) {
-      _selectedWidget = widgetName;
-      if (document.getElementById('active-widget-info')) {
-        document.getElementById('active-widget-info').style.display = 'block';
-        document.getElementById('widget-name').textContent = widgetName.charAt(0).toUpperCase() + widgetName.slice(1);
-      }
-    }
 
-    function previewBrandKit() {
-      if (!_selectedWidget) {
-        alert('Please select a widget template first');
-        return;
-      }
+<script>
+let _wizardState = {
+  template: null,
+  primaryColor: '#4A2C8A',
+  accentColor: '#D4A820',
+  backgroundColor: '#FFFFFF',
+  font: 'Playfair Display',
+  cardStyle: 'shadow',
+  buttonStyle: 'rounded',
+  layout: 'regular',
+  animation: 'none'
+};
 
-      const primary = document.getElementById('brand-primary').value;
-      const accent = document.getElementById('brand-accent').value;
-      const font = document.getElementById('brand-font').value;
+let _currentStep = 1;
 
-      let preview = '';
+function updateStepUI() {
+  document.querySelectorAll('.wizard-step').forEach(s => s.style.display = 'none');
+  document.getElementById('step-' + _currentStep).style.display = 'block';
+  document.getElementById('step-counter').textContent = 'Step ' + _currentStep + ' of 8';
+  document.getElementById('progress-bar').style.width = (_currentStep * 12.5) + '%';
+  window.scrollTo(0, 0);
+}
 
-      if (_selectedWidget === 'elegant') {
-        preview = `
-          <div style="background: white; padding: 1.5rem;">
-            <div style="font-family: '${font}', serif; font-size: 1.4rem; font-weight: 700; color: ${primary}; margin-bottom: 0.5rem;">Creamy Tuscan Chicken</div>
-            <div style="font-size: 0.85rem; color: #7A5C3A; margin-bottom: 1rem;">Italian · 30 min · Easy</div>
-            <button style="background: ${primary}; color: white; border: none; border-radius: 6px; padding: 0.6rem 1.2rem; font-weight: 700; font-size: 0.85rem; cursor: pointer; width: 100%;">📖 Save to My Cookbook</button>
-          </div>
-        `;
-      } else if (_selectedWidget === 'rustic') {
-        preview = `
-          <div style="background: white; padding: 1.5rem; border-top: 3px solid ${primary};">
-            <div style="font-family: 'Georgia', serif; font-size: 1.4rem; font-weight: 700; color: ${primary}; margin-bottom: 0.5rem;">Creamy Tuscan Chicken</div>
-            <div style="font-size: 0.85rem; color: #7A5C3A; margin-bottom: 1rem;">Italian · 30 min · Easy</div>
-            <button style="background: ${primary}; color: white; border: none; border-radius: 0; padding: 0.6rem 1.2rem; font-weight: 700; font-size: 0.85rem; cursor: pointer; width: 100%;">📖 Save to My Cookbook</button>
-          </div>
-        `;
-      } else if (_selectedWidget === 'modern') {
-        preview = `
-          <div style="background: #1a1a1a; padding: 1.5rem; color: white;">
-            <div style="font-family: 'Lato', sans-serif; font-size: 1.4rem; font-weight: 700; color: ${accent}; margin-bottom: 0.5rem; text-transform: uppercase;">Creamy Tuscan Chicken</div>
-            <div style="font-size: 0.85rem; color: #ccc; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.1em;">Italian · 30 min · Easy</div>
-            <button style="background: ${accent}; color: #1a1a1a; border: none; border-radius: 2px; padding: 0.6rem 1.2rem; font-weight: 700; font-size: 0.85rem; cursor: pointer; width: 100%;">📖 Save to My Cookbook</button>
-          </div>
-        `;
-      } else if (_selectedWidget === 'minimalist') {
-        preview = `
-          <div style="background: white; padding: 1.5rem;">
-            <div style="font-family: 'Lato', sans-serif; font-size: 1.3rem; font-weight: 700; color: ${primary}; margin-bottom: 0.5rem;">Creamy Tuscan Chicken</div>
-            <div style="font-size: 0.8rem; color: #888; margin-bottom: 1rem;">Italian · 30 min · Easy</div>
-            <button style="background: ${primary}; color: white; border: none; border-radius: 4px; padding: 0.6rem 1.2rem; font-weight: 700; font-size: 0.85rem; cursor: pointer; width: 100%;">Save Recipe</button>
-          </div>
-        `;
-      } else if (_selectedWidget === 'colorful') {
-        preview = `
-          <div style="background: white; padding: 1.5rem;">
-            <div style="background: linear-gradient(135deg, ${primary}, ${accent}); height: 30px; border-radius: 8px; margin-bottom: 1rem;"></div>
-            <div style="font-family: '${font}', serif; font-size: 1.4rem; font-weight: 700; color: ${primary}; margin-bottom: 0.5rem;">Creamy Tuscan Chicken</div>
-            <div style="font-size: 0.85rem; color: #666; margin-bottom: 1rem;">Italian · 30 min · Easy</div>
-            <button style="background: linear-gradient(135deg, ${primary}, ${accent}); color: white; border: none; border-radius: 6px; padding: 0.6rem 1.2rem; font-weight: 700; font-size: 0.85rem; cursor: pointer; width: 100%;">📖 Save to My Cookbook</button>
-          </div>
-        `;
-      } else if (_selectedWidget === 'professional') {
-        preview = `
-          <div style="background: white;">
-            <div style="background: ${primary}; padding: 1rem; color: white; text-align: center; font-weight: 700;">Your Recipe</div>
-            <div style="padding: 1.5rem;">
-              <div style="font-family: 'Georgia', serif; font-size: 1.3rem; font-weight: 700; color: ${primary}; margin-bottom: 0.5rem;">Creamy Tuscan Chicken</div>
-              <div style="font-size: 0.85rem; color: #555; margin-bottom: 1rem;">Italian · 30 min · Easy</div>
-              <button style="background: ${primary}; color: white; border: none; border-radius: 0; padding: 0.6rem 1.2rem; font-weight: 700; font-size: 0.85rem; cursor: pointer; width: 100%;">📖 Save to My Cookbook</button>
-            </div>
-          </div>
-        `;
-      }
+function nextStep() {
+  if (_currentStep < 8) {
+    _currentStep++;
+    updateStepUI();
+    if (_currentStep === 8) renderPreview();
+  }
+}
 
-      document.getElementById('preview-widget').innerHTML = preview;
-      document.getElementById('modal-preview').classList.add('active');
-    }
+function previousStep() {
+  if (_currentStep > 1) {
+    _currentStep--;
+    updateStepUI();
+  }
+}
 
-    function saveBrandKit() {
-      if (!_selectedWidget) {
-        alert('Please select a widget template first');
-        return;
-      }
+function resetWizard() {
+  if (confirm('Start over? Your current choices will be lost.')) {
+    _wizardState = {
+      template: null,
+      primaryColor: '#4A2C8A',
+      accentColor: '#D4A820',
+      backgroundColor: '#FFFFFF',
+      font: 'Playfair Display',
+      cardStyle: 'shadow',
+      buttonStyle: 'rounded',
+      layout: 'regular',
+      animation: 'none'
+    };
+    _currentStep = 1;
+    updateStepUI();
+  }
+}
 
-      const brandKit = {
-        widget: _selectedWidget,
-        primary: document.getElementById('brand-primary').value,
-        accent: document.getElementById('brand-accent').value,
-        font: document.getElementById('brand-font').value,
-        fontSize: document.getElementById('brand-font-size').value
-      };
+function selectTemplate(name) {
+  _wizardState.template = name;
+  document.querySelectorAll('.template-option').forEach(t => t.classList.remove('selected'));
+  document.getElementById('widget-' + name).classList.add('selected');
+}
 
-      if (_currentUser) {
-        _currentUser.brandKit = brandKit;
-        saveUser();
-      }
+function selectFont(font) {
+  _wizardState.font = font;
+  document.querySelectorAll('.font-option').forEach(f => f.classList.remove('selected'));
+  event.currentTarget.classList.add('selected');
+}
 
-      localStorage.setItem('blogger_brand_kit', JSON.stringify(brandKit));
-      alert('✓ Brand kit saved! Your ' + _selectedWidget + ' widget will be used for all future recipes and cookbooks.');
-    }
+function selectCardStyle(style) {
+  _wizardState.cardStyle = style;
+  document.querySelectorAll('.card-style-option').forEach(c => c.classList.remove('selected'));
+  event.currentTarget.classList.add('selected');
+}
+
+function selectButtonStyle(style) {
+  _wizardState.buttonStyle = style;
+  document.querySelectorAll('.button-style-option').forEach(b => b.classList.remove('selected'));
+  event.currentTarget.classList.add('selected');
+}
+
+function selectLayout(layout) {
+  _wizardState.layout = layout;
+  document.querySelectorAll('.layout-option').forEach(l => l.classList.remove('selected'));
+  event.currentTarget.classList.add('selected');
+}
+
+function selectAnimation(anim) {
+  _wizardState.animation = anim;
+  document.querySelectorAll('.animation-option').forEach(a => a.classList.remove('selected'));
+  event.currentTarget.classList.add('selected');
+}
+
+function renderPreview() {
+  const s = _wizardState;
+  const shadow = s.cardStyle === 'shadow' ? 'box-shadow: 0 4px 12px rgba(0,0,0,0.1);' : '';
+  const border = s.cardStyle === 'border' ? 'border: 2px solid ' + s.primaryColor + ';' : '';
+  const gradient = s.cardStyle === 'gradient' ? 'background: linear-gradient(135deg, rgba(' + parseInt(s.primaryColor.slice(1,3), 16) + ',' + parseInt(s.primaryColor.slice(3,5), 16) + ',' + parseInt(s.primaryColor.slice(5,7), 16) + ',0.05), transparent);' : '';
+  
+  let preview = '<div style="background: ' + s.backgroundColor + '; border-radius: 8px; padding: 1.5rem; ' + shadow + border + gradient + '">';
+  preview += '<div style="font-family: \'' + s.font + '\', serif; font-size: 1.4rem; font-weight: 700; color: ' + s.primaryColor + '; margin-bottom: 0.5rem;">Creamy Tuscan Chicken</div>';
+  preview += '<div style="font-size: 0.85rem; color: #666; margin-bottom: 1rem;">Italian · 30 min · Easy</div>';
+  preview += '<button style="background: ' + s.primaryColor + '; color: white; border: none; border-radius: ' + (s.buttonStyle === 'rounded' ? '20' : s.buttonStyle === 'square' ? '0' : s.buttonStyle === 'ghost' ? '6' : '4') + 'px; padding: 0.75rem 1.5rem; font-weight: 700; width: 100%; cursor: pointer;">📖 Save to My Cookbook</button>';
+  preview += '</div>';
+  
+  document.getElementById('final-preview').innerHTML = preview;
+  
+  let summary = 'Template: <strong>' + (s.template || 'Not selected') + '</strong><br>';
+  summary += 'Colors: <strong>' + s.primaryColor + '</strong> (primary), <strong>' + s.accentColor + '</strong> (accent)<br>';
+  summary += 'Font: <strong>' + s.font + '</strong><br>';
+  summary += 'Card: <strong>' + s.cardStyle + '</strong> | Button: <strong>' + s.buttonStyle + '</strong><br>';
+  summary += 'Layout: <strong>' + s.layout + '</strong> | Hover: <strong>' + s.animation + '</strong>';
+  document.getElementById('summary-text').innerHTML = summary;
+}
+
+function saveBrandKit() {
+  if (!_wizardState.template) {
+    alert('Please go back and select a widget template');
+    _currentStep = 1;
+    updateStepUI();
+    return;
+  }
+  
+  if (_currentUser) {
+    _currentUser.brandKit = _wizardState;
+    saveUser();
+  }
+  
+  localStorage.setItem('blogger_brand_kit', JSON.stringify(_wizardState));
+  alert('✓ Brand Kit Saved!\n\nYour ' + _wizardState.template + ' widget will be used for all your recipes and cookbooks.\n\nYou can change it anytime from Brand Studio.');
+  showPage('dashboard');
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  if (document.getElementById('step-1')) {
+    updateStepUI();
+  }
+});
+
 
     // Initialize
     loadUser();
