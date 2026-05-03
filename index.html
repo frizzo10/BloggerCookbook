@@ -1206,16 +1206,27 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
       }
 
+      // Check if email already exists
+      const allUsers = JSON.parse(localStorage.getItem('blogger_users') || '[]');
+      if (allUsers.find(u => u.email === email)) {
+        alert('Email already registered');
+        return;
+      }
+
       _currentUser = {
         id: Date.now(),
         name: name,
         email: email,
+        password: password,
         status: 'free',
         createdAt: new Date()
       };
 
-      _userStatus = 'free';
-      saveUser();
+      // Save to users list
+      allUsers.push(_currentUser);
+      localStorage.setItem('blogger_users', JSON.stringify(allUsers));
+      localStorage.setItem('blogger_current_user', JSON.stringify(_currentUser));
+      
       showDashboard();
     }
 
@@ -1229,13 +1240,21 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
       }
 
-      // For demo, just load any saved user
-      loadUser();
-      if (!_currentUser || _currentUser.email !== email) {
+      // Load all users from localStorage
+      const allUsers = JSON.parse(localStorage.getItem('blogger_users') || '[]');
+      
+      // Find user by email and password
+      const user = allUsers.find(u => u.email === email && u.password === password);
+      
+      if (!user) {
         alert('Email or password incorrect');
         return;
       }
 
+      // Set as current user
+      _currentUser = user;
+      localStorage.setItem('blogger_current_user', JSON.stringify(user));
+      
       showDashboard();
     }
 
