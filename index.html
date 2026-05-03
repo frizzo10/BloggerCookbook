@@ -937,6 +937,73 @@
 </style>
 
 <script>
+// ===== AUTH FUNCTIONS =====
+let _currentUser = null;
+let _userStatus = 'free';
+
+function loadUser() {
+  const saved = localStorage.getItem('blogger_current_user');
+  if (saved) _currentUser = JSON.parse(saved);
+}
+
+function saveUser() {
+  if (_currentUser) localStorage.setItem('blogger_current_user', JSON.stringify(_currentUser));
+}
+
+function handleSignUp() {
+  const name = document.getElementById('signup-name').value;
+  const email = document.getElementById('signup-email').value;
+  const password = document.getElementById('signup-password').value;
+  if (!name || !email || !password) { alert('Please fill in all fields'); return; }
+  const allUsers = JSON.parse(localStorage.getItem('blogger_users') || '[]');
+  if (allUsers.find(u => u.email === email)) { alert('Email already registered'); return; }
+  _currentUser = { id: Date.now(), name, email, password, status: 'free', createdAt: new Date() };
+  allUsers.push(_currentUser);
+  localStorage.setItem('blogger_users', JSON.stringify(allUsers));
+  localStorage.setItem('blogger_current_user', JSON.stringify(_currentUser));
+  showDashboard();
+}
+
+function handleSignIn() {
+  const email = document.getElementById('signin-email').value;
+  const password = document.getElementById('signin-password').value;
+  if (!email || !password) { alert('Please fill in all fields'); return; }
+  const allUsers = JSON.parse(localStorage.getItem('blogger_users') || '[]');
+  const user = allUsers.find(u => u.email === email && u.password === password);
+  if (!user) { alert('Email or password incorrect'); return; }
+  _currentUser = user;
+  localStorage.setItem('blogger_current_user', JSON.stringify(user));
+  showDashboard();
+}
+
+function showDashboard() {
+  document.getElementById('nav-guest').style.display = 'none';
+  document.getElementById('nav-auth').style.display = 'flex';
+  document.getElementById('user-greeting').textContent = '👋 ' + (_currentUser.name || 'Creator');
+  showPage('dashboard');
+  loadDashboard();
+}
+
+function showPage(pageName) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + pageName).classList.add('active');
+  updateNav(pageName);
+  if (pageName === 'recipes') loadRecipesList();
+  if (pageName === 'cookbooks') loadCookbooksList();
+  if (pageName === 'revenue') loadRevenuePartner();
+}
+
+function showSignIn() { showPage('signin'); }
+function showSignUp() { showPage('signup'); }
+
+function updateNav(pageName) {
+  document.querySelectorAll('#nav-auth .nav-btn').forEach(b => b.classList.remove('active'));
+  const pages = ['dashboard', 'recipes', 'cookbooks', 'revenue', 'brand'];
+  document.querySelectorAll('#nav-auth .nav-btn').forEach((b, i) => {
+    if (pages[i] === pageName) b.classList.add('active');
+  });
+}
+
 let _wizardState = {
   template: null,
   primaryColor: '#4A2C8A',
