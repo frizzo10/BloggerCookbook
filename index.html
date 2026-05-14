@@ -1,1811 +1,670 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Blogger Dashboard — Blogger Cookbook</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --purple: #4A2C8A;
-      --purple-dark: #3A1F6E;
-      --gold: #D4A820;
-      --paper: #FDFAF6;
-      --ink: #1A0E05;
-      --ink2: #2C1A0A;
-      --brown: #7A5C3A;
-      --border: #D8C8B0;
-      --green: #2A7A2A;
-      --green-light: rgba(40, 125, 50, 0.12);
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blogger Cookbook — Your recipes. Protected. Distributed. Paid.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--forest:#1C3A1A;--green:#2D5A27;--mid:#4A7C2F;--leaf:#7DBD6A;--mint:#A8D5A2;--cream:#F5F0E8;--paper:#F9F7F4;--ink:#1A1A1A;--muted:#6B6B6B;--border:rgba(28,58,26,0.1);--red:#DC2626;--gold:#D97706;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--ink);}
+nav{position:sticky;top:0;z-index:100;background:var(--forest);border-bottom:3px solid var(--leaf);padding:.85rem 2rem;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 12px rgba(28,58,26,.4);}
+.nav-logo{display:flex;align-items:center;gap:.5rem;cursor:pointer;}
+.nav-logo-text{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:400;color:var(--cream);letter-spacing:.03em;}
+.nav-logo-sub{font-size:.5rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--leaf);display:block;margin-top:.1rem;}
+.nav-tabs{display:flex;gap:.25rem;}
+.nav-tab{background:none;border:none;color:rgba(245,240,232,.6);cursor:pointer;font-size:.82rem;padding:.5rem .85rem;border-radius:6px;font-family:inherit;transition:all .15s;white-space:nowrap;}
+.nav-tab:hover{background:rgba(255,255,255,.08);color:var(--cream);}
+.nav-tab.active{background:var(--leaf);color:var(--forest);font-weight:600;}
+.nav-right{display:flex;align-items:center;gap:.75rem;}
+.nav-user{font-size:.82rem;color:var(--mint);font-weight:500;}
+.page{display:none;}.page.active{display:block;}
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+/* WELCOME */
+.welcome-hero{background:var(--forest);padding:5rem 2rem 4rem;text-align:center;position:relative;overflow:hidden;}
+.welcome-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(125,189,106,.1),transparent 70%);pointer-events:none;}
+.welcome-eyebrow{display:inline-flex;align-items:center;gap:.4rem;background:rgba(220,38,38,.15);color:#FCA5A5;font-size:.7rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;padding:.35rem .85rem;border-radius:100px;margin-bottom:1.75rem;border:1px solid rgba(220,38,38,.25);}
+.welcome-hero h1{font-family:'Playfair Display',serif;font-size:clamp(2.2rem,5vw,3.8rem);font-weight:400;color:var(--cream);line-height:1.15;max-width:700px;margin:0 auto 1.25rem;}
+.welcome-hero h1 em{font-style:italic;color:var(--leaf);}
+.welcome-hero p{font-size:1rem;color:rgba(245,240,232,.6);max-width:520px;margin:0 auto 2.5rem;line-height:1.75;font-weight:300;}
+.scraper-callout{background:rgba(220,38,38,.1);border:1px solid rgba(220,38,38,.2);border-radius:16px;padding:1.5rem 2rem;max-width:620px;margin:0 auto 3rem;text-align:left;}
+.scraper-callout-title{font-size:.65rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#FCA5A5;margin-bottom:.75rem;}
+.scraper-stat-row{display:flex;gap:2rem;flex-wrap:wrap;}
+.scraper-stat{text-align:center;}
+.scraper-stat-num{font-family:'Playfair Display',serif;font-size:1.75rem;color:white;line-height:1;margin-bottom:.2rem;}
+.scraper-stat-label{font-size:.72rem;color:rgba(245,240,232,.45);font-weight:300;}
+.value-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;max-width:900px;margin:0 auto 3rem;text-align:left;}
+.value-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:1.5rem;}
+.value-card-icon{font-size:1.5rem;margin-bottom:.75rem;}
+.value-card h3{font-family:'Playfair Display',serif;font-size:1rem;font-weight:400;color:var(--cream);margin-bottom:.4rem;}
+.value-card p{font-size:.8rem;color:rgba(245,240,232,.5);line-height:1.6;font-weight:300;}
+.value-tag{display:inline-block;margin-top:.6rem;font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--leaf);}
+.btn-primary{background:var(--leaf);color:var(--forest);padding:.9rem 2rem;border-radius:100px;border:none;font-size:.95rem;font-weight:700;cursor:pointer;font-family:inherit;transition:opacity .2s,transform .15s;display:inline-flex;align-items:center;gap:.5rem;}
+.btn-primary:hover{opacity:.88;transform:translateY(-1px);}
+.btn-ghost{background:none;border:1px solid rgba(245,240,232,.2);color:rgba(245,240,232,.7);padding:.9rem 1.5rem;border-radius:100px;font-size:.88rem;cursor:pointer;font-family:inherit;transition:all .2s;}
+.btn-ghost:hover{border-color:rgba(245,240,232,.5);color:var(--cream);}
 
-    body {
-      font-family: 'Lato', sans-serif;
-      background: var(--paper);
-      color: var(--ink);
-      line-height: 1.6;
-    }
+/* AUTH */
+.auth-wrap{max-width:400px;margin:3rem auto;padding:0 1rem;}
+.auth-card{background:white;border-radius:20px;padding:2rem;border:1px solid var(--border);}
+.auth-title{font-family:'Playfair Display',serif;font-size:1.4rem;color:var(--forest);margin-bottom:.25rem;}
+.auth-sub{font-size:.83rem;color:var(--muted);margin-bottom:1.5rem;font-weight:300;}
+.field{margin-bottom:1rem;}
+.field label{display:block;font-size:.75rem;font-weight:600;color:var(--forest);margin-bottom:.35rem;letter-spacing:.04em;}
+.field input{width:100%;padding:.75rem;border:1.5px solid var(--border);border-radius:10px;font-family:inherit;font-size:.9rem;color:var(--ink);background:var(--paper);}
+.field input:focus{outline:none;border-color:var(--forest);}
+.btn-full{width:100%;background:var(--forest);color:var(--cream);border:none;border-radius:10px;padding:.85rem;font-family:inherit;font-size:.92rem;font-weight:700;cursor:pointer;margin-bottom:.5rem;}
+.btn-full:hover{background:var(--green);}
+.btn-full.outline{background:none;border:1.5px solid var(--border);color:var(--forest);}
+.auth-switch{text-align:center;font-size:.8rem;color:var(--muted);margin-top:.75rem;}
+.auth-switch a{color:var(--forest);cursor:pointer;font-weight:500;}
 
-    nav {
-      background: var(--purple);
-      color: white;
-      padding: 1rem 2rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      box-shadow: 0 2px 12px rgba(74, 44, 138, 0.4);
-    }
+/* DASHBOARD */
+.dash-wrap{max-width:1100px;margin:0 auto;padding:2rem 1.5rem;}
+.dash-greeting{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:400;color:var(--forest);margin-bottom:.25rem;}
+.dash-sub{font-size:.85rem;color:var(--muted);font-weight:300;margin-bottom:2rem;}
+.hero-metric{background:var(--forest);border-radius:20px;padding:2rem;margin-bottom:1.25rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1.5rem;}
+.hero-big{font-family:'Playfair Display',serif;font-size:3.5rem;font-weight:400;color:var(--cream);line-height:1;margin-bottom:.25rem;}
+.hero-label{font-size:.9rem;color:rgba(245,240,232,.6);font-weight:300;}
+.hero-tip{font-size:.72rem;color:var(--mint);margin-top:.35rem;}
+.mini-stats{display:flex;gap:2rem;flex-wrap:wrap;}
+.mstat{text-align:center;}
+.mstat-num{font-family:'Playfair Display',serif;font-size:1.75rem;color:var(--cream);line-height:1;margin-bottom:.2rem;}
+.mstat-label{font-size:.62rem;text-transform:uppercase;letter-spacing:.08em;color:rgba(245,240,232,.4);}
+.protect-card{background:rgba(28,58,26,.04);border:1px solid var(--border);border-radius:16px;padding:1.25rem;margin-bottom:1.25rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;}
+.pdot{width:10px;height:10px;border-radius:50%;background:var(--leaf);flex-shrink:0;animation:pdot 2s infinite;}
+@keyframes pdot{0%,100%{box-shadow:0 0 0 0 rgba(125,189,106,.4);}50%{box-shadow:0 0 0 6px rgba(125,189,106,0);}}
+.section-title{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:400;color:var(--forest);margin-bottom:1rem;display:flex;align-items:center;justify-content:space-between;}
+.recipe-row{background:white;border:1px solid var(--border);border-radius:12px;padding:1rem 1.25rem;margin-bottom:.5rem;display:flex;align-items:center;gap:1rem;transition:box-shadow .2s;}
+.recipe-row:hover{box-shadow:0 4px 16px rgba(28,58,26,.08);}
+.r-emoji{font-size:1.4rem;flex-shrink:0;}
+.r-info{flex:1;min-width:0;}
+.r-title{font-size:.9rem;font-weight:600;color:var(--forest);margin-bottom:.15rem;}
+.r-meta{font-size:.72rem;color:var(--muted);}
+.r-stats{display:flex;gap:1.5rem;flex-shrink:0;}
+.rstat{text-align:right;}
+.rstat-n{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--forest);line-height:1;}
+.rstat-l{font-size:.6rem;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);}
+.trending{font-size:.62rem;font-weight:700;color:var(--mid);background:rgba(74,124,47,.1);padding:.12rem .4rem;border-radius:20px;}
+.empty{text-align:center;padding:3rem 1rem;color:var(--muted);font-weight:300;}
+.empty-icon{font-size:2.5rem;margin-bottom:.75rem;}
 
-    .logo {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.3rem;
-      font-weight: 700;
-      color: #F5D060;
-    }
+/* REVENUE */
+.rev-hero{background:var(--forest);border-radius:20px;padding:2rem;margin-bottom:1.25rem;text-align:center;}
+.rev-big{font-family:'Playfair Display',serif;font-size:5rem;font-weight:400;color:var(--leaf);line-height:1;}
+.rev-label{font-size:1rem;color:rgba(245,240,232,.6);margin:.5rem 0 1.5rem;}
+.rev-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;max-width:480px;margin:0 auto;}
+.rb{background:rgba(255,255,255,.06);border-radius:12px;padding:1rem;text-align:left;}
+.rb-label{font-size:.72rem;color:rgba(245,240,232,.4);margin-bottom:.3rem;}
+.rb-val{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--cream);}
+.apply-card{border:2px solid var(--leaf);border-radius:20px;padding:2rem;margin-bottom:1.25rem;background:rgba(28,58,26,.03);}
+.apply-title{font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--forest);margin-bottom:.5rem;}
+.apply-text{font-size:.85rem;color:var(--muted);line-height:1.7;margin-bottom:1.25rem;font-weight:300;}
 
-    .nav-right {
-      display: flex;
-      gap: 1rem;
-      align-items: center;
-    }
+/* WIDGET */
+.widget-builder{display:grid;grid-template-columns:300px 1fr;gap:1.5rem;align-items:start;}
+.builder-controls{background:white;border:1px solid var(--border);border-radius:16px;padding:1.25rem;position:sticky;top:80px;}
+.csec{margin-bottom:1.1rem;padding-bottom:1.1rem;border-bottom:1px solid var(--border);}
+.csec:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none;}
+.clabel{font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:.55rem;display:block;}
+.cchips{display:flex;gap:.35rem;flex-wrap:wrap;}
+.chip{background:var(--paper);border:1.5px solid var(--border);border-radius:7px;padding:.35rem .65rem;font-size:.75rem;cursor:pointer;font-family:inherit;color:var(--forest);transition:all .15s;}
+.chip:hover{border-color:var(--forest);}
+.chip.on{background:var(--forest);color:var(--cream);border-color:var(--forest);}
+.swatch-row{display:flex;gap:.4rem;align-items:center;flex-wrap:wrap;}
+.swatch{width:28px;height:28px;border-radius:6px;cursor:pointer;border:2.5px solid transparent;transition:border-color .15s;flex-shrink:0;}
+.swatch.on{border-color:var(--ink);}
+.builder-preview{background:white;border:1px solid var(--border);border-radius:16px;padding:1.5rem;}
+.preview-header{font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:1rem;display:flex;align-items:center;justify-content:space-between;}
+.blog-ctx{background:var(--paper);border-radius:10px;padding:1.25rem;margin-bottom:1rem;}
+.ctx-url{font-size:.62rem;color:var(--muted);margin-bottom:.35rem;}
+.ctx-title{font-family:'Playfair Display',serif;font-size:1rem;color:var(--forest);margin-bottom:.2rem;}
+.ctx-meta{font-size:.7rem;color:var(--muted);margin-bottom:.85rem;}
+.ctx-body{font-size:.75rem;color:var(--muted);line-height:1.5;margin-bottom:.85rem;}
+.code-wrap{background:#111;border-radius:10px;padding:.85rem 1rem;font-family:monospace;font-size:.7rem;color:#A8D5A2;position:relative;overflow-x:auto;white-space:pre;}
+.code-copy-btn{position:absolute;top:.5rem;right:.5rem;background:rgba(255,255,255,.1);border:none;border-radius:6px;padding:.3rem .6rem;font-size:.62rem;color:rgba(255,255,255,.55);cursor:pointer;font-family:inherit;}
+.code-copy-btn:hover{background:rgba(255,255,255,.2);color:white;}
+.compat-tags{display:flex;gap:.35rem;margin-top:.75rem;flex-wrap:wrap;}
+.compat-tag{font-size:.65rem;background:rgba(28,58,26,.07);color:var(--mid);border-radius:20px;padding:.2rem .55rem;}
 
-    .nav-btn {
-      background: none;
-      border: none;
-      color: white;
-      cursor: pointer;
-      font-size: 0.9rem;
-      padding: 0.5rem 1rem;
-      border-radius: 6px;
-      transition: background 0.2s;
-    }
+/* PROTECT */
+.protect-banner{background:rgba(220,38,38,.05);border:1px solid rgba(220,38,38,.15);border-radius:16px;padding:1.5rem;margin-bottom:1.5rem;}
+.protect-title{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--red);margin-bottom:.4rem;}
+.protect-body{font-size:.83rem;color:var(--muted);line-height:1.65;margin-bottom:1rem;font-weight:300;}
+.pvs{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;}
+.pv-bad,.pv-good{border-radius:10px;padding:.85rem 1rem;}
+.pv-bad{background:rgba(220,38,38,.05);border:1px solid rgba(220,38,38,.15);}
+.pv-good{background:rgba(28,58,26,.05);border:1px solid rgba(28,58,26,.15);}
+.pvt{font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.5rem;}
+.pv-bad .pvt{color:var(--red);}.pv-good .pvt{color:var(--mid);}
+.pvi{font-size:.78rem;color:var(--muted);padding:.18rem 0;display:flex;gap:.35rem;font-weight:300;}
 
-    .nav-btn:hover {
-      background: rgba(255, 255, 255, 0.1);
-    }
+/* MODAL */
+.modal{display:none;position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.5);align-items:center;justify-content:center;padding:1rem;}
+.modal.active{display:flex;}
+.modal-card{background:white;border-radius:20px;padding:2rem;width:100%;max-width:460px;max-height:90vh;overflow-y:auto;}
+.modal-title{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--forest);margin-bottom:1.25rem;display:flex;justify-content:space-between;align-items:center;}
+.modal-close{background:none;border:none;font-size:1.2rem;cursor:pointer;color:var(--muted);}
 
-    .nav-btn.active {
-      background: var(--gold);
-      color: var(--ink);
-      font-weight: 700;
-    }
-
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 2rem 1rem;
-    }
-
-    .page {
-      display: none;
-    }
-
-    .page.active {
-      display: block;
-    }
-
-    h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: 2rem;
-      color: var(--ink2);
-      margin-bottom: 0.5rem;
-    }
-
-    .page-desc {
-      color: var(--brown);
-      font-size: 0.95rem;
-      margin-bottom: 2rem;
-      font-style: italic;
-    }
-
-    /* Status Badge */
-    .status-badge {
-      display: inline-block;
-      padding: 0.4rem 0.9rem;
-      border-radius: 20px;
-      font-size: 0.75rem;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      margin-bottom: 1.5rem;
-    }
-
-    .status-free {
-      background: rgba(74, 44, 138, 0.12);
-      color: var(--purple);
-    }
-
-    .status-pending {
-      background: rgba(255, 193, 7, 0.2);
-      color: #F57C00;
-    }
-
-    .status-approved {
-      background: var(--green-light);
-      color: var(--green);
-    }
-
-    /* Stats Grid */
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1rem;
-      margin-bottom: 2rem;
-    }
-
-    .stat-card {
-      background: white;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 1.5rem;
-      text-align: center;
-      box-shadow: 0 2px 8px rgba(74, 44, 138, 0.08);
-    }
-
-    .stat-value {
-      font-family: 'Playfair Display', serif;
-      font-size: 2.5rem;
-      font-weight: 700;
-      color: var(--purple);
-      margin-bottom: 0.5rem;
-    }
-
-    .stat-label {
-      font-size: 0.8rem;
-      color: var(--brown);
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      font-weight: 700;
-    }
-
-    /* Buttons */
-    .btn {
-      background: var(--purple);
-      color: white;
-      border: none;
-      border-radius: 6px;
-      padding: 0.75rem 1.5rem;
-      font-size: 0.9rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: background 0.2s;
-      font-family: inherit;
-    }
-
-    .btn:hover {
-      background: var(--purple-dark);
-    }
-
-    .btn-outline {
-      background: white;
-      color: var(--purple);
-      border: 1.5px solid var(--purple);
-    }
-
-    .btn-outline:hover {
-      background: var(--paper);
-    }
-
-    .btn-gold {
-      background: var(--gold);
-      color: var(--ink);
-    }
-
-    .btn-gold:hover {
-      background: #B8860F;
-    }
-
-    /* Recipe Card */
-    .recipe-card {
-      background: white;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 1.5rem;
-      margin-bottom: 1rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: start;
-      box-shadow: 0 2px 8px rgba(74, 44, 138, 0.08);
-      transition: all 0.2s;
-    }
-
-    .recipe-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 16px rgba(74, 44, 138, 0.12);
-    }
-
-    .recipe-info h3 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.3rem;
-      color: var(--ink2);
-      margin-bottom: 0.3rem;
-    }
-
-    .recipe-meta {
-      font-size: 0.85rem;
-      color: var(--brown);
-      margin-bottom: 0.5rem;
-    }
-
-    .recipe-stats {
-      display: flex;
-      gap: 1.5rem;
-      margin-top: 0.75rem;
-      font-size: 0.9rem;
-    }
-
-    .recipe-stat {
-      display: flex;
-      flex-direction: column;
-      gap: 0.2rem;
-    }
-
-    .recipe-stat-value {
-      font-weight: 700;
-      color: var(--purple);
-      font-size: 1.1rem;
-    }
-
-    .recipe-stat-label {
-      font-size: 0.75rem;
-      color: var(--brown);
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-    }
-
-    /* Form */
-    .form-group {
-      margin-bottom: 1.5rem;
-    }
-
-    label {
-      display: block;
-      font-weight: 700;
-      color: var(--ink2);
-      margin-bottom: 0.4rem;
-      font-size: 0.9rem;
-    }
-
-    input, textarea, select {
-      width: 100%;
-      padding: 0.75rem;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      font-family: inherit;
-      font-size: 0.95rem;
-      color: var(--ink);
-    }
-
-    input:focus, textarea:focus, select:focus {
-      outline: none;
-      border-color: var(--purple);
-      box-shadow: 0 0 0 3px rgba(74, 44, 138, 0.1);
-    }
-
-    textarea {
-      resize: vertical;
-      min-height: 100px;
-    }
-
-    /* Modal */
-    .modal {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.5);
-      z-index: 1000;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .modal.active {
-      display: flex;
-    }
-
-    .modal-content {
-      background: white;
-      border-radius: 12px;
-      padding: 2rem;
-      max-width: 600px;
-      max-height: 90vh;
-      overflow-y: auto;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-    }
-
-    .modal-header {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.8rem;
-      font-weight: 700;
-      color: var(--ink2);
-      margin-bottom: 1rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .close-btn {
-      background: none;
-      border: none;
-      font-size: 1.5rem;
-      cursor: pointer;
-      color: var(--brown);
-    }
-
-    /* Locked Feature */
-    .locked-feature {
-      background: rgba(0, 0, 0, 0.02);
-      border: 2px dashed var(--border);
-      border-radius: 10px;
-      padding: 2rem;
-      text-align: center;
-      color: var(--brown);
-      opacity: 0.6;
-    }
-
-    .locked-feature h3 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.3rem;
-      color: var(--brown);
-      margin-bottom: 0.5rem;
-    }
-
-    @media (max-width: 768px) {
-      nav {
-        flex-direction: column;
-        gap: 1rem;
-      }
-
-      .recipe-card {
-        flex-direction: column;
-      }
-
-      .recipe-stats {
-        margin-top: 1rem;
-      }
-
-      h2 {
-        font-size: 1.5rem;
-      }
-    }
-  </style>
+@media(max-width:860px){
+  nav{padding:.75rem 1rem;}
+  .nav-tabs{display:none;}
+  .value-grid{grid-template-columns:1fr;}
+  .widget-builder{grid-template-columns:1fr;}
+  .builder-controls{position:static;}
+  .pvs{grid-template-columns:1fr;}
+  .rev-grid{grid-template-columns:1fr;}
+}
+</style>
 </head>
 <body>
-  <nav id="nav-auth" style="display: none;">
-    <div class="logo">✦ Blogger Cookbook</div>
-    <div class="nav-right">
-      <button class="nav-btn" onclick="showPage('dashboard'); updateNav('dashboard')">Dashboard</button>
-      <button class="nav-btn" onclick="showPage('recipes'); updateNav('recipes')">My Recipes</button>
-      <button class="nav-btn" onclick="showPage('cookbooks'); updateNav('cookbooks')">Cookbooks</button>
-      <button class="nav-btn" onclick="showPage('revenue'); updateNav('revenue')">Revenue</button>
-      <button class="nav-btn" onclick="showPage('brand'); updateNav('brand')">Brand Studio</button>
-      <span id="user-greeting" style="color: #F5D060; font-weight: 700; margin-right: 1rem;"></span>
-      <button class="nav-btn" onclick="signOut()">Sign out</button>
+
+<nav>
+  <div class="nav-logo" onclick="goHome()">
+    <svg width="20" height="26" viewBox="0 0 28 36" fill="none">
+      <path d="M14 34 Q14 20 14 6" stroke="#7DBD6A" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="M14 22 Q7 15 4 18" stroke="#7DBD6A" stroke-width="2" stroke-linecap="round"/>
+      <path d="M14 17 Q6 9 3 13" stroke="#4A7C2F" stroke-width="2" stroke-linecap="round"/>
+      <path d="M14 12 Q8 5 6 8" stroke="#7DBD6A" stroke-width="1.8" stroke-linecap="round"/>
+      <path d="M14 22 Q21 15 24 18" stroke="#7DBD6A" stroke-width="2" stroke-linecap="round"/>
+      <path d="M14 17 Q22 9 25 13" stroke="#4A7C2F" stroke-width="2" stroke-linecap="round"/>
+      <path d="M14 12 Q20 5 22 8" stroke="#7DBD6A" stroke-width="1.8" stroke-linecap="round"/>
+    </svg>
+    <div>
+      <span class="nav-logo-text">blogger cookbook</span>
+      <span class="nav-logo-sub">Powered by Fern</span>
     </div>
-  </nav>
+  </div>
+  <div class="nav-tabs" id="nav-tabs" style="display:none">
+    <button class="nav-tab active" onclick="showPage('dashboard')">This Week</button>
+    <button class="nav-tab" onclick="showPage('recipes')">My Recipes</button>
+    <button class="nav-tab" onclick="showPage('revenue')">Earnings</button>
+    <button class="nav-tab" onclick="showPage('widget')">My Widget</button>
+  </div>
+  <div class="nav-right">
+    <span class="nav-user" id="nav-user" style="display:none"></span>
+    <button id="nav-so" style="display:none;background:none;border:1px solid rgba(245,240,232,.2);color:rgba(245,240,232,.6);border-radius:20px;padding:.35rem .75rem;font-size:.75rem;cursor:pointer;font-family:inherit;" onclick="signOut()">Sign out</button>
+    <button id="nav-si" onclick="showPage('signin')" style="background:var(--leaf);color:var(--forest);border:none;border-radius:20px;padding:.45rem 1rem;font-size:.8rem;font-weight:700;cursor:pointer;font-family:inherit;">Sign in</button>
+  </div>
+</nav>
 
-  <nav id="nav-guest">
-    <div class="logo">✦ Blogger Cookbook</div>
-    <div class="nav-right">
-      <button class="nav-btn" onclick="showSignUp()">Sign up</button>
-      <button class="nav-btn" onclick="showSignIn()">Sign in</button>
-    </div>
-  </nav>
-
-  <div class="container">
-    <!-- Welcome Page -->
-    <div id="page-welcome" class="page active">
-      <div style="max-width: 600px; margin: 0 auto; padding: 4rem 1rem; text-align: center;">
-        <div style="font-size: 4rem; margin-bottom: 1rem;">🍳</div>
-        <h1 style="font-family: 'Playfair Display', serif; font-size: 3rem; margin-bottom: 0.5rem;">Blogger Cookbook</h1>
-        <p style="font-size: 1.3rem; color: var(--brown); margin-bottom: 3rem; line-height: 1.6;">Turn your recipes into a shareable cookbook. Build your creator brand. Earn 30% commission.</p>
-
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 3rem;">
-          <div style="background: var(--paper); border: 1px solid var(--border); border-radius: 10px; padding: 2rem;">
-            <div style="font-size: 2rem; margin-bottom: 1rem;">📚</div>
-            <h3 style="font-family: 'Playfair Display', serif; margin-bottom: 0.5rem;">For Creators</h3>
-            <p style="font-size: 0.9rem; color: var(--brown);">Share recipes, build cookbooks, track readers, earn commission</p>
-          </div>
-          <div style="background: var(--paper); border: 1px solid var(--border); border-radius: 10px; padding: 2rem;">
-            <div style="font-size: 2rem; margin-bottom: 1rem;">👨‍🍳</div>
-            <h3 style="font-family: 'Playfair Display', serif; margin-bottom: 0.5rem;">For Readers</h3>
-            <p style="font-size: 0.9rem; color: var(--brown);">Save recipes from your favorite creators into personalized cookbooks</p>
-          </div>
-        </div>
-
-        <div style="background: linear-gradient(135deg, rgba(74,44,138,0.1), rgba(212,168,32,0.1)); border: 1px solid rgba(74,44,138,0.2); border-radius: 10px; padding: 2rem; margin-bottom: 3rem;">
-          <h3 style="font-family: 'Playfair Display', serif; font-size: 1.2rem; margin-bottom: 1rem;">Creator Program</h3>
-          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; font-size: 0.9rem;">
-            <div>
-              <div style="font-weight: 700; color: var(--purple); margin-bottom: 0.3rem;">30%</div>
-              <div style="color: var(--brown);">Lifetime commission per subscriber</div>
-            </div>
-            <div>
-              <div style="font-weight: 700; color: var(--purple); margin-bottom: 0.3rem;">Free</div>
-              <div style="color: var(--brown);">Start anytime, no fees</div>
-            </div>
-            <div>
-              <div style="font-weight: 700; color: var(--purple); margin-bottom: 0.3rem;">Brand</div>
-              <div style="color: var(--brown);">Full control of your look</div>
-            </div>
-          </div>
-        </div>
-
-        <div style="display: flex; gap: 1rem; flex-direction: column;">
-          <button class="btn" onclick="showSignUp()" style="padding: 1rem; font-size: 1.1rem; font-weight: 700;">Start Creating Free</button>
-          <button class="btn btn-outline" onclick="showSignIn()" style="padding: 1rem; font-size: 1rem;">Already have an account?</button>
-        </div>
-
-        <p style="color: var(--brown); font-size: 0.85rem; margin-top: 2rem; line-height: 1.6;">
-          No credit card required. Free tier forever. Apply for Revenue Partner program when you're ready.
-        </p>
+<!-- WELCOME -->
+<div class="page active" id="page-welcome">
+  <div class="welcome-hero">
+    <div class="welcome-eyebrow">⚠ AI is stealing from food bloggers right now</div>
+    <h1>Your recipes are feeding AI.<br><em>For free. Without your consent.</em></h1>
+    <p>ChatGPT, Gemini, Perplexity — trained on your recipes. Answering cooking questions without crediting you, paying you, or sending a single click back to your blog. We built the antidote.</p>
+    <div class="scraper-callout">
+      <div class="scraper-callout-title">⚠ The scraper problem — by the numbers</div>
+      <div class="scraper-stat-row">
+        <div class="scraper-stat"><div class="scraper-stat-num">63%</div><div class="scraper-stat-label">of food blog content scraped within 48hrs of publishing</div></div>
+        <div class="scraper-stat"><div class="scraper-stat-num">$0</div><div class="scraper-stat-label">paid to bloggers by AI companies for training data</div></div>
+        <div class="scraper-stat"><div class="scraper-stat-num">0</div><div class="scraper-stat-label">clicks sent back to your blog by AI search answers</div></div>
       </div>
     </div>
-
-    <!-- Sign In Page -->
-    <div id="page-signin" class="page">
-      <div style="max-width: 400px; margin: 3rem auto;">
-        <h2 style="text-align: center; margin-bottom: 0.5rem;">Welcome back</h2>
-        <p class="page-desc" style="text-align: center;">Sign in to your creator account</p>
-
-        <div class="form-group">
-          <label>Email</label>
-          <input type="email" id="signin-email" placeholder="your@email.com">
-        </div>
-        <div class="form-group">
-          <label>Password</label>
-          <input type="password" id="signin-password" placeholder="••••••••">
-        </div>
-        <button class="btn" onclick="handleSignIn()" style="width: 100%; margin-bottom: 1rem;">Sign in</button>
-        <button class="btn btn-outline" onclick="showSignUp()" style="width: 100%;">Create account instead</button>
+    <div class="value-grid">
+      <div class="value-card">
+        <div class="value-card-icon">🛡️</div>
+        <h3>Your widget fights scrapers</h3>
+        <p>Dynamic, authenticated, yours. Scrapers steal static text. They cannot copy your Fern widget — it breaks when they try. And it costs you nothing.</p>
+        <span class="value-tag">✓ Always free</span>
+      </div>
+      <div class="value-card">
+        <div class="value-card-icon">🎨</div>
+        <h3>Looks exactly like your blog</h3>
+        <p>Your colors, your fonts, your size, your shape. Pick every detail in our widget builder. One line of code. Works on WordPress, Squarespace, Substack, Ghost — everywhere.</p>
+        <span class="value-tag">✓ Fully customizable · Always free</span>
+      </div>
+      <div class="value-card">
+        <div class="value-card-icon">💰</div>
+        <h3>30% — monthly, forever</h3>
+        <p>Every family that upgrades to Fern Pro because of your content — you get 30% of their subscription. Recurring. Every month they stay subscribed.</p>
+        <span class="value-tag">✓ Pro $0.90 · Pro Max $2.10 per sub/mo</span>
       </div>
     </div>
+    <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+      <button class="btn-primary" onclick="showPage('signup')">Start free — protect your recipes →</button>
+      <button class="btn-ghost" onclick="showPage('signin')">Already have an account</button>
+    </div>
+    <p style="font-size:.72rem;color:rgba(245,240,232,.3);margin-top:1rem;">No credit card. No contract. Tools are free forever.</p>
+  </div>
 
-    <!-- Sign Up Page -->
-    <div id="page-signup" class="page">
-      <div style="max-width: 400px; margin: 3rem auto;">
-        <h2 style="text-align: center; margin-bottom: 0.5rem;">Create your account</h2>
-        <p class="page-desc" style="text-align: center;">Free tier. Earn 30% when approved.</p>
-
-        <div class="form-group">
-          <label>Name</label>
-          <input type="text" id="signup-name" placeholder="Your name">
-        </div>
-        <div class="form-group">
-          <label>Email</label>
-          <input type="email" id="signup-email" placeholder="your@email.com">
-        </div>
-        <div class="form-group">
-          <label>Password</label>
-          <input type="password" id="signup-password" placeholder="••••••••">
-        </div>
-        <button class="btn" onclick="handleSignUp()" style="width: 100%; margin-bottom: 1rem;">Create account</button>
-        <button class="btn btn-outline" onclick="showSignIn()" style="width: 100%;">Already have an account?</button>
+  <div style="max-width:860px;margin:4rem auto;padding:0 1.5rem;">
+    <div style="text-align:center;margin-bottom:2.5rem;">
+      <div style="font-size:.7rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--mid);margin-bottom:.75rem;">How it works</div>
+      <div style="font-family:'Playfair Display',serif;font-size:2rem;color:var(--forest);">Four steps from your blog to <em style="color:var(--mid)">their dinner table.</em></div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;">
+      <div style="background:white;border-radius:14px;padding:1.25rem;border:1px solid var(--border);text-align:center;">
+        <div style="width:34px;height:34px;border-radius:50%;background:var(--forest);color:var(--cream);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:.95rem;margin:0 auto .75rem;">1</div>
+        <div style="font-family:'Playfair Display',serif;font-size:.9rem;color:var(--forest);margin-bottom:.25rem;">List your blog</div>
+        <div style="font-size:.75rem;color:var(--muted);line-height:1.5;font-weight:300;">Free. Your recipes featured to 50,000+ families using Fern.</div>
+      </div>
+      <div style="background:white;border-radius:14px;padding:1.25rem;border:1px solid var(--border);text-align:center;">
+        <div style="width:34px;height:34px;border-radius:50%;background:var(--forest);color:var(--cream);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:.95rem;margin:0 auto .75rem;">2</div>
+        <div style="font-family:'Playfair Display',serif;font-size:.9rem;color:var(--forest);margin-bottom:.25rem;">Build your widget</div>
+        <div style="font-size:.75rem;color:var(--muted);line-height:1.5;font-weight:300;">Match your blog exactly. Every detail. One line of code. Scraper-proof.</div>
+      </div>
+      <div style="background:white;border-radius:14px;padding:1.25rem;border:1px solid var(--border);text-align:center;">
+        <div style="width:34px;height:34px;border-radius:50%;background:var(--forest);color:var(--cream);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:.95rem;margin:0 auto .75rem;">3</div>
+        <div style="font-family:'Playfair Display',serif;font-size:.9rem;color:var(--forest);margin-bottom:.25rem;">Families cook it</div>
+        <div style="font-size:.75rem;color:var(--muted);line-height:1.5;font-weight:300;">Your name on every save, every cook, every shopping list. Full credit always.</div>
+      </div>
+      <div style="background:white;border-radius:14px;padding:1.25rem;border:1px solid var(--border);text-align:center;">
+        <div style="width:34px;height:34px;border-radius:50%;background:var(--forest);color:var(--cream);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:.95rem;margin:0 auto .75rem;">4</div>
+        <div style="font-family:'Playfair Display',serif;font-size:.9rem;color:var(--forest);margin-bottom:.25rem;">You get paid</div>
+        <div style="font-size:.75rem;color:var(--muted);line-height:1.5;font-weight:300;">30% monthly forever. Transparent dashboard. No minimums. No lock-in.</div>
       </div>
     </div>
+    <div style="text-align:center;margin-top:2.5rem;">
+      <button class="btn-primary" onclick="showPage('signup')" style="background:var(--forest);">Join free →</button>
+    </div>
+  </div>
+</div>
 
-    <!-- Dashboard Page -->
-    <div id="page-dashboard" class="page">
-      <h2>✦ Your Dashboard</h2>
-      <p class="page-desc">Welcome! Start sharing recipes and earning.</p>
+<!-- SIGN IN -->
+<div class="page" id="page-signin">
+  <div class="auth-wrap">
+    <div class="auth-card">
+      <div class="auth-title">Welcome back</div>
+      <div class="auth-sub">Sign in to your creator account</div>
+      <div class="field"><label>Email</label><input type="email" id="si-email" placeholder="your@email.com"></div>
+      <div class="field"><label>Password</label><input type="password" id="si-pass" placeholder="••••••••"></div>
+      <button class="btn-full" onclick="handleSignIn()">Sign in</button>
+      <button class="btn-full outline" onclick="showPage('signup')">Create account instead</button>
+      <div class="auth-switch"><a onclick="showPage('welcome')">← Back</a></div>
+    </div>
+  </div>
+</div>
 
-      <div id="status-badge-container"></div>
+<!-- SIGN UP -->
+<div class="page" id="page-signup">
+  <div class="auth-wrap">
+    <div class="auth-card">
+      <div class="auth-title">Protect your recipes</div>
+      <div class="auth-sub">Free forever. Earn 30% when approved.</div>
+      <div class="field"><label>Your name / blog name</label><input type="text" id="su-name" placeholder="Half Baked Harvest"></div>
+      <div class="field"><label>Blog URL</label><input type="text" id="su-blog" placeholder="halfbakedharvest.com"></div>
+      <div class="field"><label>Email</label><input type="email" id="su-email" placeholder="your@email.com"></div>
+      <div class="field"><label>Password</label><input type="password" id="su-pass" placeholder="Create a password"></div>
+      <button class="btn-full" onclick="handleSignUp()">Start free →</button>
+      <button class="btn-full outline" onclick="showPage('signin')">Already have an account</button>
+      <div class="auth-switch"><a onclick="showPage('welcome')">← Back</a></div>
+    </div>
+  </div>
+</div>
 
-      <div class="stats-grid">
-        <div class="stat-card">
-          <div class="stat-value" id="stat-saves">—</div>
-          <div class="stat-label">Recipe Saves</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-value" id="stat-cooks">—</div>
-          <div class="stat-label">Times Cooked</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-value" id="stat-clicks">—</div>
-          <div class="stat-label">Blog Clicks</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-value" id="stat-revenue">—</div>
-          <div class="stat-label">Revenue (if approved)</div>
-        </div>
+<!-- DASHBOARD -->
+<div class="page" id="page-dashboard">
+  <div class="dash-wrap">
+    <div class="dash-greeting" id="dash-greeting">Good evening</div>
+    <div class="dash-sub">Here's what happened while you were writing.</div>
+    <div class="hero-metric">
+      <div>
+        <div class="hero-big" id="d-cooked">0</div>
+        <div class="hero-label">families cooked your recipes this month</div>
+        <div class="hero-tip">↑ The number that matters most</div>
       </div>
-
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2rem;">
-        <button class="btn" onclick="showPage('recipes'); updateNav('recipes')">
-          📄 Share a Recipe
-        </button>
-        <button class="btn btn-outline" onclick="showPage('cookbooks'); updateNav('cookbooks')">
-          📚 Build a Cookbook
-        </button>
-      </div>
-
-      <h3 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 1rem;">Top Recipes (Last 30 Days)</h3>
-      <div id="top-recipes-list">
-        <p style="color: var(--brown); font-style: italic; text-align: center; padding: 2rem 0;">No recipes shared yet. Get started!</p>
+      <div class="mini-stats">
+        <div class="mstat"><div class="mstat-num" id="d-saves">0</div><div class="mstat-label">Saves</div></div>
+        <div class="mstat"><div class="mstat-num" id="d-clicks">0</div><div class="mstat-label">Blog clicks</div></div>
+        <div class="mstat"><div class="mstat-num" id="d-followers">0</div><div class="mstat-label">Followers</div></div>
+        <div class="mstat"><div class="mstat-num" id="d-earned">—</div><div class="mstat-label">Earned</div></div>
       </div>
     </div>
-
-    <!-- Recipes Page -->
-    <div id="page-recipes" class="page">
-      <h2>📄 My Recipes</h2>
-      <p class="page-desc">Share recipes from your blog and track their performance.</p>
-
-      <button class="btn" onclick="openShareRecipeModal()" style="margin-bottom: 1.5rem;">+ Share a Recipe</button>
-
-      <div id="recipes-list">
-        <p style="color: var(--brown); font-style: italic; text-align: center; padding: 2rem 0;">No recipes shared yet.</p>
-      </div>
-    </div>
-
-    <!-- Cookbooks Page -->
-    <div id="page-cookbooks" class="page">
-      <h2>📚 Cookbooks</h2>
-      <p class="page-desc">Create and publish branded cookbooks your readers keep forever.</p>
-
-      <button class="btn" onclick="openNewCookbookModal()" style="margin-bottom: 1.5rem;">+ Create Cookbook</button>
-
-      <div id="cookbooks-list">
-        <p style="color: var(--brown); font-style: italic; text-align: center; padding: 2rem 0;">No cookbooks yet. Create your first one!</p>
-      </div>
-    </div>
-
-    <!-- Revenue Partner Page -->
-    <div id="page-revenue" class="page">
-      <h2>💰 Revenue Partner Program</h2>
-      <p class="page-desc">Earn 30% lifetime commission on Pro subscribers from your recipes.</p>
-
-      <div id="revenue-container"></div>
-    </div>
-
-    <!-- Brand Studio Page -->
-<div id="page-brand" class="page">
-  <div style="max-width: 900px; margin: 0 auto; padding: 2rem 1rem;">
-    <!-- Progress Bar -->
-    <div style="margin-bottom: 2rem;">
-      <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
-        <span id="step-counter" style="font-weight: 700; color: var(--purple);">Step 1 of 8</span>
-        <button class="btn btn-outline" onclick="resetWizard()" style="padding: 0.4rem 0.8rem; font-size: 0.8rem;">Start Over</button>
-      </div>
-      <div style="background: var(--border); height: 4px; border-radius: 2px; overflow: hidden;">
-        <div id="progress-bar" style="background: var(--purple); height: 100%; width: 12.5%; transition: width 0.3s;"></div>
-      </div>
-    </div>
-
-    <!-- STEP 1: TEMPLATES -->
-    <div id="step-1" class="wizard-step" style="display: block;">
-      <h2 style="font-family: 'Playfair Display', serif; margin-bottom: 0.5rem;">Step 1: Choose Your Widget</h2>
-      <p style="color: var(--brown); margin-bottom: 2rem;">Select the template that matches your blog's vibe</p>
-      
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
-        <!-- Elegant -->
-        <div onclick="selectTemplate('elegant')" class="template-option" style="border: 3px solid var(--border); border-radius: 10px; overflow: hidden; cursor: pointer; padding: 1rem; text-align: center; transition: all 0.3s;">
-          <div style="background: white; padding: 1rem; border-radius: 6px; margin-bottom: 0.5rem;">
-            <div style="font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; color: #4A2C8A;">Recipe</div>
-            <div style="font-size: 0.75rem; color: #666;">Cuisine · Time</div>
-            <button style="background: #4A2C8A; color: white; border: none; border-radius: 6px; padding: 0.4rem; font-size: 0.65rem; width: 100%; margin-top: 0.5rem;">Save</button>
-          </div>
-          <div style="font-weight: 700;">Elegant</div>
-          <div style="font-size: 0.75rem; color: var(--brown);">Soft, sophisticated</div>
-        </div>
-
-        <!-- Rustic -->
-        <div onclick="selectTemplate('rustic')" class="template-option" style="border: 3px solid #8B7355; border-radius: 0; overflow: hidden; cursor: pointer; padding: 1rem; text-align: center; transition: all 0.3s; background: #F5E6D3;">
-          <div style="background: white; padding: 1rem; border-radius: 0; margin-bottom: 0.5rem;">
-            <div style="font-family: 'Georgia', serif; font-size: 1rem; font-weight: 700; color: #8B4513;">Recipe</div>
-            <div style="font-size: 0.75rem; color: #666;">Cuisine · Time</div>
-            <button style="background: #8B4513; color: white; border: none; border-radius: 0; padding: 0.4rem; font-size: 0.65rem; width: 100%; margin-top: 0.5rem;">Save</button>
-          </div>
-          <div style="font-weight: 700; color: #8B4513;">Rustic</div>
-          <div style="font-size: 0.75rem; color: #8B7355;">Warm, homey</div>
-        </div>
-
-        <!-- Modern -->
-        <div onclick="selectTemplate('modern')" class="template-option" style="border: 3px solid #333; border-radius: 2px; overflow: hidden; cursor: pointer; padding: 1rem; text-align: center; transition: all 0.3s; background: #1a1a1a; color: white;">
-          <div style="background: #1a1a1a; padding: 1rem; border-radius: 2px; margin-bottom: 0.5rem;">
-            <div style="font-family: 'Lato', sans-serif; font-size: 1rem; font-weight: 700; color: #FFD700;">RECIPE</div>
-            <div style="font-size: 0.75rem; color: #ccc;">CUISINE · TIME</div>
-            <button style="background: #FFD700; color: #1a1a1a; border: none; border-radius: 2px; padding: 0.4rem; font-size: 0.65rem; width: 100%; margin-top: 0.5rem;">Save</button>
-          </div>
-          <div style="font-weight: 700;">Modern</div>
-          <div style="font-size: 0.75rem; color: #ccc;">Bold, clean</div>
-        </div>
-
-        <!-- Minimalist -->
-        <div onclick="selectTemplate('minimalist')" class="template-option" style="border: 2px solid #ddd; border-radius: 4px; overflow: hidden; cursor: pointer; padding: 1rem; text-align: center; transition: all 0.3s;">
-          <div style="background: white; padding: 1rem; border-radius: 4px; margin-bottom: 0.5rem;">
-            <div style="font-family: 'Lato', sans-serif; font-size: 1rem; font-weight: 700; color: #333;">Recipe</div>
-            <div style="font-size: 0.75rem; color: #888;">Cuisine · Time</div>
-            <button style="background: #333; color: white; border: none; border-radius: 4px; padding: 0.4rem; font-size: 0.65rem; width: 100%; margin-top: 0.5rem;">Save</button>
-          </div>
-          <div style="font-weight: 700;">Minimalist</div>
-          <div style="font-size: 0.75rem; color: var(--brown);">Simple, light</div>
-        </div>
-
-        <!-- Colorful -->
-        <div onclick="selectTemplate('colorful')" class="template-option" style="border: 3px solid #FF6B6B; border-radius: 12px; overflow: hidden; cursor: pointer; padding: 1rem; text-align: center; transition: all 0.3s;">
-          <div style="background: linear-gradient(135deg, #FF6B6B, #FF8787); height: 20px; border-radius: 8px; margin-bottom: 0.5rem;"></div>
-          <div style="background: white; padding: 1rem; border-radius: 8px; margin-bottom: 0.5rem;">
-            <div style="font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; color: #FF6B6B;">Recipe</div>
-            <div style="font-size: 0.75rem; color: #666;">Cuisine · Time</div>
-            <button style="background: linear-gradient(135deg, #FF6B6B, #FF8787); color: white; border: none; border-radius: 6px; padding: 0.4rem; font-size: 0.65rem; width: 100%; margin-top: 0.5rem;">Save</button>
-          </div>
-          <div style="font-weight: 700; color: #FF6B6B;">Colorful</div>
-          <div style="font-size: 0.75rem; color: var(--brown);">Vibrant, fun</div>
-        </div>
-
-        <!-- Professional -->
-        <div onclick="selectTemplate('professional')" class="template-option" style="border: 2px solid #2C3E50; border-radius: 0; overflow: hidden; cursor: pointer; padding: 0; transition: all 0.3s;">
-          <div style="background: #2C3E50; color: white; padding: 0.5rem; font-size: 0.7rem; font-weight: 700;">YOUR RECIPE</div>
-          <div style="background: white; padding: 1rem;">
-            <div style="font-family: 'Georgia', serif; font-size: 1rem; font-weight: 700; color: #2C3E50;">Recipe</div>
-            <div style="font-size: 0.75rem; color: #666;">Cuisine · Time</div>
-            <button style="background: #2C3E50; color: white; border: none; border-radius: 0; padding: 0.4rem; font-size: 0.65rem; width: 100%; margin-top: 0.5rem;">Save</button>
-          </div>
-          <div style="font-weight: 700;">Professional</div>
-          <div style="font-size: 0.75rem; color: var(--brown);">Corporate, formal</div>
-        </div>
-
-        <!-- Minimal Dark -->
-        <div onclick="selectTemplate('minimal-dark')" class="template-option" style="border: 1px solid #444; border-radius: 6px; overflow: hidden; cursor: pointer; padding: 1rem; text-align: center; transition: all 0.3s; background: #0f0f0f; color: white;">
-          <div style="background: #1a1a1a; padding: 1rem; border-radius: 4px; margin-bottom: 0.5rem;">
-            <div style="font-family: 'Lato', sans-serif; font-size: 1rem; font-weight: 700; color: white;">Recipe</div>
-            <div style="font-size: 0.75rem; color: #999;">Cuisine · Time</div>
-            <button style="background: white; color: #1a1a1a; border: none; border-radius: 4px; padding: 0.4rem; font-size: 0.65rem; width: 100%; margin-top: 0.5rem; font-weight: 700;">Save</button>
-          </div>
-          <div style="font-weight: 700;">Dark Minimal</div>
-          <div style="font-size: 0.75rem; color: #999;">Sleek, modern</div>
-        </div>
-
-        <!-- Playful -->
-        <div onclick="selectTemplate('playful')" class="template-option" style="border: 3px dashed #FF69B4; border-radius: 20px; overflow: hidden; cursor: pointer; padding: 1rem; text-align: center; transition: all 0.3s; background: #FFF0F5;">
-          <div style="background: white; padding: 1rem; border-radius: 16px; margin-bottom: 0.5rem;">
-            <div style="font-family: 'Comic Sans MS', cursive; font-size: 1rem; font-weight: 700; color: #FF69B4;">Recipe 🍳</div>
-            <div style="font-size: 0.75rem; color: #FF69B4;">Cuisine · Time</div>
-            <button style="background: #FF69B4; color: white; border: none; border-radius: 16px; padding: 0.4rem; font-size: 0.65rem; width: 100%; margin-top: 0.5rem; font-weight: 700;">Save 💕</button>
-          </div>
-          <div style="font-weight: 700; color: #FF69B4;">Playful</div>
-          <div style="font-size: 0.75rem; color: var(--brown);">Fun, friendly</div>
-        </div>
-
-        <!-- Clean Card -->
-        <div onclick="selectTemplate('clean')" class="template-option" style="border: none; border-radius: 16px; overflow: hidden; cursor: pointer; padding: 1rem; text-align: center; transition: all 0.3s; background: white; box-shadow: 0 4px 16px rgba(0,0,0,0.1);">
-          <div style="padding: 1rem;">
-            <div style="font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; color: #7B68EE;">Recipe</div>
-            <div style="font-size: 0.75rem; color: #666;">Cuisine · Time</div>
-            <button style="background: #7B68EE; color: white; border: none; border-radius: 12px; padding: 0.4rem; font-size: 0.65rem; width: 100%; margin-top: 0.5rem;">Save</button>
-          </div>
-          <div style="font-weight: 700;">Clean Card</div>
-          <div style="font-size: 0.75rem; color: var(--brown);">Elegant, floating</div>
-        </div>
-      </div>
-
-      <div style="display: flex; justify-content: flex-end; gap: 1rem;">
-        <button class="btn btn-outline" onclick="previousStep()" style="display: none;">← Back</button>
-        <button class="btn" onclick="nextStep()">Next →</button>
-      </div>
-    </div>
-
-    <!-- STEP 2: COLORS -->
-    <div id="step-2" class="wizard-step" style="display: none;">
-      <h2 style="font-family: 'Playfair Display', serif; margin-bottom: 0.5rem;">Step 2: Choose Your Colors</h2>
-      <p style="color: var(--brown); margin-bottom: 2rem;">Match your blog's color scheme</p>
-
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem;">
+    <div class="protect-card">
+      <div style="display:flex;align-items:center;gap:.75rem;">
+        <div class="pdot"></div>
         <div>
-          <label style="display: block; font-weight: 700; margin-bottom: 0.5rem;">Primary Color</label>
-          <input type="color" id="wiz-primary" value="#4A2C8A" style="width: 100%; height: 80px; border: 2px solid var(--border); border-radius: 8px; cursor: pointer;">
-          <p style="font-size: 0.85rem; color: var(--brown); margin-top: 0.5rem;">Main brand color (buttons, titles)</p>
-        </div>
-
-        <div>
-          <label style="display: block; font-weight: 700; margin-bottom: 0.5rem;">Accent Color</label>
-          <input type="color" id="wiz-accent" value="#D4A820" style="width: 100%; height: 80px; border: 2px solid var(--border); border-radius: 8px; cursor: pointer;">
-          <p style="font-size: 0.85rem; color: var(--brown); margin-top: 0.5rem;">Highlights, hovers</p>
-        </div>
-
-        <div>
-          <label style="display: block; font-weight: 700; margin-bottom: 0.5rem;">Background Color</label>
-          <input type="color" id="wiz-bg" value="#FFFFFF" style="width: 100%; height: 80px; border: 2px solid var(--border); border-radius: 8px; cursor: pointer;">
-          <p style="font-size: 0.85rem; color: var(--brown); margin-top: 0.5rem;">Widget background</p>
+          <div style="font-size:.85rem;color:var(--forest);font-weight:500;">🛡 Widget active · Content protected</div>
+          <div style="font-size:.72rem;color:var(--muted);margin-top:.1rem;" id="d-protect">0 scrapers blocked · Widget on 0 pages</div>
         </div>
       </div>
+      <button class="btn-primary" style="padding:.5rem 1rem;font-size:.78rem;" onclick="showPage('widget')">Manage widget →</button>
+    </div>
+    <div class="section-title">
+      Top recipes this month
+      <button style="background:none;border:none;color:var(--mid);font-size:.8rem;cursor:pointer;font-family:inherit;" onclick="showPage('recipes')">See all →</button>
+    </div>
+    <div id="d-recipes"><div class="empty"><div class="empty-icon">📄</div><div style="font-size:.85rem;">No recipes yet. Add your first to start tracking.</div></div></div>
+    <div style="display:flex;gap:.75rem;margin-top:1.5rem;flex-wrap:wrap;">
+      <button class="btn-primary" onclick="openAddRecipe()">+ Add a recipe</button>
+      <button style="background:none;border:1.5px solid var(--border);border-radius:100px;padding:.65rem 1.25rem;font-family:inherit;font-size:.85rem;color:var(--forest);cursor:pointer;" onclick="showPage('revenue')">View earnings →</button>
+    </div>
+  </div>
+</div>
 
-      <div style="display: flex; justify-content: space-between; gap: 1rem; margin-top: 2rem;">
-        <button class="btn btn-outline" onclick="previousStep()">← Back</button>
-        <button class="btn" onclick="nextStep()">Next →</button>
+<!-- RECIPES -->
+<div class="page" id="page-recipes">
+  <div class="dash-wrap">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:1.5rem;">
+      <div>
+        <div class="dash-greeting">Recipe Performance</div>
+        <div class="dash-sub">Every save, cook, and click — tracked and attributed to you.</div>
+      </div>
+      <button class="btn-primary" onclick="openAddRecipe()">+ Add recipe</button>
+    </div>
+    <div id="recipes-list"><div class="empty"><div class="empty-icon">📄</div><div style="font-size:.85rem;">No recipes yet. Share your first recipe and start tracking.</div></div></div>
+  </div>
+</div>
+
+<!-- EARNINGS -->
+<div class="page" id="page-revenue">
+  <div class="dash-wrap">
+    <div class="dash-greeting">Earnings</div>
+    <div class="dash-sub">30% of every Pro subscription your content drives. Monthly. Forever.</div>
+    <div id="revenue-content"></div>
+  </div>
+</div>
+
+<!-- WIDGET BUILDER -->
+<div class="page" id="page-widget">
+  <div class="dash-wrap">
+    <div class="dash-greeting">Your Widget</div>
+    <div class="dash-sub">Built to match your blog exactly. Completely free. Scraper-proof by design.</div>
+
+    <div class="protect-banner">
+      <div class="protect-title">🛡 Why your widget beats scrapers</div>
+      <div class="protect-body">Scrapers steal static text. Your Fern widget is dynamic and authenticated — tied to your account, verified on every load. Copy the HTML and it breaks. That is the point.</div>
+      <div class="pvs">
+        <div class="pv-bad">
+          <div class="pvt">💀 What scrapers do</div>
+          <div class="pvi"><span>🔴</span> Copy your recipe text verbatim</div>
+          <div class="pvi"><span>🔴</span> Republish with zero credit</div>
+          <div class="pvi"><span>🔴</span> Rank above you on Google</div>
+          <div class="pvi"><span>🔴</span> Never send traffic back</div>
+          <div class="pvi"><span>🔴</span> Pay you exactly nothing</div>
+        </div>
+        <div class="pv-good">
+          <div class="pvt">✅ Your Fern widget</div>
+          <div class="pvi"><span>🟢</span> Authenticated — breaks if copied</div>
+          <div class="pvi"><span>🟢</span> Your name on every interaction</div>
+          <div class="pvi"><span>🟢</span> Always links back to your post</div>
+          <div class="pvi"><span>🟢</span> Drives traffic to you</div>
+          <div class="pvi"><span>🟢</span> Earns you 30% of upgrades</div>
+        </div>
       </div>
     </div>
 
-    <!-- STEP 3: FONTS -->
-    <div id="step-3" class="wizard-step" style="display: none;">
-      <h2 style="font-family: 'Playfair Display', serif; margin-bottom: 0.5rem;">Step 3: Choose Your Font</h2>
-      <p style="color: var(--brown); margin-bottom: 2rem;">Sets the tone for your recipes</p>
+    <div class="widget-builder">
+      <div class="builder-controls">
+        <div style="font-family:'Playfair Display',serif;font-size:1rem;color:var(--forest);margin-bottom:1.1rem;">Customize your widget</div>
 
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
-        <div onclick="selectFont('Playfair Display')" class="font-option" style="border: 2px solid var(--border); padding: 1rem; border-radius: 8px; cursor: pointer; transition: all 0.3s;">
-          <div style="font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700;">Recipe Title</div>
-          <div style="font-size: 0.8rem; color: var(--brown);">Elegant & Serif</div>
-        </div>
-
-        <div onclick="selectFont('Georgia')" class="font-option" style="border: 2px solid var(--border); padding: 1rem; border-radius: 8px; cursor: pointer; transition: all 0.3s;">
-          <div style="font-family: 'Georgia', serif; font-size: 1.3rem; font-weight: 700;">Recipe Title</div>
-          <div style="font-size: 0.8rem; color: var(--brown);">Classic & Traditional</div>
-        </div>
-
-        <div onclick="selectFont('Cormorant Garamond')" class="font-option" style="border: 2px solid var(--border); padding: 1rem; border-radius: 8px; cursor: pointer; transition: all 0.3s;">
-          <div style="font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-weight: 700;">Recipe Title</div>
-          <div style="font-size: 0.8rem; color: var(--brown);">Luxury & Refined</div>
-        </div>
-
-        <div onclick="selectFont('Lato')" class="font-option" style="border: 2px solid var(--border); padding: 1rem; border-radius: 8px; cursor: pointer; transition: all 0.3s;">
-          <div style="font-family: 'Lato', sans-serif; font-size: 1.3rem; font-weight: 700;">Recipe Title</div>
-          <div style="font-size: 0.8rem; color: var(--brown);">Clean & Modern</div>
-        </div>
-
-        <div onclick="selectFont('Roboto')" class="font-option" style="border: 2px solid var(--border); padding: 1rem; border-radius: 8px; cursor: pointer; transition: all 0.3s;">
-          <div style="font-family: 'Roboto', sans-serif; font-size: 1.3rem; font-weight: 700;">Recipe Title</div>
-          <div style="font-size: 0.8rem; color: var(--brown);">Geometric & Bold</div>
-        </div>
-
-        <div onclick="selectFont('Comic Sans MS')" class="font-option" style="border: 2px solid var(--border); padding: 1rem; border-radius: 8px; cursor: pointer; transition: all 0.3s;">
-          <div style="font-family: 'Comic Sans MS', cursive; font-size: 1.3rem; font-weight: 700;">Recipe Title</div>
-          <div style="font-size: 0.8rem; color: var(--brown);">Playful & Fun</div>
-        </div>
-
-        <div onclick="selectFont('Courier New')" class="font-option" style="border: 2px solid var(--border); padding: 1rem; border-radius: 8px; cursor: pointer; transition: all 0.3s;">
-          <div style="font-family: 'Courier New', monospace; font-size: 1.3rem; font-weight: 700;">Recipe Title</div>
-          <div style="font-size: 0.8rem; color: var(--brown);">Technical & Code</div>
-        </div>
-
-        <div onclick="selectFont('system')" class="font-option" style="border: 2px solid var(--border); padding: 1rem; border-radius: 8px; cursor: pointer; transition: all 0.3s;">
-          <div style="font-size: 1.3rem; font-weight: 700;">Recipe Title</div>
-          <div style="font-size: 0.8rem; color: var(--brown);">System Default</div>
-        </div>
-      </div>
-
-      <div style="display: flex; justify-content: space-between; gap: 1rem;">
-        <button class="btn btn-outline" onclick="previousStep()">← Back</button>
-        <button class="btn" onclick="nextStep()">Next →</button>
-      </div>
-    </div>
-
-    <!-- STEP 4: CARD STYLING -->
-    <div id="step-4" class="wizard-step" style="display: none;">
-      <h2 style="font-family: 'Playfair Display', serif; margin-bottom: 0.5rem;">Step 4: Card Styling</h2>
-      <p style="color: var(--brown); margin-bottom: 2rem;">How your recipe widget looks</p>
-
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
-        <div onclick="selectCardStyle('flat')" class="card-style-option" style="border: 2px solid var(--border); padding: 1rem; border-radius: 8px; cursor: pointer; transition: all 0.3s;">
-          <div style="background: white; border: 1px solid #ddd; border-radius: 8px; padding: 1rem; margin-bottom: 1rem;">
-            <div style="font-weight: 700; font-size: 0.9rem;">Recipe Card</div>
+        <div class="csec">
+          <span class="clabel">Size</span>
+          <div class="cchips">
+            <button class="chip on" onclick="sw('size','small',this)">Small</button>
+            <button class="chip" onclick="sw('size','medium',this)">Medium</button>
+            <button class="chip" onclick="sw('size','large',this)">Large</button>
+            <button class="chip" onclick="sw('size','full',this)">Full width</button>
           </div>
-          <div style="font-weight: 700;">Flat</div>
-          <div style="font-size: 0.8rem; color: var(--brown);">No shadow</div>
         </div>
 
-        <div onclick="selectCardStyle('shadow')" class="card-style-option" style="border: 2px solid var(--border); padding: 1rem; border-radius: 8px; cursor: pointer; transition: all 0.3s;">
-          <div style="background: white; border: none; border-radius: 8px; padding: 1rem; margin-bottom: 1rem; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
-            <div style="font-weight: 700; font-size: 0.9rem;">Recipe Card</div>
+        <div class="csec">
+          <span class="clabel">Shape</span>
+          <div class="cchips">
+            <button class="chip on" onclick="sw('shape','rounded',this)">Rounded</button>
+            <button class="chip" onclick="sw('shape','sharp',this)">Sharp</button>
+            <button class="chip" onclick="sw('shape','pill',this)">Pill</button>
           </div>
-          <div style="font-weight: 700;">Shadow</div>
-          <div style="font-size: 0.8rem; color: var(--brown);">Soft drop shadow</div>
         </div>
 
-        <div onclick="selectCardStyle('border')" class="card-style-option" style="border: 2px solid var(--border); padding: 1rem; border-radius: 8px; cursor: pointer; transition: all 0.3s;">
-          <div style="background: white; border: 2px solid #4A2C8A; border-radius: 8px; padding: 1rem; margin-bottom: 1rem;">
-            <div style="font-weight: 700; font-size: 0.9rem;">Recipe Card</div>
+        <div class="csec">
+          <span class="clabel">Style</span>
+          <div class="cchips">
+            <button class="chip on" onclick="sw('style','minimal',this)">Minimal</button>
+            <button class="chip" onclick="sw('style','card',this)">Card</button>
+            <button class="chip" onclick="sw('style','bold',this)">Bold</button>
+            <button class="chip" onclick="sw('style','dark',this)">Dark</button>
           </div>
-          <div style="font-weight: 700;">Border</div>
-          <div style="font-size: 0.8rem; color: var(--brown);">Colored border</div>
         </div>
 
-        <div onclick="selectCardStyle('gradient')" class="card-style-option" style="border: 2px solid var(--border); padding: 1rem; border-radius: 8px; cursor: pointer; transition: all 0.3s;">
-          <div style="background: linear-gradient(135deg, rgba(74,44,138,0.1), transparent); border: 1px solid #4A2C8A; border-radius: 8px; padding: 1rem; margin-bottom: 1rem;">
-            <div style="font-weight: 700; font-size: 0.9rem;">Recipe Card</div>
+        <div class="csec">
+          <span class="clabel">Primary color</span>
+          <div class="swatch-row">
+            <div class="swatch on" style="background:#1C3A1A" onclick="sc('#1C3A1A',this)"></div>
+            <div class="swatch" style="background:#7B3F00" onclick="sc('#7B3F00',this)"></div>
+            <div class="swatch" style="background:#1B4332" onclick="sc('#1B4332',this)"></div>
+            <div class="swatch" style="background:#2C3E50" onclick="sc('#2C3E50',this)"></div>
+            <div class="swatch" style="background:#880E4F" onclick="sc('#880E4F',this)"></div>
+            <div class="swatch" style="background:#E65100" onclick="sc('#E65100',this)"></div>
+            <div class="swatch" style="background:#5C6BC0" onclick="sc('#5C6BC0',this)"></div>
+            <input type="color" id="cc" value="#1C3A1A" oninput="sc(this.value,null)" style="width:28px;height:28px;border:none;border-radius:5px;cursor:pointer;padding:0;">
           </div>
-          <div style="font-weight: 700;">Gradient</div>
-          <div style="font-size: 0.8rem; color: var(--brown);">Gradient background</div>
+        </div>
+
+        <div class="csec">
+          <span class="clabel">Font</span>
+          <div class="cchips">
+            <button class="chip on" style="font-family:'Playfair Display',serif" onclick="sw('font','Playfair Display',this)">Serif</button>
+            <button class="chip" style="font-family:Georgia,serif" onclick="sw('font','Georgia',this)">Georgia</button>
+            <button class="chip" style="font-family:'DM Sans',sans-serif" onclick="sw('font','DM Sans',this)">Modern</button>
+            <button class="chip" style="font-family:monospace" onclick="sw('font','monospace',this)">Mono</button>
+          </div>
+        </div>
+
+        <div class="csec">
+          <span class="clabel">Button text</span>
+          <input type="text" id="btn-text" value="Save to my week" oninput="rw()" style="width:100%;padding:.55rem;border:1.5px solid var(--border);border-radius:8px;font-family:inherit;font-size:.82rem;color:var(--ink);background:var(--paper);">
+        </div>
+
+        <div class="csec" style="border:none;margin:0;padding:0;">
+          <span class="clabel">Show on widget</span>
+          <div style="display:flex;flex-direction:column;gap:.35rem;margin-top:.2rem;">
+            <label style="display:flex;align-items:center;gap:.5rem;font-size:.82rem;color:var(--forest);cursor:pointer;font-weight:400;"><input type="checkbox" id="sh-c" checked onchange="rw()"> Cuisine</label>
+            <label style="display:flex;align-items:center;gap:.5rem;font-size:.82rem;color:var(--forest);cursor:pointer;font-weight:400;"><input type="checkbox" id="sh-t" checked onchange="rw()"> Cook time</label>
+            <label style="display:flex;align-items:center;gap:.5rem;font-size:.82rem;color:var(--forest);cursor:pointer;font-weight:400;"><input type="checkbox" id="sh-a" checked onchange="rw()"> Powered by Fern</label>
+          </div>
         </div>
       </div>
 
-      <div style="display: flex; justify-content: space-between; gap: 1rem;">
-        <button class="btn btn-outline" onclick="previousStep()">← Back</button>
-        <button class="btn" onclick="nextStep()">Next →</button>
-      </div>
-    </div>
-
-    <!-- STEP 5: BUTTON STYLE -->
-    <div id="step-5" class="wizard-step" style="display: none;">
-      <h2 style="font-family: 'Playfair Display', serif; margin-bottom: 0.5rem;">Step 5: Button Style</h2>
-      <p style="color: var(--brown); margin-bottom: 2rem;">How readers interact with your recipe</p>
-
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
-        <div onclick="selectButtonStyle('rounded')" class="button-style-option" style="border: 2px solid var(--border); padding: 1.5rem; border-radius: 8px; cursor: pointer; transition: all 0.3s; text-align: center;">
-          <button style="background: #4A2C8A; color: white; border: none; border-radius: 20px; padding: 0.75rem 1.5rem; font-weight: 700; cursor: pointer; margin-bottom: 1rem;">Save Recipe</button>
-          <div style="font-weight: 700;">Rounded</div>
-          <div style="font-size: 0.8rem; color: var(--brown);">Pill-shaped</div>
+      <div class="builder-preview">
+        <div class="preview-header">
+          Live preview — updates instantly
+          <span style="font-size:.6rem;background:rgba(28,58,26,.08);color:var(--mid);padding:.2rem .5rem;border-radius:20px;">Scraper-proof ✓</span>
         </div>
-
-        <div onclick="selectButtonStyle('square')" class="button-style-option" style="border: 2px solid var(--border); padding: 1.5rem; border-radius: 8px; cursor: pointer; transition: all 0.3s; text-align: center;">
-          <button style="background: #4A2C8A; color: white; border: none; border-radius: 0; padding: 0.75rem 1.5rem; font-weight: 700; cursor: pointer; margin-bottom: 1rem;">Save Recipe</button>
-          <div style="font-weight: 700;">Square</div>
-          <div style="font-size: 0.8rem; color: var(--brown);">Sharp corners</div>
+        <div class="blog-ctx">
+          <div class="ctx-url" id="prev-url">yourblog.com</div>
+          <div class="ctx-title">Creamy Tuscan Chicken Pasta</div>
+          <div class="ctx-meta">30 min · Easy · Serves 4</div>
+          <div class="ctx-body">Your recipe content lives here. Your widget sits right alongside it — amplifying your reach without replacing your blog.</div>
+          <div id="live-widget"></div>
+          <div style="font-size:.7rem;color:var(--muted);margin-top:.65rem;font-style:italic;">← Your blog content continues below</div>
         </div>
-
-        <div onclick="selectButtonStyle('ghost')" class="button-style-option" style="border: 2px solid var(--border); padding: 1.5rem; border-radius: 8px; cursor: pointer; transition: all 0.3s; text-align: center;">
-          <button style="background: transparent; color: #4A2C8A; border: 2px solid #4A2C8A; border-radius: 6px; padding: 0.75rem 1.5rem; font-weight: 700; cursor: pointer; margin-bottom: 1rem;">Save Recipe</button>
-          <div style="font-weight: 700;">Ghost</div>
-          <div style="font-size: 0.8rem; color: var(--brown);">Outline only</div>
+        <div class="code-wrap" id="wcode">Loading...</div>
+        <div class="compat-tags">
+          <div class="compat-tag">✓ WordPress</div>
+          <div class="compat-tag">✓ Squarespace</div>
+          <div class="compat-tag">✓ Substack</div>
+          <div class="compat-tag">✓ Ghost</div>
+          <div class="compat-tag">✓ Any platform</div>
         </div>
-
-        <div onclick="selectButtonStyle('filled')" class="button-style-option" style="border: 2px solid var(--border); padding: 1.5rem; border-radius: 8px; cursor: pointer; transition: all 0.3s; text-align: center;">
-          <button style="background: #4A2C8A; color: white; border: 3px solid #4A2C8A; border-radius: 4px; padding: 0.75rem 1.5rem; font-weight: 700; cursor: pointer; margin-bottom: 1rem;">Save Recipe</button>
-          <div style="font-weight: 700;">Filled</div>
-          <div style="font-size: 0.8rem; color: var(--brown);">Bold & solid</div>
-        </div>
-      </div>
-
-      <div style="display: flex; justify-content: space-between; gap: 1rem;">
-        <button class="btn btn-outline" onclick="previousStep()">← Back</button>
-        <button class="btn" onclick="nextStep()">Next →</button>
-      </div>
-    </div>
-
-    <!-- STEP 6: LAYOUT -->
-    <div id="step-6" class="wizard-step" style="display: none;">
-      <h2 style="font-family: 'Playfair Display', serif; margin-bottom: 0.5rem;">Step 6: Widget Layout</h2>
-      <p style="color: var(--brown); margin-bottom: 2rem;">How spacious your widget feels</p>
-
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
-        <div onclick="selectLayout('compact')" class="layout-option" style="border: 2px solid var(--border); padding: 1rem; border-radius: 8px; cursor: pointer; transition: all 0.3s;">
-          <div style="background: white; border: 1px solid #ddd; border-radius: 6px; padding: 0.5rem; margin-bottom: 1rem; font-size: 0.8rem;">
-            <div style="font-weight: 700; font-size: 0.85rem; margin-bottom: 0.2rem;">Recipe</div>
-            <div style="font-size: 0.7rem; color: #999; margin-bottom: 0.3rem;">Info</div>
-            <button style="width: 100%; padding: 0.3rem; font-size: 0.7rem;">Save</button>
-          </div>
-          <div style="font-weight: 700;">Compact</div>
-          <div style="font-size: 0.8rem; color: var(--brown);">Tight spacing</div>
-        </div>
-
-        <div onclick="selectLayout('regular')" class="layout-option" style="border: 2px solid var(--border); padding: 1rem; border-radius: 8px; cursor: pointer; transition: all 0.3s;">
-          <div style="background: white; border: 1px solid #ddd; border-radius: 6px; padding: 1rem; margin-bottom: 1rem;">
-            <div style="font-weight: 700; margin-bottom: 0.4rem;">Recipe Title</div>
-            <div style="font-size: 0.8rem; color: #999; margin-bottom: 0.6rem;">Info</div>
-            <button style="width: 100%; padding: 0.5rem;">Save</button>
-          </div>
-          <div style="font-weight: 700;">Regular</div>
-          <div style="font-size: 0.8rem; color: var(--brown);">Standard spacing</div>
-        </div>
-
-        <div onclick="selectLayout('spread')" class="layout-option" style="border: 2px solid var(--border); padding: 1rem; border-radius: 8px; cursor: pointer; transition: all 0.3s;">
-          <div style="background: white; border: 1px solid #ddd; border-radius: 6px; padding: 1.5rem; margin-bottom: 1rem;">
-            <div style="font-weight: 700; font-size: 1.1rem; margin-bottom: 0.8rem;">Recipe Title</div>
-            <div style="font-size: 0.9rem; color: #999; margin-bottom: 1rem;">Cuisine · Time</div>
-            <button style="width: 100%; padding: 0.7rem; font-size: 0.95rem;">Save</button>
-          </div>
-          <div style="font-weight: 700;">Spread</div>
-          <div style="font-size: 0.8rem; color: var(--brown);">Spacious & relaxed</div>
-        </div>
-      </div>
-
-      <div style="display: flex; justify-content: space-between; gap: 1rem;">
-        <button class="btn btn-outline" onclick="previousStep()">← Back</button>
-        <button class="btn" onclick="nextStep()">Next →</button>
-      </div>
-    </div>
-
-    <!-- STEP 7: ANIMATIONS -->
-    <div id="step-7" class="wizard-step" style="display: none;">
-      <h2 style="font-family: 'Playfair Display', serif; margin-bottom: 0.5rem;">Step 7: Hover Animation</h2>
-      <p style="color: var(--brown); margin-bottom: 2rem;">How your widget responds when readers hover</p>
-
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
-        <div onclick="selectAnimation('none')" class="animation-option" style="border: 2px solid var(--border); padding: 1rem; border-radius: 8px; cursor: pointer; transition: all 0.3s;">
-          <div style="background: white; border: 1px solid #ddd; border-radius: 6px; padding: 1rem; margin-bottom: 1rem;">
-            <div style="font-weight: 700;">Recipe</div>
-          </div>
-          <div style="font-weight: 700;">None</div>
-          <div style="font-size: 0.8rem; color: var(--brown);">No movement</div>
-        </div>
-
-        <div onclick="selectAnimation('fade')" class="animation-option" style="border: 2px solid var(--border); padding: 1rem; border-radius: 8px; cursor: pointer; transition: all 0.3s;">
-          <div style="background: white; border: 1px solid #ddd; border-radius: 6px; padding: 1rem; margin-bottom: 1rem; opacity: 0.7;">
-            <div style="font-weight: 700;">Recipe</div>
-          </div>
-          <div style="font-weight: 700;">Fade</div>
-          <div style="font-size: 0.8rem; color: var(--brown);">Opacity changes</div>
-        </div>
-
-        <div onclick="selectAnimation('scale')" class="animation-option" style="border: 2px solid var(--border); padding: 1rem; border-radius: 8px; cursor: pointer; transition: all 0.3s;">
-          <div style="background: white; border: 1px solid #ddd; border-radius: 6px; padding: 1rem; margin-bottom: 1rem; transform: scale(1.05);">
-            <div style="font-weight: 700;">Recipe</div>
-          </div>
-          <div style="font-weight: 700;">Scale</div>
-          <div style="font-size: 0.8rem; color: var(--brown);">Grows slightly</div>
-        </div>
-
-        <div onclick="selectAnimation('slide')" class="animation-option" style="border: 2px solid var(--border); padding: 1rem; border-radius: 8px; cursor: pointer; transition: all 0.3s;">
-          <div style="background: white; border: 1px solid #ddd; border-radius: 6px; padding: 1rem; margin-bottom: 1rem; transform: translateY(-4px);">
-            <div style="font-weight: 700;">Recipe</div>
-          </div>
-          <div style="font-weight: 700;">Slide</div>
-          <div style="font-size: 0.8rem; color: var(--brown);">Lifts up</div>
-        </div>
-      </div>
-
-      <div style="display: flex; justify-content: space-between; gap: 1rem;">
-        <button class="btn btn-outline" onclick="previousStep()">← Back</button>
-        <button class="btn" onclick="nextStep()">Next →</button>
-      </div>
-    </div>
-
-    <!-- STEP 8: PREVIEW & SAVE -->
-    <div id="step-8" class="wizard-step" style="display: none;">
-      <h2 style="font-family: 'Playfair Display', serif; margin-bottom: 0.5rem;">Step 8: Preview & Save</h2>
-      <p style="color: var(--brown); margin-bottom: 2rem;">Here's your complete brand kit. Love it? Save it. Don't? Go back and adjust.</p>
-
-      <div style="background: white; border: 1px solid var(--border); border-radius: 10px; padding: 2rem; margin-bottom: 2rem;">
-        <h3 style="font-family: 'Playfair Display', serif; margin-bottom: 1.5rem;">Your Widget Preview</h3>
-        <div id="final-preview" style="border: 1px solid var(--border); border-radius: 10px; padding: 2rem; background: var(--paper); text-align: center;">
-          <!-- Preview will be rendered here -->
-        </div>
-      </div>
-
-      <div style="background: var(--paper); border: 1px solid var(--border); border-radius: 10px; padding: 1.5rem; margin-bottom: 2rem;">
-        <h4 style="font-family: 'Playfair Display', serif; margin-bottom: 0.75rem;">Your Settings</h4>
-        <div id="summary-text" style="font-size: 0.9rem; color: var(--brown); line-height: 1.8;"></div>
-      </div>
-
-      <div style="display: flex; justify-content: space-between; gap: 1rem;">
-        <button class="btn btn-outline" onclick="previousStep()">← Back to adjust</button>
-        <button class="btn" onclick="saveBrandKit()" style="flex: 1;">✓ Save Brand Kit</button>
       </div>
     </div>
   </div>
 </div>
 
-<style>
-.template-option:hover, .font-option:hover, .card-style-option:hover, .button-style-option:hover, .layout-option:hover, .animation-option:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 16px rgba(74, 44, 138, 0.15);
-  border-color: var(--purple);
-}
-
-.template-option.selected, .font-option.selected, .card-style-option.selected, .button-style-option.selected, .layout-option.selected, .animation-option.selected {
-  border-color: var(--purple);
-  background: rgba(74, 44, 138, 0.05);
-  box-shadow: 0 0 0 3px rgba(74, 44, 138, 0.1);
-}
-</style>
+<!-- ADD RECIPE MODAL -->
+<div class="modal" id="modal-recipe">
+  <div class="modal-card">
+    <div class="modal-title">Add a recipe <button class="modal-close" onclick="cm('modal-recipe')">✕</button></div>
+    <div class="field"><label>Recipe title</label><input type="text" id="r-title" placeholder="Creamy Tuscan Garlic Chicken"></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;">
+      <div class="field"><label>Cuisine</label><input type="text" id="r-cuisine" placeholder="Italian"></div>
+      <div class="field"><label>Cook time</label><input type="text" id="r-time" placeholder="30 min"></div>
+    </div>
+    <div class="field"><label>Blog post URL</label><input type="text" id="r-url" placeholder="https://yourblog.com/recipe-name"></div>
+    <div class="field"><label>Emoji</label><input type="text" id="r-emoji" placeholder="🍝" maxlength="2"></div>
+    <button class="btn-full" onclick="saveRecipe()">Add recipe</button>
+  </div>
+</div>
 
 <script>
-// ===== AUTH FUNCTIONS =====
-let _currentUser = null;
-let _userStatus = 'free';
+var _u=null,_r=[],_w={size:'small',shape:'rounded',style:'minimal',color:'#1C3A1A',font:'Playfair Display',btn:'Save to my week',cuisine:true,time:true,attr:true};
 
-function loadUser() {
-  const saved = localStorage.getItem('blogger_current_user');
-  if (saved) _currentUser = JSON.parse(saved);
+function init(){var s=localStorage.getItem('bc_u');if(s){_u=JSON.parse(s);_r=JSON.parse(localStorage.getItem('bc_r_'+_u.id)||'[]');enter();}else showPage('welcome');}
+function goHome(){_u?showPage('dashboard'):showPage('welcome');}
+
+function handleSignUp(){
+  var n=document.getElementById('su-name').value.trim(),b=document.getElementById('su-blog').value.trim(),e=document.getElementById('su-email').value.trim(),p=document.getElementById('su-pass').value;
+  if(!n||!e||!p){alert('Please fill in all fields');return;}
+  var us=JSON.parse(localStorage.getItem('bc_us')||'[]');
+  if(us.find(function(u){return u.email===e;})){alert('Email already registered');return;}
+  _u={id:Date.now(),name:n,blog:b,email:e,password:p,status:'free',joined:Date.now()};
+  us.push(_u);localStorage.setItem('bc_us',JSON.stringify(us));localStorage.setItem('bc_u',JSON.stringify(_u));
+  _r=[];enter();
 }
 
-function saveUser() {
-  if (_currentUser) localStorage.setItem('blogger_current_user', JSON.stringify(_currentUser));
+function handleSignIn(){
+  var e=document.getElementById('si-email').value.trim(),p=document.getElementById('si-pass').value;
+  if(!e||!p){alert('Please fill in all fields');return;}
+  var us=JSON.parse(localStorage.getItem('bc_us')||'[]');
+  var u=us.find(function(u){return u.email===e&&u.password===p;});
+  if(!u){alert('Email or password incorrect');return;}
+  _u=u;localStorage.setItem('bc_u',JSON.stringify(_u));
+  _r=JSON.parse(localStorage.getItem('bc_r_'+_u.id)||'[]');enter();
 }
 
-function handleSignUp() {
-  const name = document.getElementById('signup-name').value;
-  const email = document.getElementById('signup-email').value;
-  const password = document.getElementById('signup-password').value;
-  if (!name || !email || !password) { alert('Please fill in all fields'); return; }
-  const allUsers = JSON.parse(localStorage.getItem('blogger_users') || '[]');
-  if (allUsers.find(u => u.email === email)) { alert('Email already registered'); return; }
-  _currentUser = { id: Date.now(), name, email, password, status: 'free', createdAt: new Date() };
-  allUsers.push(_currentUser);
-  localStorage.setItem('blogger_users', JSON.stringify(allUsers));
-  localStorage.setItem('blogger_current_user', JSON.stringify(_currentUser));
-  showDashboard();
+function signOut(){if(!confirm('Sign out?'))return;_u=null;_r=[];localStorage.removeItem('bc_u');document.getElementById('nav-tabs').style.display='none';document.getElementById('nav-user').style.display='none';document.getElementById('nav-so').style.display='none';document.getElementById('nav-si').style.display='block';showPage('welcome');}
+
+function enter(){document.getElementById('nav-tabs').style.display='flex';document.getElementById('nav-user').style.display='block';document.getElementById('nav-user').textContent='👋 '+(_u.name||'Creator');document.getElementById('nav-so').style.display='block';document.getElementById('nav-si').style.display='none';showPage('dashboard');}
+
+function showPage(n){
+  document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
+  document.getElementById('page-'+n).classList.add('active');
+  document.querySelectorAll('.nav-tab').forEach(function(t){t.classList.remove('active');});
+  var map=['dashboard','recipes','revenue','widget'];
+  var idx=map.indexOf(n);if(idx>=0){var tabs=document.querySelectorAll('.nav-tab');if(tabs[idx])tabs[idx].classList.add('active');}
+  if(n==='dashboard')loadDash();
+  if(n==='recipes')loadRecipes();
+  if(n==='revenue')loadRevenue();
+  if(n==='widget'){rw();if(_u&&_u.blog)document.getElementById('prev-url').textContent=_u.blog;}
 }
 
-function handleSignIn() {
-  const email = document.getElementById('signin-email').value;
-  const password = document.getElementById('signin-password').value;
-  if (!email || !password) { alert('Please fill in all fields'); return; }
-  const allUsers = JSON.parse(localStorage.getItem('blogger_users') || '[]');
-  const user = allUsers.find(u => u.email === email && u.password === password);
-  if (!user) { alert('Email or password incorrect'); return; }
-  _currentUser = user;
-  localStorage.setItem('blogger_current_user', JSON.stringify(user));
-  showDashboard();
+function loadDash(){
+  if(!_u)return;
+  var h=new Date().getHours();
+  document.getElementById('dash-greeting').textContent=(h<12?'Good morning':h<17?'Good afternoon':'Good evening')+', '+(_u.name||'Creator')+'.';
+  var s=_r.reduce(function(a,r){return a+(r.saves||0);},0);
+  var c=_r.reduce(function(a,r){return a+(r.cooks||0);},0);
+  var cl=_r.reduce(function(a,r){return a+(r.clicks||0);},0);
+  var f=Math.floor(s*0.4);
+  document.getElementById('d-cooked').textContent=c.toLocaleString();
+  document.getElementById('d-saves').textContent=s.toLocaleString();
+  document.getElementById('d-clicks').textContent=cl.toLocaleString();
+  document.getElementById('d-followers').textContent=f.toLocaleString();
+  document.getElementById('d-earned').textContent=_u.status==='approved'?'$'+(s*0.009).toFixed(2):'—';
+  document.getElementById('d-protect').textContent=Math.floor(s*0.2)+' scrapers blocked · Widget on '+Math.max(_r.length,0)+' pages';
+  var top=_r.slice().sort(function(a,b){return (b.cooks||0)-(a.cooks||0);}).slice(0,3);
+  document.getElementById('d-recipes').innerHTML=top.length?top.map(function(r){return rrow(r,true);}).join(''):'<div class="empty"><div class="empty-icon">📄</div><div style="font-size:.85rem;">No recipes yet. Add your first to start tracking.</div></div>';
 }
 
-function showDashboard() {
-  document.getElementById('nav-guest').style.display = 'none';
-  document.getElementById('nav-auth').style.display = 'flex';
-  document.getElementById('user-greeting').textContent = '👋 ' + (_currentUser.name || 'Creator');
-  showPage('dashboard');
-  loadDashboard();
+function loadRecipes(){
+  document.getElementById('recipes-list').innerHTML=_r.length?_r.map(function(r){return rrow(r,false);}).join(''):'<div class="empty"><div class="empty-icon">📄</div><div style="font-size:.85rem;">No recipes yet.</div></div>';
 }
 
-function showPage(pageName) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.getElementById('page-' + pageName).classList.add('active');
-  updateNav(pageName);
-  if (pageName === 'recipes') loadRecipesList();
-  if (pageName === 'cookbooks') loadCookbooksList();
-  if (pageName === 'revenue') loadRevenuePartner();
+function rrow(r,compact){
+  var trend=(r.cooks||0)>5?'<span class="trending">↑ Trending</span>':'';
+  return '<div class="recipe-row"><div class="r-emoji">'+(r.emoji||'🍽')+'</div><div class="r-info"><div class="r-title">'+esc(r.title||'')+' '+trend+'</div><div class="r-meta">'+esc(r.cuisine||'')+(r.time?' · '+esc(r.time):'')+'</div></div><div class="r-stats"><div class="rstat"><div class="rstat-n">'+(r.cooks||0)+'</div><div class="rstat-l">Cooked</div></div><div class="rstat"><div class="rstat-n">'+(r.saves||0)+'</div><div class="rstat-l">Saves</div></div>'+(compact?'':'<div class="rstat"><div class="rstat-n">'+(r.clicks||0)+'</div><div class="rstat-l">Clicks</div></div>')+'</div></div>';
 }
 
-function showSignIn() { showPage('signin'); }
-function showSignUp() { showPage('signup'); }
-
-function updateNav(pageName) {
-  document.querySelectorAll('#nav-auth .nav-btn').forEach(b => b.classList.remove('active'));
-  const pages = ['dashboard', 'recipes', 'cookbooks', 'revenue', 'brand'];
-  document.querySelectorAll('#nav-auth .nav-btn').forEach((b, i) => {
-    if (pages[i] === pageName) b.classList.add('active');
-  });
-}
-
-let _wizardState = {
-  template: null,
-  primaryColor: '#4A2C8A',
-  accentColor: '#D4A820',
-  backgroundColor: '#FFFFFF',
-  font: 'Playfair Display',
-  cardStyle: 'shadow',
-  buttonStyle: 'rounded',
-  layout: 'regular',
-  animation: 'none'
-};
-
-let _currentStep = 1;
-
-function updateStepUI() {
-  document.querySelectorAll('.wizard-step').forEach(s => s.style.display = 'none');
-  document.getElementById('step-' + _currentStep).style.display = 'block';
-  document.getElementById('step-counter').textContent = 'Step ' + _currentStep + ' of 8';
-  document.getElementById('progress-bar').style.width = (_currentStep * 12.5) + '%';
-  window.scrollTo(0, 0);
-}
-
-function nextStep() {
-  if (_currentStep < 8) {
-    _currentStep++;
-    updateStepUI();
-    if (_currentStep === 8) renderPreview();
+function loadRevenue(){
+  var el=document.getElementById('revenue-content');if(!_u)return;
+  var s=_r.reduce(function(a,r){return a+(r.saves||0);},0);
+  if(_u.status==='approved'){
+    var m=(s*0.009).toFixed(2),sub=Math.floor(s*0.01);
+    el.innerHTML='<div class="rev-hero"><div class="rev-big">$'+m+'</div><div class="rev-label">estimated this month</div><div class="rev-grid"><div class="rb"><div class="rb-label">Active subscribers</div><div class="rb-val">'+sub+'</div></div><div class="rb"><div class="rb-label">Per sub/mo</div><div class="rb-val">$0.90</div></div><div class="rb"><div class="rb-label">Your share</div><div class="rb-val">30%</div></div><div class="rb"><div class="rb-label">Paid</div><div class="rb-val">Monthly</div></div></div></div><div style="background:white;border:1px solid var(--border);border-radius:16px;padding:1.5rem;margin-top:1rem;"><p style="font-size:.88rem;color:var(--muted);line-height:1.75;font-weight:300;">You earn <strong style="color:var(--forest);">$0.90/month</strong> for every Pro subscriber who discovered Fern through your recipes. That subscription renews every month — so do your earnings.<br><br>✓ Lifetime attribution &nbsp; ✓ Paid on the 15th &nbsp; ✓ No minimums</p></div>';
+  }else if(_u.status==='pending'){
+    el.innerHTML='<div style="background:rgba(217,119,6,.08);border:1px solid rgba(217,119,6,.2);border-radius:16px;padding:2rem;text-align:center;"><div style="font-size:2rem;margin-bottom:.5rem;">⏳</div><div style="font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--forest);margin-bottom:.4rem;">Application under review</div><div style="font-size:.85rem;color:var(--muted);font-weight:300;">We typically respond within 48 hours. Keep sharing recipes in the meantime!</div></div>';
+  }else{
+    el.innerHTML='<div class="apply-card"><div class="apply-title">💰 Revenue Partner Program</div><div class="apply-text">Get approved to earn 30% lifetime commission on every Pro subscriber your recipes bring to Fern. Monthly. Recurring. The more families cook your food, the more you earn — from content you already created.</div><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.5rem;"><div style="text-align:center;padding:1rem;background:rgba(28,58,26,.05);border-radius:10px;"><div style="font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--forest);">30%</div><div style="font-size:.72rem;color:var(--muted);">Lifetime commission</div></div><div style="text-align:center;padding:1rem;background:rgba(28,58,26,.05);border-radius:10px;"><div style="font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--forest);">$0.90</div><div style="font-size:.72rem;color:var(--muted);">Per Pro sub/mo</div></div><div style="text-align:center;padding:1rem;background:rgba(28,58,26,.05);border-radius:10px;"><div style="font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--forest);">∞</div><div style="font-size:.72rem;color:var(--muted);">For life</div></div></div><button class="btn-primary" onclick="applyRev()">Apply for Revenue Partner →</button></div><div style="background:white;border:1px solid var(--border);border-radius:16px;padding:1.5rem;"><div style="font-family:'Playfair Display',serif;font-size:1rem;color:var(--forest);margin-bottom:.75rem;">How the math works</div><p style="font-size:.83rem;color:var(--muted);line-height:1.75;font-weight:300;">500 families save your Tuscan Chicken. 50 upgrade to Pro. That is <strong style="color:var(--forest);">$45/month</strong> — every month they stay subscribed. 10 recipes like that and the math gets very interesting.</p></div>';
   }
 }
 
-function previousStep() {
-  if (_currentStep > 1) {
-    _currentStep--;
-    updateStepUI();
-  }
+function applyRev(){
+  _u.status='pending';
+  var us=JSON.parse(localStorage.getItem('bc_us')||'[]');
+  var idx=us.findIndex(function(u){return u.id===_u.id;});
+  if(idx>=0){us[idx]=_u;localStorage.setItem('bc_us',JSON.stringify(us));}
+  localStorage.setItem('bc_u',JSON.stringify(_u));loadRevenue();
 }
 
-function resetWizard() {
-  if (confirm('Start over? Your current choices will be lost.')) {
-    _wizardState = {
-      template: null,
-      primaryColor: '#4A2C8A',
-      accentColor: '#D4A820',
-      backgroundColor: '#FFFFFF',
-      font: 'Playfair Display',
-      cardStyle: 'shadow',
-      buttonStyle: 'rounded',
-      layout: 'regular',
-      animation: 'none'
-    };
-    _currentStep = 1;
-    updateStepUI();
-  }
+// WIDGET
+function sw(k,v,btn){_w[k]=v;if(btn){var p=btn.parentElement;p.querySelectorAll('.chip').forEach(function(c){c.classList.remove('on');});btn.classList.add('on');}rw();}
+function sc(hex,sw){_w.color=hex;document.querySelectorAll('.swatch').forEach(function(s){s.classList.remove('on');});if(sw)sw.classList.add('on');document.getElementById('cc').value=hex;rw();}
+
+function rw(){
+  _w.btn=document.getElementById('btn-text').value||'Save to my week';
+  _w.cuisine=document.getElementById('sh-c').checked;
+  _w.time=document.getElementById('sh-t').checked;
+  _w.attr=document.getElementById('sh-a').checked;
+
+  var c=_w.color;
+  var w=_w;
+  var widths={small:'220px',medium:'300px',large:'380px',full:'100%'};
+  var pads={small:'.7rem',medium:'1rem',large:'1.2rem',full:'1rem'};
+  var radii={rounded:'12px',sharp:'3px',pill:'100px'};
+  var br={rounded:'8px',sharp:'2px',pill:'100px'};
+
+  var bg='#fff',tc=c,mc='#888',ab='rgba(0,0,0,.2)',sh='';
+  if(w.style==='card')sh='box-shadow:0 4px 14px rgba(0,0,0,.09);';
+  if(w.style==='bold'){bg=c;tc='#fff';mc='rgba(255,255,255,.6)';ab='rgba(255,255,255,.25)';}
+  if(w.style==='dark'){bg='#111';tc='#fff';mc='rgba(255,255,255,.5)';ab='rgba(255,255,255,.2)';}
+  var bBg=(w.style==='bold'||w.style==='dark')?'#fff':c;
+  var bC=(w.style==='bold')?c:(w.style==='dark')?'#111':'#fff';
+  var bdr=w.style==='minimal'?'border:1px solid '+h2a(c,.18)+';':'';
+
+  var meta=[];if(w.cuisine)meta.push('Italian');if(w.time)meta.push('30 min');
+
+  var html='<div style="width:'+widths[w.size]+';background:'+bg+';border-radius:'+radii[w.shape]+';padding:'+pads[w.size]+';'+bdr+sh+'">'
+    +'<div style="font-family:''+w.font+'',serif;font-size:'+(w.size==='small'?'.88rem':'.95rem')+';font-weight:600;color:'+tc+';margin-bottom:.2rem;">Creamy Tuscan Chicken</div>'
+    +(meta.length?'<div style="font-size:.68rem;color:'+mc+';margin-bottom:.55rem;">'+meta.join(' · ')+'</div>':'')
+    +'<button style="width:100%;background:'+bBg+';color:'+bC+';border:none;border-radius:'+br[w.shape]+';padding:.5rem;font-family:inherit;font-size:.78rem;font-weight:700;cursor:pointer;">'+esc(w.btn)+'</button>'
+    +(w.attr?'<div style="font-size:.52rem;color:'+ab+';text-align:center;margin-top:.35rem;">Powered by Fern · Links back to your site</div>':'')
+    +'</div>';
+
+  document.getElementById('live-widget').innerHTML=html;
+
+  var blog=(_u&&_u.blog)?_u.blog.replace(/https?:\/\//,'').split('/')[0]:'yourblog.com';
+  var code='<script src="https://cdn.myfernai.com/widget.js"
+  data-blog="'+blog+'"
+  data-color="'+c+'"
+  data-shape="'+w.shape+'"
+  data-size="'+w.size+'"
+  data-style="'+w.style+'"&gt;&lt;/scri'+'pt>';
+  document.getElementById('wcode').innerHTML=code+'<button class="code-copy-btn" onclick="cpCode()">Copy</button>';
 }
 
-function selectTemplate(name) {
-  _wizardState.template = name;
-  document.querySelectorAll('.template-option').forEach(t => t.classList.remove('selected'));
-  document.getElementById('widget-' + name).classList.add('selected');
+function h2a(hex,a){var r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);return 'rgba('+r+','+g+','+b+','+a+')';}
+
+function cpCode(){
+  var t=document.getElementById('wcode').textContent.replace('Copy','').trim();
+  navigator.clipboard.writeText(t).then(function(){var b=document.querySelector('.code-copy-btn');if(b){b.textContent='Copied!';setTimeout(function(){b.textContent='Copy';},2000);}});
 }
 
-function selectFont(font) {
-  _wizardState.font = font;
-  document.querySelectorAll('.font-option').forEach(f => f.classList.remove('selected'));
-  event.currentTarget.classList.add('selected');
+function openAddRecipe(){document.getElementById('modal-recipe').classList.add('active');}
+function cm(id){document.getElementById(id).classList.remove('active');}
+
+function saveRecipe(){
+  var t=document.getElementById('r-title').value.trim();
+  if(!t){alert('Recipe title required');return;}
+  var recipe={id:Date.now(),title:t,cuisine:document.getElementById('r-cuisine').value.trim(),time:document.getElementById('r-time').value.trim(),url:document.getElementById('r-url').value.trim(),emoji:document.getElementById('r-emoji').value||'🍽',saves:Math.floor(Math.random()*80)+5,cooks:Math.floor(Math.random()*30)+1,clicks:Math.floor(Math.random()*20)+1,added:Date.now()};
+  _r.push(recipe);
+  localStorage.setItem('bc_r_'+_u.id,JSON.stringify(_r));
+  cm('modal-recipe');
+  ['r-title','r-cuisine','r-time','r-url','r-emoji'].forEach(function(id){document.getElementById(id).value='';});
+  loadRecipes();loadDash();
 }
 
-function selectCardStyle(style) {
-  _wizardState.cardStyle = style;
-  document.querySelectorAll('.card-style-option').forEach(c => c.classList.remove('selected'));
-  event.currentTarget.classList.add('selected');
-}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 
-function selectButtonStyle(style) {
-  _wizardState.buttonStyle = style;
-  document.querySelectorAll('.button-style-option').forEach(b => b.classList.remove('selected'));
-  event.currentTarget.classList.add('selected');
-}
+document.addEventListener('keydown',function(e){if(e.key==='Escape')document.querySelectorAll('.modal.active').forEach(function(m){m.classList.remove('active');});});
 
-function selectLayout(layout) {
-  _wizardState.layout = layout;
-  document.querySelectorAll('.layout-option').forEach(l => l.classList.remove('selected'));
-  event.currentTarget.classList.add('selected');
-}
-
-function selectAnimation(anim) {
-  _wizardState.animation = anim;
-  document.querySelectorAll('.animation-option').forEach(a => a.classList.remove('selected'));
-  event.currentTarget.classList.add('selected');
-}
-
-function renderPreview() {
-  const s = _wizardState;
-  const shadow = s.cardStyle === 'shadow' ? 'box-shadow: 0 4px 12px rgba(0,0,0,0.1);' : '';
-  const border = s.cardStyle === 'border' ? 'border: 2px solid ' + s.primaryColor + ';' : '';
-  const gradient = s.cardStyle === 'gradient' ? 'background: linear-gradient(135deg, rgba(' + parseInt(s.primaryColor.slice(1,3), 16) + ',' + parseInt(s.primaryColor.slice(3,5), 16) + ',' + parseInt(s.primaryColor.slice(5,7), 16) + ',0.05), transparent);' : '';
-  
-  let preview = '<div style="background: ' + s.backgroundColor + '; border-radius: 8px; padding: 1.5rem; ' + shadow + border + gradient + '">';
-  preview += '<div style="font-family: \'' + s.font + '\', serif; font-size: 1.4rem; font-weight: 700; color: ' + s.primaryColor + '; margin-bottom: 0.5rem;">Creamy Tuscan Chicken</div>';
-  preview += '<div style="font-size: 0.85rem; color: #666; margin-bottom: 1rem;">Italian · 30 min · Easy</div>';
-  preview += '<button style="background: ' + s.primaryColor + '; color: white; border: none; border-radius: ' + (s.buttonStyle === 'rounded' ? '20' : s.buttonStyle === 'square' ? '0' : s.buttonStyle === 'ghost' ? '6' : '4') + 'px; padding: 0.75rem 1.5rem; font-weight: 700; width: 100%; cursor: pointer;">📖 Save to My Cookbook</button>';
-  preview += '</div>';
-  
-  document.getElementById('final-preview').innerHTML = preview;
-  
-  let summary = 'Template: <strong>' + (s.template || 'Not selected') + '</strong><br>';
-  summary += 'Colors: <strong>' + s.primaryColor + '</strong> (primary), <strong>' + s.accentColor + '</strong> (accent)<br>';
-  summary += 'Font: <strong>' + s.font + '</strong><br>';
-  summary += 'Card: <strong>' + s.cardStyle + '</strong> | Button: <strong>' + s.buttonStyle + '</strong><br>';
-  summary += 'Layout: <strong>' + s.layout + '</strong> | Hover: <strong>' + s.animation + '</strong>';
-  document.getElementById('summary-text').innerHTML = summary;
-}
-
-function saveBrandKit() {
-  if (!_wizardState.template) {
-    alert('Please go back and select a widget template');
-    _currentStep = 1;
-    updateStepUI();
-    return;
-  }
-  
-  if (_currentUser) {
-    _currentUser.brandKit = _wizardState;
-    saveUser();
-  }
-  
-  localStorage.setItem('blogger_brand_kit', JSON.stringify(_wizardState));
-  alert('✓ Brand Kit Saved!\n\nYour ' + _wizardState.template + ' widget will be used for all your recipes and cookbooks.\n\nYou can change it anytime from Brand Studio.');
-  showPage('dashboard');
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-  if (document.getElementById('step-1')) {
-    updateStepUI();
-  }
-});
+init();
 </script>
-  <!-- Share Recipe Modal -->
-  <div id="modal-share-recipe" class="modal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <span>Share a Recipe</span>
-        <button class="close-btn" onclick="closeModal('modal-share-recipe')">✕</button>
-      </div>
-      <div class="form-group">
-        <label>Recipe Title</label>
-        <input type="text" id="recipe-title" placeholder="e.g., Creamy Tuscan Garlic Chicken">
-      </div>
-      <div class="form-group">
-        <label>Cuisine</label>
-        <input type="text" id="recipe-cuisine" placeholder="e.g., Italian, Thai">
-      </div>
-      <div class="form-group">
-        <label>Cooking Time</label>
-        <input type="text" id="recipe-time" placeholder="e.g., 30 min">
-      </div>
-      <div class="form-group">
-        <label>Difficulty</label>
-        <select id="recipe-difficulty">
-          <option value="">Select difficulty…</option>
-          <option value="Easy">Easy</option>
-          <option value="Medium">Medium</option>
-          <option value="Hard">Hard</option>
-        </select>
-      </div>
-      <div style="display: flex; gap: 0.75rem;">
-        <button class="btn" onclick="saveRecipe()">Share Recipe</button>
-        <button class="btn btn-outline" onclick="closeModal('modal-share-recipe')">Cancel</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- New Cookbook Modal -->
-  <div id="modal-new-cookbook" class="modal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <span>Create a Cookbook</span>
-        <button class="close-btn" onclick="closeModal('modal-new-cookbook')">✕</button>
-      </div>
-      <div class="form-group">
-        <label>Cookbook Title</label>
-        <input type="text" id="cookbook-title" placeholder="e.g., Weeknight Dinners">
-      </div>
-      <div class="form-group">
-        <label>Description</label>
-        <textarea id="cookbook-desc" placeholder="What is this cookbook about?"></textarea>
-      </div>
-      <div style="display: flex; gap: 0.75rem;">
-        <button class="btn" onclick="saveCookbook()">Create Cookbook</button>
-        <button class="btn btn-outline" onclick="closeModal('modal-new-cookbook')">Cancel</button>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    let _currentUser = null;
-    let _recipes = [];
-    let _cookbooks = [];
-    let _userStatus = 'free'; // 'free' | 'pending' | 'approved'
-
-    // Load user from localStorage
-    function loadUser() {
-      const stored = localStorage.getItem('blogger_user');
-      if (stored) {
-        _currentUser = JSON.parse(stored);
-        _userStatus = _currentUser.status || 'free';
-      }
-    }
-
-    // Save user to localStorage
-    function saveUser() {
-      if (_currentUser) {
-        localStorage.setItem('blogger_user', JSON.stringify(_currentUser));
-      }
-    }
-
-    // Load recipes from localStorage
-    function loadRecipes() {
-      const stored = localStorage.getItem('blogger_recipes') || '[]';
-      _recipes = JSON.parse(stored);
-    }
-
-    // Save recipes to localStorage
-    function saveRecipes() {
-      localStorage.setItem('blogger_recipes', JSON.stringify(_recipes));
-    }
-
-    // Load cookbooks from localStorage
-    function loadCookbooks() {
-      const stored = localStorage.getItem('blogger_cookbooks') || '[]';
-      _cookbooks = JSON.parse(stored);
-    }
-
-    // Save cookbooks to localStorage
-    function saveCookbooks() {
-      localStorage.setItem('blogger_cookbooks', JSON.stringify(_cookbooks));
-    }
-
-    // Show/hide pages
-    function showPage(pageName) {
-      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-      document.getElementById('page-' + pageName).classList.add('active');
-
-      if (pageName === 'dashboard') loadDashboard();
-      if (pageName === 'recipes') loadRecipesList();
-      if (pageName === 'cookbooks') loadCookbooksList();
-      if (pageName === 'revenue') loadRevenuePartner();
-    }
-
-    function updateNav(pageName) {
-      // Update active nav button
-      document.querySelectorAll('#nav-auth .nav-btn').forEach(b => b.classList.remove('active'));
-      document.querySelectorAll('#nav-auth .nav-btn').forEach((b, i) => {
-        const pages = ['dashboard', 'recipes', 'cookbooks', 'revenue', 'brand'];
-        if (pages[i] === pageName) b.classList.add('active');
-      });
-    }
-
-    // Sign up
-    function handleSignUp() {
-      const name = document.getElementById('signup-name').value;
-      const email = document.getElementById('signup-email').value;
-      const password = document.getElementById('signup-password').value;
-
-      if (!name || !email || !password) {
-        alert('Please fill in all fields');
-        return;
-      }
-
-      // Check if email already exists
-      const allUsers = JSON.parse(localStorage.getItem('blogger_users') || '[]');
-      if (allUsers.find(u => u.email === email)) {
-        alert('Email already registered');
-        return;
-      }
-
-      _currentUser = {
-        id: Date.now(),
-        name: name,
-        email: email,
-        password: password,
-        status: 'free',
-        createdAt: new Date()
-      };
-
-      // Save to users list
-      allUsers.push(_currentUser);
-      localStorage.setItem('blogger_users', JSON.stringify(allUsers));
-      localStorage.setItem('blogger_current_user', JSON.stringify(_currentUser));
-      
-      showDashboard();
-    }
-
-    // Sign in
-    function handleSignIn() {
-      const email = document.getElementById('signin-email').value;
-      const password = document.getElementById('signin-password').value;
-
-      if (!email || !password) {
-        alert('Please fill in all fields');
-        return;
-      }
-
-      // Load all users from localStorage
-      const allUsers = JSON.parse(localStorage.getItem('blogger_users') || '[]');
-      
-      // Find user by email and password
-      const user = allUsers.find(u => u.email === email && u.password === password);
-      
-      if (!user) {
-        alert('Email or password incorrect');
-        return;
-      }
-
-      // Set as current user
-      _currentUser = user;
-      localStorage.setItem('blogger_current_user', JSON.stringify(user));
-      
-      showDashboard();
-    }
-
-    // Show dashboard after auth
-    function showDashboard() {
-      document.getElementById('nav-guest').style.display = 'none';
-      document.getElementById('nav-auth').style.display = 'flex';
-      document.getElementById('user-greeting').textContent = '👋 ' + (_currentUser.name || 'Creator');
-      
-      showPage('dashboard');
-      loadDashboard();
-    }
-
-    // Sign out
-    function signOut() {
-      if (confirm('Sign out?')) {
-        _currentUser = null;
-        localStorage.removeItem('blogger_user');
-        document.getElementById('nav-guest').style.display = 'flex';
-        document.getElementById('nav-auth').style.display = 'none';
-        showPage('signin');
-      }
-    }
-
-    // Show sign in
-    function showSignIn() {
-      showPage('signin');
-    }
-
-    // Show sign up
-    function showSignUp() {
-      showPage('signup');
-    }
-
-    // Load dashboard
-    function loadDashboard() {
-      const totalSaves = _recipes.reduce((sum, r) => sum + (r.saves || 0), 0);
-      const totalCooks = _recipes.reduce((sum, r) => sum + (r.cooks || 0), 0);
-      const totalClicks = _recipes.reduce((sum, r) => sum + (r.clicks || 0), 0);
-      const revenue = (_userStatus === 'approved') ? (totalSaves * 0.003).toFixed(2) : '—';
-
-      document.getElementById('stat-saves').textContent = totalSaves.toLocaleString();
-      document.getElementById('stat-cooks').textContent = totalCooks.toLocaleString();
-      document.getElementById('stat-clicks').textContent = totalClicks.toLocaleString();
-      document.getElementById('stat-revenue').textContent = _userStatus === 'approved' ? '$' + revenue : '—';
-
-      // Status badge
-      let badge = '';
-      if (_userStatus === 'free') {
-        badge = '<div class="status-badge status-free">✦ Free Creator</div>';
-      } else if (_userStatus === 'pending') {
-        badge = '<div class="status-badge status-pending">⏳ Pending Approval</div>';
-      } else if (_userStatus === 'approved') {
-        badge = '<div class="status-badge status-approved">✓ Revenue Partner</div>';
-      }
-      document.getElementById('status-badge-container').innerHTML = badge;
-
-      // Top recipes
-      const topRecipes = [..._recipes].sort((a, b) => (b.saves || 0) - (a.saves || 0)).slice(0, 3);
-      const html = topRecipes.length ? topRecipes.map(r => `
-        <div class="recipe-card">
-          <div class="recipe-info">
-            <h3>${r.title || 'Recipe'}</h3>
-            <div class="recipe-meta">${r.cuisine || 'Uncategorized'} · ${r.time || '?'} · ${r.difficulty || '?'}</div>
-            <div class="recipe-stats">
-              <div class="recipe-stat">
-                <div class="recipe-stat-value">${r.saves || 0}</div>
-                <div class="recipe-stat-label">Saves</div>
-              </div>
-              <div class="recipe-stat">
-                <div class="recipe-stat-value">${r.cooks || 0}</div>
-                <div class="recipe-stat-label">Cooks</div>
-              </div>
-              <div class="recipe-stat">
-                <div class="recipe-stat-value">${r.clicks || 0}</div>
-                <div class="recipe-stat-label">Clicks</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      `).join('') : '<p style="color: var(--brown); font-style: italic; text-align: center; padding: 2rem 0;">No recipes shared yet.</p>';
-
-      document.getElementById('top-recipes-list').innerHTML = html;
-    }
-
-    // Load recipes list
-    function loadRecipesList() {
-      const html = _recipes.length ? _recipes.map((r, i) => `
-        <div class="recipe-card">
-          <div class="recipe-info">
-            <h3>${r.title || 'Recipe'}</h3>
-            <div class="recipe-meta">${r.cuisine || 'Uncategorized'} · ${r.time || '?'} · ${r.difficulty || '?'}</div>
-            <div class="recipe-stats">
-              <div class="recipe-stat">
-                <div class="recipe-stat-value">${r.saves || 0}</div>
-                <div class="recipe-stat-label">Saves</div>
-              </div>
-              <div class="recipe-stat">
-                <div class="recipe-stat-value">${r.cooks || 0}</div>
-                <div class="recipe-stat-label">Cooks</div>
-              </div>
-              <div class="recipe-stat">
-                <div class="recipe-stat-value">${r.clicks || 0}</div>
-                <div class="recipe-stat-label">Clicks</div>
-              </div>
-            </div>
-          </div>
-          <button class="btn btn-outline" onclick="deleteRecipe(${i})">Delete</button>
-        </div>
-      `).join('') : '<p style="color: var(--brown); font-style: italic; text-align: center; padding: 2rem 0;">No recipes yet.</p>';
-
-      document.getElementById('recipes-list').innerHTML = html;
-    }
-
-    // Load cookbooks list
-    function loadCookbooksList() {
-      const html = _cookbooks.length ? _cookbooks.map((c, i) => `
-        <div class="recipe-card">
-          <div class="recipe-info">
-            <h3>${c.title || 'Cookbook'}</h3>
-            <div class="recipe-meta">${c.desc || 'No description'}</div>
-          </div>
-          <button class="btn btn-outline" onclick="deleteCookbook(${i})">Delete</button>
-        </div>
-      `).join('') : '<p style="color: var(--brown); font-style: italic; text-align: center; padding: 2rem 0;">No cookbooks yet.</p>';
-
-      document.getElementById('cookbooks-list').innerHTML = html;
-    }
-
-    // Load revenue partner section
-    function loadRevenuePartner() {
-      let html = '';
-      
-      if (_userStatus === 'approved') {
-        const totalSaves = _recipes.reduce((sum, r) => sum + (r.saves || 0), 0);
-        const revenue = (totalSaves * 0.003 * 0.33).toFixed(2);
-        const activeSubs = Math.floor(totalSaves * 0.5);
-
-        html = `
-          <div class="stats-grid">
-            <div class="stat-card">
-              <div class="stat-value">$${revenue}</div>
-              <div class="stat-label">This Month (est.)</div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-value">${activeSubs}</div>
-              <div class="stat-label">Active Subscribers</div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-value">$0.90</div>
-              <div class="stat-label">Per Subscriber/mo</div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-value">∞</div>
-              <div class="stat-label">Lifetime Commission</div>
-            </div>
-          </div>
-
-          <h3 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 1rem;">How You Earn</h3>
-          <div style="background: var(--paper); border: 1px solid var(--border); border-radius: 10px; padding: 1.5rem;">
-            <p style="margin-bottom: 1rem;">You earn <strong>$0.90/month</strong> for every Pro subscriber who came from your recipe saves.</p>
-            <p style="margin-bottom: 1rem;">✓ <strong>Lifetime attribution</strong> — keep earning as long as they stay subscribed</p>
-            <p>✓ <strong>Paid monthly</strong> — via Stripe Connect on the 15th</p>
-          </div>
-        `;
-      } else if (_userStatus === 'pending') {
-        html = `
-          <div style="background: rgba(255, 193, 7, 0.1); border: 2px solid rgba(255, 193, 7, 0.3); border-radius: 10px; padding: 2rem; text-align: center;">
-            <div style="font-size: 2rem; margin-bottom: 0.5rem;">⏳</div>
-            <h3 style="font-family: 'Playfair Display', serif; color: var(--ink2); margin-bottom: 0.5rem;">Your application is under review</h3>
-            <p style="color: var(--brown); margin-bottom: 1rem;">We typically respond within 48 hours. Keep sharing recipes in the meantime!</p>
-          </div>
-        `;
-      } else {
-        html = `
-          <div class="locked-feature">
-            <h3>🔒 Revenue Partner Program</h3>
-            <p style="margin-bottom: 1.5rem;">Get approved to earn 30% lifetime commission on Pro subscribers from your recipes.</p>
-            <p style="font-size: 0.9rem; margin-bottom: 1.5rem;">Requirements: 50K+ monthly readers or 25K+ social following</p>
-            <button class="btn btn-gold" onclick="window.location.href='https://bloggercookbook.com#apply'">Apply Now →</button>
-          </div>
-        `;
-      }
-
-      document.getElementById('revenue-container').innerHTML = html;
-    }
-
-    // Modal functions
-    function openShareRecipeModal() {
-      document.getElementById('modal-share-recipe').classList.add('active');
-    }
-
-    function openNewCookbookModal() {
-      document.getElementById('modal-new-cookbook').classList.add('active');
-    }
-
-    function closeModal(modalId) {
-      document.getElementById(modalId).classList.remove('active');
-    }
-
-    // Save recipe
-    function saveRecipe() {
-      const recipe = {
-        id: Date.now(),
-        title: document.getElementById('recipe-title').value,
-        cuisine: document.getElementById('recipe-cuisine').value,
-        time: document.getElementById('recipe-time').value,
-        difficulty: document.getElementById('recipe-difficulty').value,
-        saves: Math.floor(Math.random() * 100),
-        cooks: Math.floor(Math.random() * 50),
-        clicks: Math.floor(Math.random() * 30),
-        createdAt: new Date()
-      };
-
-      _recipes.push(recipe);
-      saveRecipes();
-      closeModal('modal-share-recipe');
-      document.getElementById('recipe-title').value = '';
-      document.getElementById('recipe-cuisine').value = '';
-      document.getElementById('recipe-time').value = '';
-      document.getElementById('recipe-difficulty').value = '';
-      loadRecipesList();
-      alert('✓ Recipe shared!');
-    }
-
-    // Delete recipe
-    function deleteRecipe(i) {
-      if (confirm('Delete this recipe?')) {
-        _recipes.splice(i, 1);
-        saveRecipes();
-        loadRecipesList();
-      }
-    }
-
-    // Save cookbook
-    function saveCookbook() {
-      const cookbook = {
-        id: Date.now(),
-        title: document.getElementById('cookbook-title').value,
-        desc: document.getElementById('cookbook-desc').value,
-        recipes: [],
-        createdAt: new Date()
-      };
-
-      _cookbooks.push(cookbook);
-      saveCookbooks();
-      closeModal('modal-new-cookbook');
-      document.getElementById('cookbook-title').value = '';
-      document.getElementById('cookbook-desc').value = '';
-      loadCookbooksList();
-      alert('✓ Cookbook created!');
-    }
-
-    // Delete cookbook
-    function deleteCookbook(i) {
-      if (confirm('Delete this cookbook?')) {
-        _cookbooks.splice(i, 1);
-        saveCookbooks();
-        loadCookbooksList();
-      }
-    }
-
-    // Save brand kit
-    let _selectedWidget = null;
-
-    let _wizardState = {
-  template: null,
-  primaryColor: '#4A2C8A',
-  accentColor: '#D4A820',
-  backgroundColor: '#FFFFFF',
-  font: 'Playfair Display',
-  cardStyle: 'shadow',
-  buttonStyle: 'rounded',
-  layout: 'regular',
-  animation: 'none'
-};
-
-let _currentStep = 1;
-
-function updateStepUI() {
-  document.querySelectorAll('.wizard-step').forEach(s => s.style.display = 'none');
-  document.getElementById('step-' + _currentStep).style.display = 'block';
-  document.getElementById('step-counter').textContent = 'Step ' + _currentStep + ' of 8';
-  document.getElementById('progress-bar').style.width = (_currentStep * 12.5) + '%';
-  window.scrollTo(0, 0);
-}
-
-function nextStep() {
-  if (_currentStep < 8) {
-    _currentStep++;
-    updateStepUI();
-    if (_currentStep === 8) renderPreview();
-  }
-}
-
-function previousStep() {
-  if (_currentStep > 1) {
-    _currentStep--;
-    updateStepUI();
-  }
-}
-
-function resetWizard() {
-  if (confirm('Start over? Your current choices will be lost.')) {
-    _wizardState = {
-      template: null,
-      primaryColor: '#4A2C8A',
-      accentColor: '#D4A820',
-      backgroundColor: '#FFFFFF',
-      font: 'Playfair Display',
-      cardStyle: 'shadow',
-      buttonStyle: 'rounded',
-      layout: 'regular',
-      animation: 'none'
-    };
-    _currentStep = 1;
-    updateStepUI();
-  }
-}
-
-function selectTemplate(name) {
-  _wizardState.template = name;
-  document.querySelectorAll('.template-option').forEach(t => t.classList.remove('selected'));
-  document.getElementById('widget-' + name).classList.add('selected');
-}
-
-function selectFont(font) {
-  _wizardState.font = font;
-  document.querySelectorAll('.font-option').forEach(f => f.classList.remove('selected'));
-  event.currentTarget.classList.add('selected');
-}
-
-function selectCardStyle(style) {
-  _wizardState.cardStyle = style;
-  document.querySelectorAll('.card-style-option').forEach(c => c.classList.remove('selected'));
-  event.currentTarget.classList.add('selected');
-}
-
-function selectButtonStyle(style) {
-  _wizardState.buttonStyle = style;
-  document.querySelectorAll('.button-style-option').forEach(b => b.classList.remove('selected'));
-  event.currentTarget.classList.add('selected');
-}
-
-function selectLayout(layout) {
-  _wizardState.layout = layout;
-  document.querySelectorAll('.layout-option').forEach(l => l.classList.remove('selected'));
-  event.currentTarget.classList.add('selected');
-}
-
-function selectAnimation(anim) {
-  _wizardState.animation = anim;
-  document.querySelectorAll('.animation-option').forEach(a => a.classList.remove('selected'));
-  event.currentTarget.classList.add('selected');
-}
-
-function renderPreview() {
-  const s = _wizardState;
-  const shadow = s.cardStyle === 'shadow' ? 'box-shadow: 0 4px 12px rgba(0,0,0,0.1);' : '';
-  const border = s.cardStyle === 'border' ? 'border: 2px solid ' + s.primaryColor + ';' : '';
-  const gradient = s.cardStyle === 'gradient' ? 'background: linear-gradient(135deg, rgba(' + parseInt(s.primaryColor.slice(1,3), 16) + ',' + parseInt(s.primaryColor.slice(3,5), 16) + ',' + parseInt(s.primaryColor.slice(5,7), 16) + ',0.05), transparent);' : '';
-  
-  let preview = '<div style="background: ' + s.backgroundColor + '; border-radius: 8px; padding: 1.5rem; ' + shadow + border + gradient + '">';
-  preview += '<div style="font-family: \'' + s.font + '\', serif; font-size: 1.4rem; font-weight: 700; color: ' + s.primaryColor + '; margin-bottom: 0.5rem;">Creamy Tuscan Chicken</div>';
-  preview += '<div style="font-size: 0.85rem; color: #666; margin-bottom: 1rem;">Italian · 30 min · Easy</div>';
-  preview += '<button style="background: ' + s.primaryColor + '; color: white; border: none; border-radius: ' + (s.buttonStyle === 'rounded' ? '20' : s.buttonStyle === 'square' ? '0' : s.buttonStyle === 'ghost' ? '6' : '4') + 'px; padding: 0.75rem 1.5rem; font-weight: 700; width: 100%; cursor: pointer;">📖 Save to My Cookbook</button>';
-  preview += '</div>';
-  
-  document.getElementById('final-preview').innerHTML = preview;
-  
-  let summary = 'Template: <strong>' + (s.template || 'Not selected') + '</strong><br>';
-  summary += 'Colors: <strong>' + s.primaryColor + '</strong> (primary), <strong>' + s.accentColor + '</strong> (accent)<br>';
-  summary += 'Font: <strong>' + s.font + '</strong><br>';
-  summary += 'Card: <strong>' + s.cardStyle + '</strong> | Button: <strong>' + s.buttonStyle + '</strong><br>';
-  summary += 'Layout: <strong>' + s.layout + '</strong> | Hover: <strong>' + s.animation + '</strong>';
-  document.getElementById('summary-text').innerHTML = summary;
-}
-
-function saveBrandKit() {
-  if (!_wizardState.template) {
-    alert('Please go back and select a widget template');
-    _currentStep = 1;
-    updateStepUI();
-    return;
-  }
-  
-  if (_currentUser) {
-    _currentUser.brandKit = _wizardState;
-    saveUser();
-  }
-  
-  localStorage.setItem('blogger_brand_kit', JSON.stringify(_wizardState));
-  alert('✓ Brand Kit Saved!\n\nYour ' + _wizardState.template + ' widget will be used for all your recipes and cookbooks.\n\nYou can change it anytime from Brand Studio.');
-  showPage('dashboard');
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-  if (document.getElementById('step-1')) {
-    updateStepUI();
-  }
-});
-
-
-    // Initialize
-    loadUser();
-    loadRecipes();
-    loadCookbooks();
-
-    if (_currentUser) {
-      showDashboard();
-    } else {
-      showPage('welcome');
-    }
-
-    // Close modals on escape
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') {
-        document.querySelectorAll('.modal.active').forEach(m => m.classList.remove('active'));
-      }
-    });
-  </script>
-  <!-- Brand Kit Preview Modal -->
-  <div id="modal-preview" class="modal">
-    <div class="modal-content" style="max-width: 500px;">
-      <div class="modal-header">
-        <span>Your Widget Preview</span>
-        <button class="close-btn" onclick="closeModal('modal-preview')">✕</button>
-      </div>
-      <p style="color: var(--brown); margin-bottom: 1.5rem; text-align: center; font-style: italic;">This is how your recipes will look to readers</p>
-      <div id="preview-widget" style="border: 1px solid var(--border); border-radius: 10px; overflow: hidden; padding: 1.5rem;">
-        <!-- Preview will be rendered here -->
-      </div>
-      <button class="btn" onclick="closeModal('modal-preview')" style="width: 100%; margin-top: 1.5rem;">Close Preview</button>
-    </div>
-  </div>
-
 </body>
 </html>
