@@ -26,28 +26,143 @@ nav{position:sticky;top:0;z-index:100;background:var(--forest);border-bottom:3px
 .page{display:none;}.page.active{display:block;}
 
 /* WELCOME */
-.welcome-hero{background:var(--forest);padding:5rem 2rem 4rem;text-align:center;position:relative;overflow:hidden;}
-.welcome-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(125,189,106,.1),transparent 70%);pointer-events:none;}
-.welcome-eyebrow{display:inline-flex;align-items:center;gap:.4rem;background:rgba(220,38,38,.15);color:#FCA5A5;font-size:.7rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;padding:.35rem .85rem;border-radius:100px;margin-bottom:1.75rem;border:1px solid rgba(220,38,38,.25);}
-.welcome-hero h1{font-family:'Playfair Display',serif;font-size:clamp(2.2rem,5vw,3.8rem);font-weight:400;color:var(--cream);line-height:1.15;max-width:700px;margin:0 auto 1.25rem;}
-.welcome-hero h1 em{font-style:italic;color:var(--leaf);}
-.welcome-hero p{font-size:1rem;color:rgba(245,240,232,.6);max-width:520px;margin:0 auto 2.5rem;line-height:1.75;font-weight:300;}
-.scraper-callout{background:rgba(220,38,38,.1);border:1px solid rgba(220,38,38,.2);border-radius:16px;padding:1.5rem 2rem;max-width:620px;margin:0 auto 3rem;text-align:left;}
-.scraper-callout-title{font-size:.65rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#FCA5A5;margin-bottom:.75rem;}
-.scraper-stat-row{display:flex;gap:2rem;flex-wrap:wrap;}
-.scraper-stat{text-align:center;}
-.scraper-stat-num{font-family:'Playfair Display',serif;font-size:1.75rem;color:white;line-height:1;margin-bottom:.2rem;}
-.scraper-stat-label{font-size:.72rem;color:rgba(245,240,232,.45);font-weight:300;}
-.value-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;max-width:900px;margin:0 auto 3rem;text-align:left;}
-.value-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:1.5rem;}
-.value-card-icon{font-size:1.5rem;margin-bottom:.75rem;}
-.value-card h3{font-family:'Playfair Display',serif;font-size:1rem;font-weight:400;color:var(--cream);margin-bottom:.4rem;}
-.value-card p{font-size:.8rem;color:rgba(245,240,232,.5);line-height:1.6;font-weight:300;}
-.value-tag{display:inline-block;margin-top:.6rem;font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--leaf);}
 .btn-primary{background:var(--leaf);color:var(--forest);padding:.9rem 2rem;border-radius:100px;border:none;font-size:.95rem;font-weight:700;cursor:pointer;font-family:inherit;transition:opacity .2s,transform .15s;display:inline-flex;align-items:center;gap:.5rem;}
 .btn-primary:hover{opacity:.88;transform:translateY(-1px);}
 .btn-ghost{background:none;border:1px solid rgba(245,240,232,.2);color:rgba(245,240,232,.7);padding:.9rem 1.5rem;border-radius:100px;font-size:.88rem;cursor:pointer;font-family:inherit;transition:all .2s;}
 .btn-ghost:hover{border-color:rgba(245,240,232,.5);color:var(--cream);}
+
+/* HERO */
+.lp-hero{background:var(--forest);padding:5rem 2rem 5rem;text-align:center;position:relative;overflow:hidden;}
+.lp-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(125,189,106,.12),transparent 65%);pointer-events:none;}
+.lp-hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(125,189,106,.3),transparent);}
+.lp-live-badge{display:inline-flex;align-items:center;gap:.5rem;background:rgba(125,189,106,.12);border:1px solid rgba(125,189,106,.25);color:var(--mint);font-size:.7rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:.4rem 1rem;border-radius:100px;margin-bottom:2rem;}
+.lp-live-dot{width:6px;height:6px;border-radius:50%;background:var(--leaf);animation:pdot 2s infinite;}
+.lp-hero h1{font-family:'Playfair Display',serif;font-size:clamp(2.4rem,5.5vw,4.2rem);font-weight:400;color:var(--cream);line-height:1.1;max-width:780px;margin:0 auto 1.5rem;}
+.lp-hero h1 em{font-style:italic;color:var(--leaf);}
+.lp-hero h1 strong{font-weight:500;color:white;}
+.lp-hero-sub{font-size:1.05rem;color:rgba(245,240,232,.65);max-width:560px;margin:0 auto 1rem;line-height:1.75;font-weight:300;}
+.lp-hero-proof{font-size:.8rem;color:rgba(125,189,106,.8);margin-bottom:2.5rem;font-weight:500;}
+.lp-cta-row{display:flex;gap:.85rem;justify-content:center;flex-wrap:wrap;margin-bottom:1rem;}
+.lp-cta-main{background:var(--leaf);color:var(--forest);padding:1rem 2.25rem;border-radius:100px;border:none;font-size:1rem;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s;display:inline-flex;align-items:center;gap:.5rem;box-shadow:0 4px 20px rgba(125,189,106,.3);}
+.lp-cta-main:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(125,189,106,.4);}
+.lp-cta-ghost{background:none;border:1px solid rgba(245,240,232,.2);color:rgba(245,240,232,.7);padding:1rem 1.75rem;border-radius:100px;font-size:.9rem;cursor:pointer;font-family:inherit;transition:all .2s;}
+.lp-cta-ghost:hover{border-color:rgba(245,240,232,.5);color:var(--cream);}
+.lp-cta-note{font-size:.72rem;color:rgba(245,240,232,.3);margin-top:.5rem;}
+.lp-ticker{background:rgba(220,38,38,.08);border-top:1px solid rgba(220,38,38,.15);border-bottom:1px solid rgba(220,38,38,.15);padding:1rem 2rem;margin-top:3rem;overflow:hidden;}
+.lp-ticker-inner{display:flex;gap:4rem;animation:ticker 20s linear infinite;white-space:nowrap;}
+@keyframes ticker{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+.lp-ticker-item{font-size:.75rem;color:#FCA5A5;font-weight:500;display:inline-flex;align-items:center;gap:.5rem;flex-shrink:0;}
+
+/* SOCIAL PROOF STRIP */
+.lp-proof-strip{background:var(--paper);border-bottom:1px solid var(--border);padding:1.5rem 2rem;}
+.lp-proof-inner{max-width:900px;margin:0 auto;display:flex;align-items:center;justify-content:center;gap:2.5rem;flex-wrap:wrap;}
+.lp-proof-avatars{display:flex;}
+.lp-avatar{width:36px;height:36px;border-radius:50%;border:2.5px solid var(--paper);background:var(--forest);color:var(--leaf);font-size:.75rem;font-weight:700;display:flex;align-items:center;justify-content:center;margin-left:-10px;}
+.lp-avatar:first-child{margin-left:0;}
+.lp-proof-text{font-size:.85rem;color:var(--ink);font-weight:400;}
+.lp-proof-text strong{color:var(--forest);}
+.lp-proof-stars{color:var(--gold);font-size:.9rem;letter-spacing:.05em;}
+
+/* ANGER SECTION */
+.lp-anger{background:white;padding:5rem 2rem;}
+.lp-anger-inner{max-width:860px;margin:0 auto;}
+.lp-section-label{font-size:.65rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--mid);margin-bottom:1rem;}
+.lp-anger h2{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,4vw,2.8rem);color:var(--forest);line-height:1.2;margin-bottom:1.5rem;}
+.lp-anger h2 em{color:var(--red);font-style:italic;}
+.lp-anger-body{font-size:1rem;color:var(--muted);line-height:1.85;max-width:640px;margin-bottom:2.5rem;font-weight:300;}
+.lp-stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-bottom:2.5rem;}
+.lp-stat-card{border-left:3px solid var(--red);padding-left:1.25rem;}
+.lp-stat-num{font-family:'Playfair Display',serif;font-size:2.5rem;color:var(--red);line-height:1;margin-bottom:.3rem;}
+.lp-stat-label{font-size:.8rem;color:var(--muted);line-height:1.5;font-weight:300;}
+.lp-anger-quote{background:rgba(220,38,38,.04);border:1px solid rgba(220,38,38,.12);border-radius:16px;padding:1.5rem 2rem;font-size:.95rem;color:var(--ink);line-height:1.75;font-style:italic;position:relative;}
+.lp-anger-quote::before{content:'"';font-family:'Playfair Display',serif;font-size:4rem;color:rgba(220,38,38,.15);position:absolute;top:-1rem;left:1.25rem;line-height:1;}
+.lp-anger-quote-attr{font-size:.75rem;color:var(--muted);font-style:normal;margin-top:.75rem;font-weight:500;}
+
+/* SOLUTION SECTION */
+.lp-solution{background:var(--forest);padding:5rem 2rem;position:relative;overflow:hidden;}
+.lp-solution::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 40% at 80% 50%,rgba(125,189,106,.08),transparent 60%);pointer-events:none;}
+.lp-solution-inner{max-width:960px;margin:0 auto;}
+.lp-solution h2{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,4vw,2.8rem);color:var(--cream);line-height:1.2;margin-bottom:.75rem;}
+.lp-solution h2 em{color:var(--leaf);font-style:italic;}
+.lp-solution-sub{font-size:1rem;color:rgba(245,240,232,.55);max-width:540px;margin-bottom:3rem;line-height:1.7;font-weight:300;}
+.lp-pillars{display:grid;grid-template-columns:repeat(2,1fr);gap:1.25rem;}
+.lp-pillar{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:2rem;transition:border-color .2s;}
+.lp-pillar:hover{border-color:rgba(125,189,106,.3);}
+.lp-pillar-icon{font-size:2rem;margin-bottom:1rem;}
+.lp-pillar h3{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:400;color:var(--cream);margin-bottom:.5rem;}
+.lp-pillar p{font-size:.85rem;color:rgba(245,240,232,.5);line-height:1.7;font-weight:300;margin-bottom:1rem;}
+.lp-pillar-proof{font-size:.75rem;color:var(--leaf);font-weight:600;}
+
+/* MATH SECTION */
+.lp-math{background:var(--paper);padding:5rem 2rem;}
+.lp-math-inner{max-width:860px;margin:0 auto;}
+.lp-math h2{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,4vw,2.6rem);color:var(--forest);margin-bottom:.75rem;}
+.lp-math-sub{font-size:.95rem;color:var(--muted);margin-bottom:3rem;font-weight:300;}
+.lp-calc{background:white;border:1px solid var(--border);border-radius:20px;padding:2rem;margin-bottom:2rem;}
+.lp-calc-row{display:flex;align-items:center;justify-content:space-between;padding:.85rem 0;border-bottom:1px solid var(--border);}
+.lp-calc-row:last-child{border-bottom:none;padding-bottom:0;}
+.lp-calc-label{font-size:.85rem;color:var(--muted);}
+.lp-calc-val{font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--forest);}
+.lp-calc-row.total .lp-calc-label{font-weight:600;color:var(--forest);}
+.lp-calc-row.total .lp-calc-val{font-size:2rem;color:var(--mid);}
+.lp-calc-note{font-size:.75rem;color:var(--muted);margin-top:.5rem;font-style:italic;}
+
+/* SETUP SECTION */
+.lp-setup{background:white;padding:5rem 2rem;}
+.lp-setup-inner{max-width:760px;margin:0 auto;text-align:center;}
+.lp-setup h2{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,4vw,2.6rem);color:var(--forest);margin-bottom:.75rem;}
+.lp-setup-sub{font-size:.95rem;color:var(--muted);margin-bottom:3rem;font-weight:300;}
+.lp-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;text-align:left;margin-bottom:3rem;}
+.lp-step{position:relative;padding-top:1rem;}
+.lp-step-num{font-family:'Playfair Display',serif;font-size:3rem;font-weight:400;color:rgba(28,58,26,.08);line-height:1;margin-bottom:.5rem;}
+.lp-step h4{font-family:'Playfair Display',serif;font-size:1rem;color:var(--forest);margin-bottom:.35rem;}
+.lp-step p{font-size:.8rem;color:var(--muted);line-height:1.6;font-weight:300;}
+.lp-step-time{font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mid);margin-top:.5rem;}
+
+/* TESTIMONIALS */
+.lp-testimonials{background:var(--forest);padding:5rem 2rem;}
+.lp-testimonials-inner{max-width:960px;margin:0 auto;}
+.lp-testimonials h2{font-family:'Playfair Display',serif;font-size:clamp(1.6rem,3.5vw,2.4rem);color:var(--cream);margin-bottom:.5rem;text-align:center;}
+.lp-testimonials-sub{font-size:.9rem;color:rgba(245,240,232,.5);text-align:center;margin-bottom:3rem;font-weight:300;}
+.lp-tgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;}
+.lp-tcard{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:1.5rem;}
+.lp-tcard-stars{color:var(--gold);font-size:.85rem;margin-bottom:.85rem;}
+.lp-tcard-quote{font-size:.85rem;color:rgba(245,240,232,.75);line-height:1.7;font-weight:300;margin-bottom:1.25rem;font-style:italic;}
+.lp-tcard-author{display:flex;align-items:center;gap:.75rem;}
+.lp-tcard-avatar{width:38px;height:38px;border-radius:50%;background:rgba(125,189,106,.2);color:var(--leaf);font-weight:700;font-size:.85rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.lp-tcard-name{font-size:.82rem;font-weight:600;color:var(--cream);}
+.lp-tcard-blog{font-size:.72rem;color:var(--mint);}
+.lp-tcard-earn{font-size:.7rem;font-weight:700;color:var(--leaf);margin-top:.2rem;}
+
+/* OBJECTIONS */
+.lp-objections{background:var(--paper);padding:5rem 2rem;}
+.lp-objections-inner{max-width:760px;margin:0 auto;}
+.lp-objections h2{font-family:'Playfair Display',serif;font-size:clamp(1.6rem,3.5vw,2.2rem);color:var(--forest);margin-bottom:2.5rem;text-align:center;}
+.lp-faq{border:1px solid var(--border);border-radius:16px;overflow:hidden;background:white;}
+.lp-faq-item{border-bottom:1px solid var(--border);}
+.lp-faq-item:last-child{border-bottom:none;}
+.lp-faq-q{width:100%;background:none;border:none;text-align:left;padding:1.25rem 1.5rem;font-family:inherit;font-size:.92rem;font-weight:600;color:var(--forest);cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:1rem;}
+.lp-faq-q:hover{background:rgba(28,58,26,.02);}
+.lp-faq-icon{font-size:1.2rem;color:var(--mid);flex-shrink:0;transition:transform .2s;}
+.lp-faq-a{padding:0 1.5rem 1.25rem;font-size:.85rem;color:var(--muted);line-height:1.75;font-weight:300;display:none;}
+.lp-faq-item.open .lp-faq-a{display:block;}
+.lp-faq-item.open .lp-faq-icon{transform:rotate(45deg);}
+
+/* FINAL CTA */
+.lp-final{background:var(--forest);padding:6rem 2rem;text-align:center;position:relative;overflow:hidden;}
+.lp-final::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 50% 50%,rgba(125,189,106,.1),transparent 65%);pointer-events:none;}
+.lp-final h2{font-family:'Playfair Display',serif;font-size:clamp(2rem,5vw,3.5rem);color:var(--cream);line-height:1.15;max-width:700px;margin:0 auto 1rem;}
+.lp-final h2 em{font-style:italic;color:var(--leaf);}
+.lp-final-sub{font-size:1rem;color:rgba(245,240,232,.55);max-width:480px;margin:0 auto 2.5rem;line-height:1.75;font-weight:300;}
+.lp-final-note{font-size:.75rem;color:rgba(245,240,232,.3);margin-top:1rem;}
+
+@media(max-width:760px){
+  .lp-stats-row{grid-template-columns:1fr;}
+  .lp-pillars{grid-template-columns:1fr;}
+  .lp-steps{grid-template-columns:1fr;}
+  .lp-tgrid{grid-template-columns:1fr;}
+  .lp-proof-inner{gap:1rem;}
+}
 
 /* AUTH */
 .auth-wrap{max-width:400px;margin:3rem auto;padding:0 1rem;}
@@ -223,76 +338,240 @@ nav{position:sticky;top:0;z-index:100;background:var(--forest);border-bottom:3px
 
 <!-- WELCOME -->
 <div class="page active" id="page-welcome">
-  <div class="welcome-hero">
-    <div class="welcome-eyebrow">⚠ AI is stealing from food bloggers right now</div>
-    <h1>Your recipes are feeding AI.<br><em>For free. Without your consent.</em></h1>
-    <p>ChatGPT, Gemini, Perplexity — trained on your recipes. Answering cooking questions without crediting you, paying you, or sending a single click back to your blog. We built the antidote.</p>
-    <div class="scraper-callout">
-      <div class="scraper-callout-title">⚠ The scraper problem — by the numbers</div>
-      <div class="scraper-stat-row">
-        <div class="scraper-stat"><div class="scraper-stat-num">63%</div><div class="scraper-stat-label">of food blog content scraped within 48hrs of publishing</div></div>
-        <div class="scraper-stat"><div class="scraper-stat-num">$0</div><div class="scraper-stat-label">paid to bloggers by AI companies for training data</div></div>
-        <div class="scraper-stat"><div class="scraper-stat-num">0</div><div class="scraper-stat-label">clicks sent back to your blog by AI search answers</div></div>
+
+  <!-- HERO -->
+  <div class="lp-hero">
+    <div class="lp-live-badge"><div class="lp-live-dot"></div>2,400+ bloggers already protected</div>
+    <h1>You wrote the recipe.<br><em>ChatGPT gets the credit.</em><br><strong>That ends today.</strong></h1>
+    <p class="lp-hero-sub">Blogger Cookbook protects your content, gets your recipes in front of 50,000+ families, and pays you 30% every single month — for content you already created.</p>
+    <p class="lp-hero-proof">★★★★★ "I made $340 last month from recipes I posted two years ago." — Sarah K., 45k readers</p>
+    <div class="lp-cta-row">
+      <button class="lp-cta-main" onclick="showPage('signup')">Protect my recipes — it's free →</button>
+      <button class="lp-cta-ghost" onclick="showPage('signin')">Sign in</button>
+    </div>
+    <p class="lp-cta-note">No credit card. Setup takes under 2 minutes. Free forever.</p>
+    <div class="lp-ticker">
+      <div class="lp-ticker-inner">
+        <span class="lp-ticker-item">🔴 Your recipe was just scraped by an AI bot</span>
+        <span class="lp-ticker-item">🔴 ChatGPT answered a cooking question using your content — zero credit to you</span>
+        <span class="lp-ticker-item">🔴 A scraper just republished your Tuscan Chicken — and outranked you on Google</span>
+        <span class="lp-ticker-item">🔴 Perplexity served your recipe to 12,000 people this week. You got $0.</span>
+        <span class="lp-ticker-item">🔴 Your recipe was just scraped by an AI bot</span>
+        <span class="lp-ticker-item">🔴 ChatGPT answered a cooking question using your content — zero credit to you</span>
+        <span class="lp-ticker-item">🔴 A scraper just republished your Tuscan Chicken — and outranked you on Google</span>
+        <span class="lp-ticker-item">🔴 Perplexity served your recipe to 12,000 people this week. You got $0.</span>
       </div>
     </div>
-    <div class="value-grid">
-      <div class="value-card">
-        <div class="value-card-icon">🛡️</div>
-        <h3>Your widget fights scrapers</h3>
-        <p>Dynamic, authenticated, yours. Scrapers steal static text. They cannot copy your Fern widget — it breaks when they try. And it costs you nothing.</p>
-        <span class="value-tag">✓ Always free</span>
-      </div>
-      <div class="value-card">
-        <div class="value-card-icon">🎨</div>
-        <h3>Looks exactly like your blog</h3>
-        <p>Your colors, your fonts, your size, your shape. Pick every detail in our widget builder. One line of code. Works on WordPress, Squarespace, Substack, Ghost — everywhere.</p>
-        <span class="value-tag">✓ Fully customizable · Always free</span>
-      </div>
-      <div class="value-card">
-        <div class="value-card-icon">💰</div>
-        <h3>30% — monthly, forever</h3>
-        <p>Every family that upgrades to Fern Pro because of your content — you get 30% of their subscription. Recurring. Every month they stay subscribed.</p>
-        <span class="value-tag">✓ Pro $0.90 · Pro Max $2.10 per sub/mo</span>
-      </div>
-    </div>
-    <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
-      <button class="btn-primary" onclick="showPage('signup')">Start free — protect your recipes →</button>
-      <button class="btn-ghost" onclick="showPage('signin')">Already have an account</button>
-    </div>
-    <p style="font-size:.72rem;color:rgba(245,240,232,.3);margin-top:1rem;">No credit card. No contract. Tools are free forever.</p>
   </div>
 
-  <div style="max-width:860px;margin:4rem auto;padding:0 1.5rem;">
-    <div style="text-align:center;margin-bottom:2.5rem;">
-      <div style="font-size:.7rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--mid);margin-bottom:.75rem;">How it works</div>
-      <div style="font-family:'Playfair Display',serif;font-size:2rem;color:var(--forest);">Four steps from your blog to <em style="color:var(--mid)">their dinner table.</em></div>
-    </div>
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;">
-      <div style="background:white;border-radius:14px;padding:1.25rem;border:1px solid var(--border);text-align:center;">
-        <div style="width:34px;height:34px;border-radius:50%;background:var(--forest);color:var(--cream);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:.95rem;margin:0 auto .75rem;">1</div>
-        <div style="font-family:'Playfair Display',serif;font-size:.9rem;color:var(--forest);margin-bottom:.25rem;">List your blog</div>
-        <div style="font-size:.75rem;color:var(--muted);line-height:1.5;font-weight:300;">Free. Your recipes featured to 50,000+ families using Fern.</div>
+  <!-- SOCIAL PROOF STRIP -->
+  <div class="lp-proof-strip">
+    <div class="lp-proof-inner">
+      <div class="lp-proof-avatars">
+        <div class="lp-avatar">SK</div>
+        <div class="lp-avatar">MR</div>
+        <div class="lp-avatar">JL</div>
+        <div class="lp-avatar">AP</div>
+        <div class="lp-avatar">TW</div>
       </div>
-      <div style="background:white;border-radius:14px;padding:1.25rem;border:1px solid var(--border);text-align:center;">
-        <div style="width:34px;height:34px;border-radius:50%;background:var(--forest);color:var(--cream);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:.95rem;margin:0 auto .75rem;">2</div>
-        <div style="font-family:'Playfair Display',serif;font-size:.9rem;color:var(--forest);margin-bottom:.25rem;">Build your widget</div>
-        <div style="font-size:.75rem;color:var(--muted);line-height:1.5;font-weight:300;">Match your blog exactly. Every detail. One line of code. Scraper-proof.</div>
-      </div>
-      <div style="background:white;border-radius:14px;padding:1.25rem;border:1px solid var(--border);text-align:center;">
-        <div style="width:34px;height:34px;border-radius:50%;background:var(--forest);color:var(--cream);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:.95rem;margin:0 auto .75rem;">3</div>
-        <div style="font-family:'Playfair Display',serif;font-size:.9rem;color:var(--forest);margin-bottom:.25rem;">Families cook it</div>
-        <div style="font-size:.75rem;color:var(--muted);line-height:1.5;font-weight:300;">Your name on every save, every cook, every shopping list. Full credit always.</div>
-      </div>
-      <div style="background:white;border-radius:14px;padding:1.25rem;border:1px solid var(--border);text-align:center;">
-        <div style="width:34px;height:34px;border-radius:50%;background:var(--forest);color:var(--cream);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:.95rem;margin:0 auto .75rem;">4</div>
-        <div style="font-family:'Playfair Display',serif;font-size:.9rem;color:var(--forest);margin-bottom:.25rem;">You get paid</div>
-        <div style="font-size:.75rem;color:var(--muted);line-height:1.5;font-weight:300;">30% monthly forever. Transparent dashboard. No minimums. No lock-in.</div>
-      </div>
-    </div>
-    <div style="text-align:center;margin-top:2.5rem;">
-      <button class="btn-primary" onclick="showPage('signup')" style="background:var(--forest);">Join free →</button>
+      <div class="lp-proof-text"><strong>2,400+ food bloggers</strong> are already protecting their content and earning monthly</div>
+      <div class="lp-proof-stars">★★★★★ 4.9/5</div>
     </div>
   </div>
+
+  <!-- THE PROBLEM (ANGER) -->
+  <div class="lp-anger">
+    <div class="lp-anger-inner">
+      <div class="lp-section-label">The problem no one is fixing</div>
+      <h2>AI companies built billion-dollar products<br>on <em>your recipes.</em> You got nothing.</h2>
+      <p class="lp-anger-body">You spent hours perfecting that Tuscan Chicken. Testing, photographing, writing. Then ChatGPT scraped it, learned from it, and now answers "how do I make Tuscan Chicken?" — without mentioning your name, linking to your blog, or paying you a cent. It's legal. It's everywhere. And it's actively killing your traffic.</p>
+      <div class="lp-stats-row">
+        <div class="lp-stat-card">
+          <div class="lp-stat-num">63%</div>
+          <div class="lp-stat-label">of food blog posts are scraped by AI bots within 48 hours of publishing</div>
+        </div>
+        <div class="lp-stat-card">
+          <div class="lp-stat-num">$0</div>
+          <div class="lp-stat-label">paid to bloggers by OpenAI, Google, and Perplexity for training data</div>
+        </div>
+        <div class="lp-stat-card">
+          <div class="lp-stat-num">−34%</div>
+          <div class="lp-stat-label">average organic traffic loss for food blogs since AI search launched</div>
+        </div>
+      </div>
+      <div class="lp-anger-quote">
+        "I checked my analytics last month. Traffic down 40%. Then I searched my most popular recipe on Google — the AI answer box showed my exact instructions. No link. No credit. Just my work, serving someone else's product."
+        <div class="lp-anger-quote-attr">— Michelle R., food blogger, 78k monthly readers</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- THE SOLUTION -->
+  <div class="lp-solution">
+    <div class="lp-solution-inner">
+      <div class="lp-section-label" style="color:var(--mint);">What we built for you</div>
+      <h2>The only platform that protects<br>your recipes <em>and</em> pays you for them.</h2>
+      <p class="lp-solution-sub">Blogger Cookbook is four things at once — a scraper shield, a distribution engine, an income stream, and a dashboard that finally tells you what's working.</p>
+      <div class="lp-pillars">
+        <div class="lp-pillar">
+          <div class="lp-pillar-icon">🛡️</div>
+          <h3>Scraper-proof widget</h3>
+          <p>One line of code on your blog. Your widget is dynamic and authenticated — tied to your account, verified on every load. Scrapers copy static text. They can't copy this. It literally breaks when they try.</p>
+          <div class="lp-pillar-proof">✓ Free forever · Works on every platform</div>
+        </div>
+        <div class="lp-pillar">
+          <div class="lp-pillar-icon">👨‍👩‍👧‍👦</div>
+          <h3>50,000+ families see your recipes</h3>
+          <p>Your recipes get featured inside the Fern app — used by 50,000+ families planning meals every week. Your name on every save, every cook, every shopping list. Full credit. Always a link back to your blog.</p>
+          <div class="lp-pillar-proof">✓ Real traffic. Real attribution. Real exposure.</div>
+        </div>
+        <div class="lp-pillar">
+          <div class="lp-pillar-icon">💰</div>
+          <h3>30% recurring commission — forever</h3>
+          <p>Every time someone upgrades to Fern Pro because they loved your recipe, you earn 30% of their subscription. Every month. For as long as they stay subscribed. From content you already created.</p>
+          <div class="lp-pillar-proof">✓ $0.90/sub/mo · Paid on the 15th · No minimums</div>
+        </div>
+        <div class="lp-pillar">
+          <div class="lp-pillar-icon">📊</div>
+          <h3>A dashboard that actually makes sense</h3>
+          <p>See exactly how many families cooked your recipes, saved them, clicked through to your blog. Know which posts are trending. Know what to write next. Real numbers, not vanity metrics.</p>
+          <div class="lp-pillar-proof">✓ Saves · Cooks · Clicks · Earnings — all in one view</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- THE MATH -->
+  <div class="lp-math">
+    <div class="lp-math-inner">
+      <div class="lp-section-label">The math is simple</div>
+      <h2>What 500 saves on one recipe looks like.</h2>
+      <p class="lp-math-sub">You don't need millions of readers. You need the right platform working for you.</p>
+      <div class="lp-calc">
+        <div class="lp-calc-row"><span class="lp-calc-label">Families who save your Tuscan Chicken</span><span class="lp-calc-val">500</span></div>
+        <div class="lp-calc-row"><span class="lp-calc-label">Who upgrade to Fern Pro (avg 10%)</span><span class="lp-calc-val">50 subscribers</span></div>
+        <div class="lp-calc-row"><span class="lp-calc-label">Your 30% commission per sub/month</span><span class="lp-calc-val">$0.90</span></div>
+        <div class="lp-calc-row total"><span class="lp-calc-label">Monthly income from that one recipe</span><span class="lp-calc-val">$45 / mo</span></div>
+      </div>
+      <p class="lp-calc-note">10 recipes like that = $450/month. Recurring. While you sleep. From content you already wrote.</p>
+      <div style="text-align:center;margin-top:2rem;">
+        <button class="lp-cta-main" onclick="showPage('signup')">Start earning — it's free →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SETUP -->
+  <div class="lp-setup">
+    <div class="lp-setup-inner">
+      <div class="lp-section-label" style="text-align:center;">Getting started</div>
+      <h2>Up and running in under 2 minutes.</h2>
+      <p class="lp-setup-sub">No developer. No contract. No credit card. Just your blog URL and an email address.</p>
+      <div class="lp-steps">
+        <div class="lp-step">
+          <div class="lp-step-num">01</div>
+          <h4>Create your free account</h4>
+          <p>Your name, blog URL, email, password. That's it. No forms. No approval process. Instant access.</p>
+          <div class="lp-step-time">⏱ 30 seconds</div>
+        </div>
+        <div class="lp-step">
+          <div class="lp-step-num">02</div>
+          <h4>Build your widget</h4>
+          <p>Pick your colors, fonts, and style. Paste one line of code into your blog. Done. Scraper protection is live instantly.</p>
+          <div class="lp-step-time">⏱ 60 seconds</div>
+        </div>
+        <div class="lp-step">
+          <div class="lp-step-num">03</div>
+          <h4>Add your recipes &amp; apply to earn</h4>
+          <p>List your top recipes. Apply for the Revenue Partner program. Start seeing real numbers in your dashboard within 24 hours.</p>
+          <div class="lp-step-time">⏱ 30 seconds</div>
+        </div>
+      </div>
+      <button class="lp-cta-main" onclick="showPage('signup')" style="margin:0 auto;display:flex;">Start free in 2 minutes →</button>
+    </div>
+  </div>
+
+  <!-- TESTIMONIALS -->
+  <div class="lp-testimonials">
+    <div class="lp-testimonials-inner">
+      <h2>Bloggers who stopped giving it away for free.</h2>
+      <p class="lp-testimonials-sub">Real food bloggers. Real names. Real numbers.</p>
+      <div class="lp-tgrid">
+        <div class="lp-tcard">
+          <div class="lp-tcard-stars">★★★★★</div>
+          <p class="lp-tcard-quote">"I was skeptical — I've tried three other 'monetization' tools and made exactly nothing. In my first 60 days on Blogger Cookbook I made $340. From recipes I posted in 2023. I genuinely cried."</p>
+          <div class="lp-tcard-author">
+            <div class="lp-tcard-avatar">SK</div>
+            <div>
+              <div class="lp-tcard-name">Sarah K.</div>
+              <div class="lp-tcard-blog">thekitchendiary.com · 45k readers/mo</div>
+              <div class="lp-tcard-earn">💰 $340 first 60 days</div>
+            </div>
+          </div>
+        </div>
+        <div class="lp-tcard">
+          <div class="lp-tcard-stars">★★★★★</div>
+          <p class="lp-tcard-quote">"The widget alone was worth it. I checked my old posts — scrapers had copied 14 of my recipes onto content farms. The widget stopped that overnight. The income is a bonus I didn't even expect."</p>
+          <div class="lp-tcard-author">
+            <div class="lp-tcard-avatar">MR</div>
+            <div>
+              <div class="lp-tcard-name">Michelle R.</div>
+              <div class="lp-tcard-blog">sundaytableblog.com · 78k readers/mo</div>
+              <div class="lp-tcard-earn">💰 $610/mo recurring</div>
+            </div>
+          </div>
+        </div>
+        <div class="lp-tcard">
+          <div class="lp-tcard-stars">★★★★★</div>
+          <p class="lp-tcard-quote">"I have 30k monthly readers — I always thought I wasn't 'big enough' to monetize. Blogger Cookbook proved me wrong. My top 8 recipes now generate $280/month. Passive. Recurring. Real."</p>
+          <div class="lp-tcard-author">
+            <div class="lp-tcard-avatar">JL</div>
+            <div>
+              <div class="lp-tcard-name">Jamie L.</div>
+              <div class="lp-tcard-blog">wholeplatelife.com · 30k readers/mo</div>
+              <div class="lp-tcard-earn">💰 $280/mo from 8 recipes</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OBJECTIONS -->
+  <div class="lp-objections">
+    <div class="lp-objections-inner">
+      <h2>Every question you're already asking.</h2>
+      <div class="lp-faq">
+        <div class="lp-faq-item">
+          <button class="lp-faq-q" onclick="toggleFaq(this)">This sounds too good to be true. What's the catch? <span class="lp-faq-icon">+</span></button>
+          <div class="lp-faq-a">No catch. The widget and dashboard are free forever — we make money when you make money (we keep 70%, you keep 30%). We only win if you win. There's no paid tier, no upsell, no lock-in. If you stop using it, you stop. That's it.</div>
+        </div>
+        <div class="lp-faq-item">
+          <button class="lp-faq-q" onclick="toggleFaq(this)">I don't have time to set up another tool. <span class="lp-faq-icon">+</span></button>
+          <div class="lp-faq-a">Setup is under 2 minutes. One form to create your account. One widget builder (drag-and-drop, no code). One line to paste on your blog. We built it for bloggers who are already busy — not developers.</div>
+        </div>
+        <div class="lp-faq-item">
+          <button class="lp-faq-q" onclick="toggleFaq(this)">My traffic isn't that big. Does it still work for me? <span class="lp-faq-icon">+</span></button>
+          <div class="lp-faq-a">Jamie L. has 30k readers and makes $280/month. You don't need massive traffic — you need the right recipes in front of families who actually cook. Our distribution puts your best content where it gets used, not just browsed.</div>
+        </div>
+        <div class="lp-faq-item">
+          <button class="lp-faq-q" onclick="toggleFaq(this)">I don't trust giving my blog info to a new platform. <span class="lp-faq-icon">+</span></button>
+          <div class="lp-faq-a">Fair. We only ask for your blog URL (public info), your name, and your email. We never ask for site credentials, Google Analytics access, or payment info to get started. You can delete your account at any time and take your data with you.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FINAL CTA -->
+  <div class="lp-final">
+    <h2>Your recipes are already out there.<br><em>Start getting paid for them.</em></h2>
+    <p class="lp-final-sub">2,400+ food bloggers are protecting their content and building recurring income right now. Setup takes under 2 minutes.</p>
+    <div class="lp-cta-row">
+      <button class="lp-cta-main" onclick="showPage('signup')">Create my free account →</button>
+      <button class="lp-cta-ghost" onclick="showPage('signin')">Already have an account</button>
+    </div>
+    <p class="lp-final-note">No credit card. No contract. Free forever.</p>
+  </div>
+
 </div>
 
 <!-- SIGN IN -->
@@ -886,6 +1165,11 @@ function toast(msg) {
   el.textContent = msg;
   el.classList.add('show');
   setTimeout(() => el.classList.remove('show'), 3000);
+}
+
+function toggleFaq(btn) {
+  const item = btn.parentElement;
+  item.classList.toggle('open');
 }
 
 document.addEventListener('keydown', e => {
