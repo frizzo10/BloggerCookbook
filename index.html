@@ -227,10 +227,114 @@ nav{position:sticky;top:0;z-index:100;background:var(--forest);border-bottom:3px
 .apply-title{font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--forest);margin-bottom:.5rem;}
 .apply-text{font-size:.85rem;color:var(--muted);line-height:1.7;margin-bottom:1.25rem;font-weight:300;}
 
-/* WIDGET */
-.widget-builder{display:grid;grid-template-columns:300px 1fr;gap:1.5rem;align-items:start;}
-.builder-controls{background:white;border:1px solid var(--border);border-radius:16px;padding:1.25rem;position:sticky;top:80px;}
-.csec{margin-bottom:1.1rem;padding-bottom:1.1rem;border-bottom:1px solid var(--border);}
+/* BRAND STUDIO */
+.bs-page{background:#0F0F0F;min-height:calc(100vh - 60px);}
+.bs-header{background:linear-gradient(135deg,#0F0F0F 0%,#1a1a1a 100%);border-bottom:1px solid rgba(255,255,255,.06);padding:2rem 2.5rem 1.75rem;}
+.bs-header-top{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;flex-wrap:wrap;}
+.bs-title-group{}
+.bs-eyebrow{font-size:.6rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--mid);margin-bottom:.5rem;}
+.bs-title{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:400;color:#fff;line-height:1.15;margin-bottom:.35rem;}
+.bs-title em{font-style:italic;color:var(--leaf);}
+.bs-subtitle{font-size:.85rem;color:rgba(255,255,255,.4);font-weight:300;}
+.bs-status{display:flex;align-items:center;gap:.5rem;background:rgba(125,189,106,.08);border:1px solid rgba(125,189,106,.15);border-radius:100px;padding:.4rem 1rem;font-size:.72rem;color:var(--mint);font-weight:500;}
+.bs-status-dot{width:6px;height:6px;border-radius:50%;background:var(--leaf);animation:pdot 2s infinite;flex-shrink:0;}
+
+/* TEMPLATE PICKER */
+.bs-templates{padding:1.75rem 2.5rem;border-bottom:1px solid rgba(255,255,255,.05);}
+.bs-section-label{font-size:.58rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.25);margin-bottom:1rem;}
+.bs-template-grid{display:flex;gap:.75rem;overflow-x:auto;padding-bottom:.5rem;}
+.bs-template-grid::-webkit-scrollbar{height:3px;}
+.bs-template-grid::-webkit-scrollbar-track{background:rgba(255,255,255,.04);}
+.bs-template-grid::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:2px;}
+.bs-tpl{background:rgba(255,255,255,.04);border:1.5px solid rgba(255,255,255,.07);border-radius:14px;padding:1rem;cursor:pointer;transition:all .2s;min-width:120px;text-align:center;flex-shrink:0;}
+.bs-tpl:hover{border-color:rgba(125,189,106,.3);background:rgba(125,189,106,.05);}
+.bs-tpl.active{border-color:var(--leaf);background:rgba(125,189,106,.08);}
+.bs-tpl-preview{height:52px;border-radius:8px;margin-bottom:.65rem;display:flex;align-items:center;justify-content:center;font-size:.6rem;font-weight:700;letter-spacing:.05em;}
+.bs-tpl-name{font-size:.72rem;color:rgba(255,255,255,.6);font-weight:500;}
+.bs-tpl.active .bs-tpl-name{color:var(--leaf);}
+
+/* STUDIO LAYOUT */
+.bs-studio{display:grid;grid-template-columns:280px 1fr;min-height:calc(100vh - 260px);}
+.bs-controls{background:#141414;border-right:1px solid rgba(255,255,255,.05);padding:1.5rem;overflow-y:auto;max-height:calc(100vh - 120px);position:sticky;top:60px;}
+.bs-control-section{margin-bottom:1.75rem;}
+.bs-control-section:last-child{margin-bottom:0;}
+.bs-cs-label{font-size:.58rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.25);margin-bottom:.85rem;display:flex;align-items:center;gap:.5rem;}
+.bs-cs-label::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.05);}
+
+/* Chips */
+.bs-chips{display:flex;gap:.4rem;flex-wrap:wrap;}
+.bs-chip{background:rgba(255,255,255,.04);border:1.5px solid rgba(255,255,255,.08);border-radius:8px;padding:.4rem .75rem;font-size:.75rem;cursor:pointer;font-family:inherit;color:rgba(255,255,255,.5);transition:all .15s;}
+.bs-chip:hover{border-color:rgba(255,255,255,.2);color:rgba(255,255,255,.8);}
+.bs-chip.on{background:rgba(125,189,106,.12);border-color:var(--leaf);color:var(--leaf);}
+
+/* Color palette */
+.bs-palette{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;}
+.bs-swatch{width:32px;height:32px;border-radius:8px;cursor:pointer;border:2px solid transparent;transition:all .15s;flex-shrink:0;position:relative;}
+.bs-swatch:hover{transform:scale(1.1);}
+.bs-swatch.on::after{content:'✓';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:.65rem;color:white;text-shadow:0 1px 3px rgba(0,0,0,.5);}
+.bs-swatch.on{border-color:rgba(255,255,255,.6);transform:scale(1.1);}
+.bs-color-input{width:32px;height:32px;border:2px solid rgba(255,255,255,.1);border-radius:8px;cursor:pointer;padding:0;background:none;}
+
+/* Slider */
+.bs-slider-row{display:flex;align-items:center;gap:.75rem;}
+.bs-slider{flex:1;-webkit-appearance:none;appearance:none;height:3px;border-radius:2px;background:rgba(255,255,255,.1);outline:none;}
+.bs-slider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:14px;height:14px;border-radius:50%;background:var(--leaf);cursor:pointer;border:2px solid #141414;}
+.bs-slider-val{font-size:.72rem;color:rgba(255,255,255,.4);min-width:30px;text-align:right;}
+
+/* Text input */
+.bs-input{width:100%;background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.08);border-radius:9px;padding:.6rem .85rem;font-family:inherit;font-size:.82rem;color:rgba(255,255,255,.8);outline:none;transition:border-color .15s;}
+.bs-input:focus{border-color:rgba(125,189,106,.4);}
+
+/* Toggle */
+.bs-toggle-row{display:flex;align-items:center;justify-content:space-between;padding:.5rem 0;}
+.bs-toggle-label{font-size:.8rem;color:rgba(255,255,255,.5);}
+.bs-toggle{position:relative;width:36px;height:20px;cursor:pointer;}
+.bs-toggle input{opacity:0;width:0;height:0;}
+.bs-toggle-track{position:absolute;inset:0;background:rgba(255,255,255,.1);border-radius:20px;transition:background .2s;}
+.bs-toggle input:checked + .bs-toggle-track{background:var(--leaf);}
+.bs-toggle-thumb{position:absolute;top:3px;left:3px;width:14px;height:14px;background:white;border-radius:50%;transition:transform .2s;}
+.bs-toggle input:checked ~ .bs-toggle-thumb{transform:translateX(16px);}
+
+/* PREVIEW AREA */
+.bs-preview-area{background:#1a1a1a;padding:2rem;display:flex;flex-direction:column;gap:1.5rem;}
+.bs-preview-toolbar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.75rem;}
+.bs-preview-label{font-size:.6rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.25);}
+.bs-view-tabs{display:flex;gap:.35rem;}
+.bs-view-tab{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.07);border-radius:7px;padding:.35rem .75rem;font-size:.72rem;cursor:pointer;font-family:inherit;color:rgba(255,255,255,.4);transition:all .15s;}
+.bs-view-tab:hover{color:rgba(255,255,255,.7);}
+.bs-view-tab.on{background:rgba(125,189,106,.1);border-color:rgba(125,189,106,.25);color:var(--leaf);}
+
+/* Blog mock */
+.bs-blog-mock{background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.4);}
+.bs-blog-mock-header{background:#f8f8f8;border-bottom:1px solid #eee;padding:.75rem 1.25rem;display:flex;align-items:center;gap:.5rem;}
+.bs-mock-dot{width:10px;height:10px;border-radius:50%;}
+.bs-mock-url{font-size:.65rem;color:#999;background:#eee;border-radius:4px;padding:.2rem .6rem;flex:1;max-width:220px;}
+.bs-blog-content{padding:1.5rem;}
+.bs-blog-post-title{font-family:'Playfair Display',serif;font-size:1.4rem;color:#1a1a1a;margin-bottom:.35rem;}
+.bs-blog-post-meta{font-size:.72rem;color:#999;margin-bottom:.85rem;}
+.bs-blog-post-body{font-size:.82rem;color:#555;line-height:1.7;margin-bottom:1rem;}
+.bs-widget-slot{margin:1rem 0;}
+.bs-blog-post-more{font-size:.82rem;color:#555;line-height:1.7;}
+
+/* Code output */
+.bs-code-panel{background:#0d0d0d;border:1px solid rgba(255,255,255,.06);border-radius:14px;overflow:hidden;}
+.bs-code-header{display:flex;align-items:center;justify-content:space-between;padding:.75rem 1.25rem;border-bottom:1px solid rgba(255,255,255,.05);}
+.bs-code-title{font-size:.65rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.3);}
+.bs-code-copy{background:rgba(125,189,106,.1);border:1px solid rgba(125,189,106,.2);border-radius:7px;padding:.35rem .85rem;font-size:.72rem;color:var(--leaf);cursor:pointer;font-family:inherit;transition:all .15s;}
+.bs-code-copy:hover{background:rgba(125,189,106,.2);}
+.bs-code-body{padding:1.25rem;font-family:'Courier New',monospace;font-size:.72rem;color:#A8D5A2;line-height:1.7;overflow-x:auto;white-space:pre;}
+
+/* Save bar */
+.bs-save-bar{background:#141414;border-top:1px solid rgba(255,255,255,.06);padding:1rem 2.5rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;position:sticky;bottom:0;}
+.bs-save-info{font-size:.78rem;color:rgba(255,255,255,.3);}
+.bs-save-info strong{color:rgba(255,255,255,.6);}
+.bs-save-btn{background:var(--leaf);color:var(--forest);border:none;border-radius:100px;padding:.7rem 1.75rem;font-family:inherit;font-size:.88rem;font-weight:700;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:.5rem;}
+.bs-save-btn:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(125,189,106,.3);}
+.bs-compat{display:flex;gap:.5rem;flex-wrap:wrap;}
+.bs-compat-tag{font-size:.62rem;background:rgba(255,255,255,.05);color:rgba(255,255,255,.3);border-radius:20px;padding:.2rem .6rem;}
+
+/* chip/swatch shared */
+.csec{margin-bottom:1.1rem;padding-bottom:1.1rem;border-bottom:1px solid rgba(255,255,255,.05);}
 .csec:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none;}
 .clabel{font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:.55rem;display:block;}
 .cchips{display:flex;gap:.35rem;flex-wrap:wrap;}
@@ -254,6 +358,8 @@ nav{position:sticky;top:0;z-index:100;background:var(--forest);border-bottom:3px
 .compat-tag{font-size:.65rem;background:rgba(28,58,26,.07);color:var(--mid);border-radius:20px;padding:.2rem .55rem;}
 .save-widget-btn{width:100%;margin-top:1rem;background:var(--forest);color:var(--cream);border:none;border-radius:10px;padding:.75rem;font-family:inherit;font-size:.85rem;font-weight:700;cursor:pointer;transition:background .15s;}
 .save-widget-btn:hover{background:var(--green);}
+
+@media(max-width:860px){.bs-studio{grid-template-columns:1fr;}.bs-controls{position:static;max-height:none;}}
 
 /* PROTECT */
 .protect-banner{background:rgba(220,38,38,.05);border:1px solid rgba(220,38,38,.15);border-radius:16px;padding:1.5rem;margin-bottom:1.5rem;}
@@ -664,122 +770,211 @@ nav{position:sticky;top:0;z-index:100;background:var(--forest);border-bottom:3px
   </div>
 </div>
 
-<!-- WIDGET BUILDER -->
+<!-- BRAND STUDIO -->
 <div class="page" id="page-widget">
-  <div class="dash-wrap">
-    <div class="dash-greeting">Your Widget</div>
-    <div class="dash-sub">Built to match your blog exactly. Completely free. Scraper-proof by design.</div>
-    <div class="protect-banner">
-      <div class="protect-title">🛡 Why your widget beats scrapers</div>
-      <div class="protect-body">Scrapers steal static text. Your Fern widget is dynamic and authenticated — tied to your account, verified on every load. Copy the HTML and it breaks. That is the point.</div>
-      <div class="pvs">
-        <div class="pv-bad">
-          <div class="pvt">💀 What scrapers do</div>
-          <div class="pvi"><span>🔴</span> Copy your recipe text verbatim</div>
-          <div class="pvi"><span>🔴</span> Republish with zero credit</div>
-          <div class="pvi"><span>🔴</span> Rank above you on Google</div>
-          <div class="pvi"><span>🔴</span> Never send traffic back</div>
-          <div class="pvi"><span>🔴</span> Pay you exactly nothing</div>
-        </div>
-        <div class="pv-good">
-          <div class="pvt">✅ Your Fern widget</div>
-          <div class="pvi"><span>🟢</span> Authenticated — breaks if copied</div>
-          <div class="pvi"><span>🟢</span> Your name on every interaction</div>
-          <div class="pvi"><span>🟢</span> Always links back to your post</div>
-          <div class="pvi"><span>🟢</span> Drives traffic to you</div>
-          <div class="pvi"><span>🟢</span> Earns you 30% of upgrades</div>
-        </div>
+<div class="bs-page">
+
+  <!-- HEADER -->
+  <div class="bs-header">
+    <div class="bs-header-top">
+      <div class="bs-title-group">
+        <div class="bs-eyebrow">Brand Studio</div>
+        <div class="bs-title">Make it <em>unmistakably yours.</em></div>
+        <div class="bs-subtitle">Design your widget. See it live in your blog. Copy one line of code.</div>
       </div>
+      <div class="bs-status"><div class="bs-status-dot"></div>Scraper protection active</div>
     </div>
-    <div class="widget-builder">
-      <div class="builder-controls">
-        <div style="font-family:'Playfair Display',serif;font-size:1rem;color:var(--forest);margin-bottom:1.1rem;">Customize your widget</div>
-        <div class="csec">
-          <span class="clabel">Size</span>
-          <div class="cchips">
-            <button class="chip on" onclick="sw('size','small',this)">Small</button>
-            <button class="chip" onclick="sw('size','medium',this)">Medium</button>
-            <button class="chip" onclick="sw('size','large',this)">Large</button>
-            <button class="chip" onclick="sw('size','full',this)">Full width</button>
-          </div>
-        </div>
-        <div class="csec">
-          <span class="clabel">Shape</span>
-          <div class="cchips">
-            <button class="chip on" onclick="sw('shape','rounded',this)">Rounded</button>
-            <button class="chip" onclick="sw('shape','sharp',this)">Sharp</button>
-            <button class="chip" onclick="sw('shape','pill',this)">Pill</button>
-          </div>
-        </div>
-        <div class="csec">
-          <span class="clabel">Style</span>
-          <div class="cchips">
-            <button class="chip on" onclick="sw('style','minimal',this)">Minimal</button>
-            <button class="chip" onclick="sw('style','card',this)">Card</button>
-            <button class="chip" onclick="sw('style','bold',this)">Bold</button>
-            <button class="chip" onclick="sw('style','dark',this)">Dark</button>
-          </div>
-        </div>
-        <div class="csec">
-          <span class="clabel">Primary color</span>
-          <div class="swatch-row">
-            <div class="swatch on" style="background:#1C3A1A" onclick="sc('#1C3A1A',this)"></div>
-            <div class="swatch" style="background:#7B3F00" onclick="sc('#7B3F00',this)"></div>
-            <div class="swatch" style="background:#1B4332" onclick="sc('#1B4332',this)"></div>
-            <div class="swatch" style="background:#2C3E50" onclick="sc('#2C3E50',this)"></div>
-            <div class="swatch" style="background:#880E4F" onclick="sc('#880E4F',this)"></div>
-            <div class="swatch" style="background:#E65100" onclick="sc('#E65100',this)"></div>
-            <div class="swatch" style="background:#5C6BC0" onclick="sc('#5C6BC0',this)"></div>
-            <input type="color" id="cc" value="#1C3A1A" oninput="sc(this.value,null)" style="width:28px;height:28px;border:none;border-radius:5px;cursor:pointer;padding:0;">
-          </div>
-        </div>
-        <div class="csec">
-          <span class="clabel">Font</span>
-          <div class="cchips">
-            <button class="chip on" style="font-family:'Playfair Display',serif" onclick="sw('font','Playfair Display',this)">Serif</button>
-            <button class="chip" style="font-family:Georgia,serif" onclick="sw('font','Georgia',this)">Georgia</button>
-            <button class="chip" style="font-family:'DM Sans',sans-serif" onclick="sw('font','DM Sans',this)">Modern</button>
-            <button class="chip" style="font-family:monospace" onclick="sw('font','monospace',this)">Mono</button>
-          </div>
-        </div>
-        <div class="csec">
-          <span class="clabel">Button text</span>
-          <input type="text" id="btn-text" value="Save to my week" oninput="rw()" style="width:100%;padding:.55rem;border:1.5px solid var(--border);border-radius:8px;font-family:inherit;font-size:.82rem;color:var(--ink);background:var(--paper);">
-        </div>
-        <div class="csec" style="border:none;margin:0;padding:0;">
-          <span class="clabel">Show on widget</span>
-          <div style="display:flex;flex-direction:column;gap:.35rem;margin-top:.2rem;">
-            <label style="display:flex;align-items:center;gap:.5rem;font-size:.82rem;color:var(--forest);cursor:pointer;font-weight:400;"><input type="checkbox" id="sh-c" checked onchange="rw()"> Cuisine</label>
-            <label style="display:flex;align-items:center;gap:.5rem;font-size:.82rem;color:var(--forest);cursor:pointer;font-weight:400;"><input type="checkbox" id="sh-t" checked onchange="rw()"> Cook time</label>
-            <label style="display:flex;align-items:center;gap:.5rem;font-size:.82rem;color:var(--forest);cursor:pointer;font-weight:400;"><input type="checkbox" id="sh-a" checked onchange="rw()"> Powered by Fern</label>
-          </div>
-        </div>
-        <button class="save-widget-btn" onclick="saveWidget()">Save widget settings</button>
+  </div>
+
+  <!-- TEMPLATE PICKER -->
+  <div class="bs-templates">
+    <div class="bs-section-label">Start from a template</div>
+    <div class="bs-template-grid">
+      <div class="bs-tpl active" onclick="applyTemplate('minimal',this)">
+        <div class="bs-tpl-preview" style="background:#f9f9f9;border:1px solid #eee;color:#555;">Clean</div>
+        <div class="bs-tpl-name">Minimal</div>
       </div>
-      <div class="builder-preview">
-        <div class="preview-header">
-          Live preview — updates instantly
-          <span style="font-size:.6rem;background:rgba(28,58,26,.08);color:var(--mid);padding:.2rem .5rem;border-radius:20px;">Scraper-proof ✓</span>
-        </div>
-        <div class="blog-ctx">
-          <div class="ctx-url" id="prev-url">yourblog.com</div>
-          <div class="ctx-title">Creamy Tuscan Chicken Pasta</div>
-          <div class="ctx-meta">30 min · Easy · Serves 4</div>
-          <div class="ctx-body">Your recipe content lives here. Your widget sits right alongside it — amplifying your reach without replacing your blog.</div>
-          <div id="live-widget"></div>
-          <div style="font-size:.7rem;color:var(--muted);margin-top:.65rem;font-style:italic;">← Your blog content continues below</div>
-        </div>
-        <div class="code-wrap" id="wcode">Loading...</div>
-        <div class="compat-tags">
-          <div class="compat-tag">✓ WordPress</div>
-          <div class="compat-tag">✓ Squarespace</div>
-          <div class="compat-tag">✓ Substack</div>
-          <div class="compat-tag">✓ Ghost</div>
-          <div class="compat-tag">✓ Any platform</div>
-        </div>
+      <div class="bs-tpl" onclick="applyTemplate('card',this)">
+        <div class="bs-tpl-preview" style="background:#fff;box-shadow:0 4px 12px rgba(0,0,0,.12);color:#333;">Shadow</div>
+        <div class="bs-tpl-name">Card</div>
+      </div>
+      <div class="bs-tpl" onclick="applyTemplate('bold',this)">
+        <div class="bs-tpl-preview" style="background:#1C3A1A;color:#7DBD6A;">Bold</div>
+        <div class="bs-tpl-name">Bold</div>
+      </div>
+      <div class="bs-tpl" onclick="applyTemplate('dark',this)">
+        <div class="bs-tpl-preview" style="background:#111;color:#fff;">Dark</div>
+        <div class="bs-tpl-name">Dark Mode</div>
+      </div>
+      <div class="bs-tpl" onclick="applyTemplate('warm',this)">
+        <div class="bs-tpl-preview" style="background:#FFF8F0;border:1px solid #E8D5B7;color:#7B3F00;">Warm</div>
+        <div class="bs-tpl-name">Warm Spice</div>
+      </div>
+      <div class="bs-tpl" onclick="applyTemplate('editorial',this)">
+        <div class="bs-tpl-preview" style="background:#fff;border-left:3px solid #1C3A1A;color:#1C3A1A;border-radius:2px;">Clean</div>
+        <div class="bs-tpl-name">Editorial</div>
+      </div>
+      <div class="bs-tpl" onclick="applyTemplate('berry',this)">
+        <div class="bs-tpl-preview" style="background:#880E4F;color:#FCE4EC;">Vivid</div>
+        <div class="bs-tpl-name">Berry</div>
+      </div>
+      <div class="bs-tpl" onclick="applyTemplate('coastal',this)">
+        <div class="bs-tpl-preview" style="background:#E3F2FD;border:1px solid #90CAF9;color:#1565C0;">Airy</div>
+        <div class="bs-tpl-name">Coastal</div>
       </div>
     </div>
   </div>
+
+  <!-- STUDIO: CONTROLS + PREVIEW -->
+  <div class="bs-studio">
+
+    <!-- LEFT: CONTROLS -->
+    <div class="bs-controls">
+
+      <div class="bs-control-section">
+        <div class="bs-cs-label">Style</div>
+        <div class="bs-chips">
+          <button class="bs-chip on" onclick="bsw('style','minimal',this)">Minimal</button>
+          <button class="bs-chip" onclick="bsw('style','card',this)">Card</button>
+          <button class="bs-chip" onclick="bsw('style','bold',this)">Bold</button>
+          <button class="bs-chip" onclick="bsw('style','dark',this)">Dark</button>
+        </div>
+      </div>
+
+      <div class="bs-control-section">
+        <div class="bs-cs-label">Primary color</div>
+        <div class="bs-palette">
+          <div class="bs-swatch on" style="background:#1C3A1A" onclick="bsc('#1C3A1A',this)" title="Forest"></div>
+          <div class="bs-swatch" style="background:#7B3F00" onclick="bsc('#7B3F00',this)" title="Spice"></div>
+          <div class="bs-swatch" style="background:#880E4F" onclick="bsc('#880E4F',this)" title="Berry"></div>
+          <div class="bs-swatch" style="background:#E65100" onclick="bsc('#E65100',this)" title="Ember"></div>
+          <div class="bs-swatch" style="background:#1565C0" onclick="bsc('#1565C0',this)" title="Ocean"></div>
+          <div class="bs-swatch" style="background:#2C3E50" onclick="bsc('#2C3E50',this)" title="Slate"></div>
+          <div class="bs-swatch" style="background:#5C6BC0" onclick="bsc('#5C6BC0',this)" title="Lavender"></div>
+          <div class="bs-swatch" style="background:#00695C" onclick="bsc('#00695C',this)" title="Teal"></div>
+          <input type="color" class="bs-color-input" id="bs-cc" value="#1C3A1A" oninput="bsc(this.value,null)" title="Custom color">
+        </div>
+      </div>
+
+      <div class="bs-control-section">
+        <div class="bs-cs-label">Shape</div>
+        <div class="bs-chips">
+          <button class="bs-chip on" onclick="bsw('shape','rounded',this)">Rounded</button>
+          <button class="bs-chip" onclick="bsw('shape','sharp',this)">Sharp</button>
+          <button class="bs-chip" onclick="bsw('shape','pill',this)">Pill</button>
+        </div>
+      </div>
+
+      <div class="bs-control-section">
+        <div class="bs-cs-label">Size</div>
+        <div class="bs-chips">
+          <button class="bs-chip on" onclick="bsw('size','small',this)">Compact</button>
+          <button class="bs-chip" onclick="bsw('size','medium',this)">Medium</button>
+          <button class="bs-chip" onclick="bsw('size','large',this)">Large</button>
+          <button class="bs-chip" onclick="bsw('size','full',this)">Full width</button>
+        </div>
+      </div>
+
+      <div class="bs-control-section">
+        <div class="bs-cs-label">Font</div>
+        <div class="bs-chips">
+          <button class="bs-chip on" style="font-family:'Playfair Display',serif" onclick="bsw('font','Playfair Display',this)">Playfair</button>
+          <button class="bs-chip" style="font-family:Georgia,serif" onclick="bsw('font','Georgia',this)">Georgia</button>
+          <button class="bs-chip" style="font-family:'DM Sans',sans-serif" onclick="bsw('font','DM Sans',this)">Modern</button>
+          <button class="bs-chip" style="font-family:monospace" onclick="bsw('font','monospace',this)">Mono</button>
+        </div>
+      </div>
+
+      <div class="bs-control-section">
+        <div class="bs-cs-label">Button text</div>
+        <input type="text" class="bs-input" id="bs-btn-text" value="Save to my week" oninput="rw()" placeholder="Save to my week">
+      </div>
+
+      <div class="bs-control-section">
+        <div class="bs-cs-label">Show on widget</div>
+        <div>
+          <div class="bs-toggle-row">
+            <span class="bs-toggle-label">Cuisine type</span>
+            <label class="bs-toggle"><input type="checkbox" id="bs-sh-c" checked onchange="rw()"><div class="bs-toggle-track"></div><div class="bs-toggle-thumb"></div></label>
+          </div>
+          <div class="bs-toggle-row">
+            <span class="bs-toggle-label">Cook time</span>
+            <label class="bs-toggle"><input type="checkbox" id="bs-sh-t" checked onchange="rw()"><div class="bs-toggle-track"></div><div class="bs-toggle-thumb"></div></label>
+          </div>
+          <div class="bs-toggle-row">
+            <span class="bs-toggle-label">Powered by Fern</span>
+            <label class="bs-toggle"><input type="checkbox" id="bs-sh-a" checked onchange="rw()"><div class="bs-toggle-track"></div><div class="bs-toggle-thumb"></div></label>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT: PREVIEW -->
+    <div class="bs-preview-area">
+
+      <div class="bs-preview-toolbar">
+        <div class="bs-preview-label">Live preview</div>
+        <div class="bs-view-tabs">
+          <button class="bs-view-tab on" onclick="bsSetView('blog',this)">In your blog</button>
+          <button class="bs-view-tab" onclick="bsSetView('isolated',this)">Widget only</button>
+        </div>
+      </div>
+
+      <!-- BLOG MOCK VIEW -->
+      <div id="bs-view-blog">
+        <div class="bs-blog-mock">
+          <div class="bs-blog-mock-header">
+            <div class="bs-mock-dot" style="background:#ff5f57"></div>
+            <div class="bs-mock-dot" style="background:#febc2e;margin-left:5px;"></div>
+            <div class="bs-mock-dot" style="background:#28c840;margin-left:5px;"></div>
+            <div class="bs-mock-url" id="bs-prev-url">yourblog.com/tuscan-chicken</div>
+          </div>
+          <div class="bs-blog-content">
+            <div class="bs-blog-post-title">Creamy Tuscan Chicken Pasta</div>
+            <div class="bs-blog-post-meta">Published March 14 · 30 min · Easy · Serves 4</div>
+            <div class="bs-blog-post-body">This weeknight pasta has become my family's most-requested dinner. Juicy chicken, sun-dried tomatoes, wilted spinach, and a cream sauce that's somehow both rich and light...</div>
+            <div class="bs-widget-slot" id="live-widget"></div>
+            <div class="bs-blog-post-more">Continue reading the full recipe below, including my tips for getting the sauce perfectly silky every time...</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ISOLATED VIEW -->
+      <div id="bs-view-isolated" style="display:none;">
+        <div style="display:flex;align-items:center;justify-content:center;padding:3rem;background:rgba(255,255,255,.03);border-radius:16px;border:1px dashed rgba(255,255,255,.08);">
+          <div id="live-widget-iso"></div>
+        </div>
+      </div>
+
+      <!-- CODE OUTPUT -->
+      <div class="bs-code-panel">
+        <div class="bs-code-header">
+          <div class="bs-code-title">Your embed code — paste once into any blog post</div>
+          <button class="bs-code-copy" onclick="cpCode()">Copy code</button>
+        </div>
+        <div class="bs-code-body" id="wcode">Loading...</div>
+      </div>
+
+      <div class="bs-compat">
+        <div class="bs-compat-tag">✓ WordPress</div>
+        <div class="bs-compat-tag">✓ Squarespace</div>
+        <div class="bs-compat-tag">✓ Substack</div>
+        <div class="bs-compat-tag">✓ Ghost</div>
+        <div class="bs-compat-tag">✓ Wix</div>
+        <div class="bs-compat-tag">✓ Any HTML</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SAVE BAR -->
+  <div class="bs-save-bar">
+    <div class="bs-save-info">Changes save to your account. <strong>Widget updates live on your blog instantly.</strong></div>
+    <button class="bs-save-btn" onclick="saveWidget()">✓ Save widget</button>
+  </div>
+
+</div>
 </div>
 
 <!-- ADD RECIPE MODAL -->
@@ -944,7 +1139,7 @@ function showPage(n) {
   if (n === 'dashboard') loadDash();
   if (n === 'recipes') loadRecipes();
   if (n === 'revenue') loadRevenue();
-  if (n === 'widget') { applyWidgetState(); rw(); if (_profile?.blog) document.getElementById('prev-url').textContent = _profile.blog; }
+  if (n === 'widget') { applyWidgetState(); rw(); }
 }
 
 // ── DASHBOARD ────────────────────────────────────────────
@@ -1068,57 +1263,105 @@ async function deleteRecipe(id) {
   }
 }
 
-// ── WIDGET ───────────────────────────────────────────────
-function applyWidgetState() {
-  // sync chip UI to _w state
-  document.querySelectorAll('.cchips').forEach(group => {
-    group.querySelectorAll('.chip').forEach(chip => chip.classList.remove('on'));
-  });
-  document.querySelector(`[onclick*="'size','${_w.size}'"]`)?.classList.add('on');
-  document.querySelector(`[onclick*="'shape','${_w.shape}'"]`)?.classList.add('on');
-  document.querySelector(`[onclick*="'style','${_w.style}'"]`)?.classList.add('on');
-  document.querySelectorAll('.swatch').forEach(s => s.classList.remove('on'));
-  const btnTxt = document.getElementById('btn-text');
-  if (btnTxt) btnTxt.value = _w.btn;
-  document.getElementById('sh-c').checked = _w.cuisine;
-  document.getElementById('sh-t').checked = _w.time;
-  document.getElementById('sh-a').checked = _w.attr;
+// ── BRAND STUDIO ─────────────────────────────────────────
+var _bsView = 'blog';
+
+const _templates = {
+  minimal:   {style:'minimal',color:'#1C3A1A',shape:'rounded',size:'small', font:'Playfair Display'},
+  card:      {style:'card',   color:'#2C3E50',shape:'rounded',size:'medium',font:'DM Sans'},
+  bold:      {style:'bold',   color:'#1C3A1A',shape:'rounded',size:'medium',font:'Playfair Display'},
+  dark:      {style:'dark',   color:'#1C3A1A',shape:'sharp',  size:'medium',font:'DM Sans'},
+  warm:      {style:'card',   color:'#7B3F00',shape:'rounded',size:'medium',font:'Georgia'},
+  editorial: {style:'minimal',color:'#1C3A1A',shape:'sharp',  size:'full',  font:'Playfair Display'},
+  berry:     {style:'bold',   color:'#880E4F',shape:'pill',   size:'medium',font:'Georgia'},
+  coastal:   {style:'card',   color:'#1565C0',shape:'pill',   size:'medium',font:'DM Sans'},
+};
+
+function applyTemplate(name, btn) {
+  document.querySelectorAll('.bs-tpl').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  const t = _templates[name];
+  if (t) { Object.assign(_w, t); applyWidgetState(); rw(); }
 }
 
-function sw(k, v, btn) {
+function applyWidgetState() {
+  document.querySelectorAll('.bs-chips').forEach(group => {
+    group.querySelectorAll('.bs-chip').forEach(c => c.classList.remove('on'));
+  });
+  const styleChip = document.querySelector(`.bs-chip[onclick*="'style','${_w.style}'"]`);
+  if (styleChip) styleChip.classList.add('on');
+  const shapeChip = document.querySelector(`.bs-chip[onclick*="'shape','${_w.shape}'"]`);
+  if (shapeChip) shapeChip.classList.add('on');
+  const sizeChip = document.querySelector(`.bs-chip[onclick*="'size','${_w.size}'"]`);
+  if (sizeChip) sizeChip.classList.add('on');
+  const fontChip = document.querySelector(`.bs-chip[onclick*="'font','${_w.font}'"]`);
+  if (fontChip) fontChip.classList.add('on');
+  document.querySelectorAll('.bs-swatch').forEach(s => s.classList.remove('on'));
+  const bsBtnTxt = document.getElementById('bs-btn-text');
+  if (bsBtnTxt) bsBtnTxt.value = _w.btn;
+  const bsShC = document.getElementById('bs-sh-c');
+  const bsShT = document.getElementById('bs-sh-t');
+  const bsShA = document.getElementById('bs-sh-a');
+  if (bsShC) bsShC.checked = _w.cuisine !== false;
+  if (bsShT) bsShT.checked = _w.time !== false;
+  if (bsShA) bsShA.checked = _w.attr !== false;
+  const bsCc = document.getElementById('bs-cc');
+  if (bsCc) bsCc.value = _w.color;
+}
+
+function bsw(k, v, btn) {
   _w[k] = v;
-  if (btn) { var p = btn.parentElement; p.querySelectorAll('.chip').forEach(c => c.classList.remove('on')); btn.classList.add('on'); }
+  if (btn) {
+    btn.closest('.bs-chips').querySelectorAll('.bs-chip').forEach(c => c.classList.remove('on'));
+    btn.classList.add('on');
+  }
   rw();
 }
 
-function sc(hex, swEl) {
+function bsc(hex, swEl) {
   _w.color = hex;
-  document.querySelectorAll('.swatch').forEach(s => s.classList.remove('on'));
+  document.querySelectorAll('.bs-swatch').forEach(s => s.classList.remove('on'));
   if (swEl) swEl.classList.add('on');
-  document.getElementById('cc').value = hex;
+  const bsCc = document.getElementById('bs-cc');
+  if (bsCc) bsCc.value = hex;
+  rw();
+}
+
+function sw(k, v, btn) { bsw(k, v, btn); }
+function sc(hex, swEl) { bsc(hex, swEl); }
+
+function bsSetView(v, btn) {
+  _bsView = v;
+  document.querySelectorAll('.bs-view-tab').forEach(t => t.classList.remove('on'));
+  btn.classList.add('on');
+  document.getElementById('bs-view-blog').style.display = v === 'blog' ? 'block' : 'none';
+  document.getElementById('bs-view-isolated').style.display = v === 'isolated' ? 'flex' : 'none';
   rw();
 }
 
 function rw() {
-  _w.btn = document.getElementById('btn-text')?.value || 'Save to my week';
-  _w.cuisine = document.getElementById('sh-c')?.checked;
-  _w.time = document.getElementById('sh-t')?.checked;
-  _w.attr = document.getElementById('sh-a')?.checked;
+  const bsBtn = document.getElementById('bs-btn-text');
+  const bsShC = document.getElementById('bs-sh-c');
+  const bsShT = document.getElementById('bs-sh-t');
+  const bsShA = document.getElementById('bs-sh-a');
+  if (bsBtn) _w.btn = bsBtn.value || 'Save to my week';
+  if (bsShC) _w.cuisine = bsShC.checked;
+  if (bsShT) _w.time = bsShT.checked;
+  if (bsShA) _w.attr = bsShA.checked;
 
   const c = _w.color, w = _w;
   const widths = {small:'220px',medium:'300px',large:'380px',full:'100%'};
-  const pads = {small:'.7rem',medium:'1rem',large:'1.2rem',full:'1rem'};
-  const radii = {rounded:'12px',sharp:'3px',pill:'100px'};
-  const br = {rounded:'8px',sharp:'2px',pill:'100px'};
+  const pads   = {small:'.7rem',medium:'1rem',large:'1.2rem',full:'1rem'};
+  const radii  = {rounded:'12px',sharp:'3px',pill:'100px'};
+  const br     = {rounded:'8px',sharp:'2px',pill:'100px'};
 
   var bg='#fff',tc=c,mc='#888',ab='rgba(0,0,0,.2)',sh='';
   if (w.style==='card') sh='box-shadow:0 4px 14px rgba(0,0,0,.09);';
   if (w.style==='bold') {bg=c;tc='#fff';mc='rgba(255,255,255,.6)';ab='rgba(255,255,255,.25)';}
   if (w.style==='dark') {bg='#111';tc='#fff';mc='rgba(255,255,255,.5)';ab='rgba(255,255,255,.2)';}
   var bBg = (w.style==='bold'||w.style==='dark') ? '#fff' : c;
-  var bC = (w.style==='bold') ? c : (w.style==='dark') ? '#111' : '#fff';
+  var bC  = (w.style==='bold') ? c : (w.style==='dark') ? '#111' : '#fff';
   var bdr = w.style==='minimal' ? 'border:1px solid '+h2a(c,.18)+';' : '';
-
   var meta = []; if (w.cuisine) meta.push('Italian'); if (w.time) meta.push('30 min');
 
   var html = '<div style="width:'+widths[w.size]+';background:'+bg+';border-radius:'+radii[w.shape]+';padding:'+pads[w.size]+';'+bdr+sh+'">'
@@ -1128,11 +1371,18 @@ function rw() {
     +(w.attr?'<div style="font-size:.52rem;color:'+ab+';text-align:center;margin-top:.35rem;">Powered by Fern · Links back to your site</div>':'')
     +'</div>';
 
-  document.getElementById('live-widget').innerHTML = html;
+  const lw = document.getElementById('live-widget');
+  const lwi = document.getElementById('live-widget-iso');
+  if (lw) lw.innerHTML = html;
+  if (lwi) lwi.innerHTML = html;
 
   const blog = (_profile?.blog || 'yourblog.com').replace(/https?:\/\//, '').split('/')[0];
-  const code = '<script src="https://cdn.myfernai.com/widget.js"\n  data-blog="'+blog+'"\n  data-color="'+c+'"\n  data-shape="'+w.shape+'"\n  data-size="'+w.size+'"\n  data-style="'+w.style+'">\x3c/script>';
-  document.getElementById('wcode').innerHTML = code + '<button class="code-copy-btn" onclick="cpCode()">Copy</button>';
+  const rawCode = '<script src="https://cdn.myfernai.com/widget.js"\n  data-blog="'+blog+'"\n  data-color="'+c+'"\n  data-shape="'+w.shape+'"\n  data-size="'+w.size+'"\n  data-style="'+w.style+'">\x3c/script>';
+  const wcodeEl = document.getElementById('wcode');
+  if (wcodeEl) wcodeEl.textContent = rawCode;
+
+  const prevUrl = document.getElementById('bs-prev-url');
+  if (prevUrl && _profile?.blog) prevUrl.textContent = _profile.blog.replace(/https?:\/\//,'') + '/tuscan-chicken';
 }
 
 async function saveWidget() {
@@ -1141,14 +1391,15 @@ async function saveWidget() {
     widget_config: JSON.stringify(_w),
     updated_at: new Date().toISOString()
   });
-  if (!error) toast('Widget settings saved ✓');
+  if (!error) toast('Widget saved ✓');
 }
 
 function cpCode() {
-  var t = document.getElementById('wcode').textContent.replace('Copy','').trim();
-  navigator.clipboard.writeText(t).then(() => {
-    var b = document.querySelector('.code-copy-btn');
-    if (b) { b.textContent = 'Copied!'; setTimeout(() => b.textContent = 'Copy', 2000); }
+  const el = document.getElementById('wcode');
+  if (!el) return;
+  navigator.clipboard.writeText(el.textContent.trim()).then(() => {
+    const b = document.querySelector('.bs-code-copy');
+    if (b) { b.textContent = 'Copied!'; setTimeout(() => b.textContent = 'Copy code', 2000); }
   });
 }
 
