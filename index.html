@@ -119,8 +119,54 @@ nav{position:sticky;top:0;z-index:100;background:var(--forest);border-bottom:3px
 .lp-step p{font-size:.8rem;color:var(--muted);line-height:1.6;font-weight:300;}
 .lp-step-time{font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mid);margin-top:.5rem;}
 
-/* TESTIMONIALS */
-.lp-testimonials{background:var(--forest);padding:5rem 2rem;}
+/* CONSUMER APP SHOWCASE */
+.lp-app{background:var(--paper);padding:5rem 2rem;overflow:hidden;}
+.lp-app-inner{max-width:1060px;margin:0 auto;}
+.lp-app-header{text-align:center;margin-bottom:3.5rem;}
+.lp-app-header h2{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,4vw,2.8rem);color:var(--forest);margin-bottom:.75rem;line-height:1.2;}
+.lp-app-header h2 em{font-style:italic;color:var(--mid);}
+.lp-app-header p{font-size:.95rem;color:var(--muted);max-width:540px;margin:0 auto;line-height:1.75;font-weight:300;}
+.lp-app-grid{display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:center;}
+.lp-app-points{display:flex;flex-direction:column;gap:1.5rem;}
+.lp-app-point{display:flex;gap:1rem;align-items:flex-start;}
+.lp-app-point-icon{width:44px;height:44px;border-radius:12px;background:var(--forest);color:var(--leaf);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;}
+.lp-app-point-text h4{font-family:'Playfair Display',serif;font-size:1rem;color:var(--forest);margin-bottom:.25rem;}
+.lp-app-point-text p{font-size:.82rem;color:var(--muted);line-height:1.6;font-weight:300;}
+.lp-app-point-text strong{color:var(--forest);}
+
+/* Fern app mock */
+.fern-mock{background:white;border-radius:20px;box-shadow:0 24px 80px rgba(0,0,0,.15);overflow:hidden;border:1px solid rgba(0,0,0,.06);}
+.fern-mock-nav{background:#1C3A1A;padding:.65rem 1.25rem;display:flex;align-items:center;gap:.5rem;}
+.fern-mock-logo{font-family:'Playfair Display',serif;color:#7DBD6A;font-size:.9rem;display:flex;align-items:center;gap:.4rem;}
+.fern-mock-nav-items{display:flex;gap:.4rem;margin-left:auto;}
+.fern-mock-nav-item{font-size:.55rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:rgba(255,255,255,.5);padding:.3rem .55rem;border-radius:5px;}
+.fern-mock-nav-item.active{background:rgba(125,189,106,.2);color:#7DBD6A;}
+.fern-mock-body{padding:1.25rem;}
+.fern-mock-greeting{font-size:.7rem;color:#888;margin-bottom:.85rem;}
+.fern-mock-stats{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1rem;}
+.fern-mock-stat{background:#F9F7F4;border-radius:10px;padding:.7rem .85rem;border:1px solid rgba(0,0,0,.06);}
+.fern-mock-stat-num{font-family:'Playfair Display',serif;font-size:1.3rem;color:#1C3A1A;line-height:1;}
+.fern-mock-stat-num.highlight{color:#880E4F;}
+.fern-mock-stat-label{font-size:.6rem;color:#888;margin-top:.15rem;}
+.fern-mock-week{background:#F9F7F4;border-radius:12px;padding:.85rem;margin-bottom:1rem;border:1px solid rgba(0,0,0,.06);}
+.fern-mock-week-label{font-size:.55rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#888;margin-bottom:.65rem;}
+.fern-mock-days{display:flex;gap:.35rem;}
+.fern-mock-day{flex:1;text-align:center;}
+.fern-mock-day-label{font-size:.5rem;color:#888;margin-bottom:.3rem;text-transform:uppercase;}
+.fern-mock-day-circle{width:28px;height:28px;border-radius:50%;background:#e5e5e5;margin:0 auto;display:flex;align-items:center;justify-content:center;font-size:.7rem;}
+.fern-mock-day-circle.filled{background:#1C3A1A;}
+.fern-mock-saved{border:1px solid rgba(0,0,0,.07);border-radius:12px;overflow:hidden;}
+.fern-mock-saved-header{padding:.6rem .85rem;background:#F9F7F4;font-size:.55rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#888;border-bottom:1px solid rgba(0,0,0,.06);}
+.fern-mock-recipe{padding:.7rem .85rem;display:flex;align-items:center;gap:.65rem;border-bottom:1px solid rgba(0,0,0,.04);}
+.fern-mock-recipe:last-child{border-bottom:none;}
+.fern-mock-recipe-emoji{font-size:1rem;flex-shrink:0;}
+.fern-mock-recipe-info{flex:1;min-width:0;}
+.fern-mock-recipe-title{font-size:.7rem;font-weight:600;color:#1a1a1a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.fern-mock-recipe-blog{font-size:.58rem;color:#7DBD6A;font-weight:500;}
+.fern-mock-recipe-saved{font-size:.55rem;color:#888;}
+.fern-mock-badge{display:inline-flex;align-items:center;gap:.3rem;background:rgba(125,189,106,.1);border:1px solid rgba(125,189,106,.2);border-radius:20px;padding:.2rem .55rem;font-size:.55rem;font-weight:700;color:#2D5A27;margin-top:.4rem;}
+
+@media(max-width:860px){.lp-app-grid{grid-template-columns:1fr;}}
 .lp-testimonials-inner{max-width:960px;margin:0 auto;}
 .lp-testimonials h2{font-family:'Playfair Display',serif;font-size:clamp(1.6rem,3.5vw,2.4rem);color:var(--cream);margin-bottom:.5rem;text-align:center;}
 .lp-testimonials-sub{font-size:.9rem;color:rgba(245,240,232,.5);text-align:center;margin-bottom:3rem;font-weight:300;}
@@ -757,6 +803,123 @@ nav{position:sticky;top:0;z-index:100;background:var(--forest);border-bottom:3px
         </div>
       </div>
       <button class="lp-cta-main" onclick="showPage('signup')" style="margin:0 auto;display:flex;">Start free in 2 minutes →</button>
+    </div>
+  </div>
+
+  <!-- WHERE YOUR RECIPES LIVE -->
+  <div class="lp-app">
+    <div class="lp-app-inner">
+      <div class="lp-app-header">
+        <div class="lp-section-label" style="text-align:center;color:var(--mid);">The other side of the equation</div>
+        <h2>This is where your recipes <em>actually live.</em></h2>
+        <p>Fern is a full consumer app used by families to find recipes, plan meals, and build shopping lists. When a family saves your recipe — your name is on it. Forever.</p>
+      </div>
+      <div class="lp-app-grid">
+
+        <div class="lp-app-points">
+          <div class="lp-app-point">
+            <div class="lp-app-point-icon">👨‍👩‍👧</div>
+            <div class="lp-app-point-text">
+              <h4>Families follow you by name</h4>
+              <p>Inside Fern, families follow their favorite bloggers directly — just like social media. Every new recipe you add shows up in their feed. <strong>You build an audience you actually own.</strong></p>
+            </div>
+          </div>
+          <div class="lp-app-point">
+            <div class="lp-app-point-icon">📅</div>
+            <div class="lp-app-point-text">
+              <h4>Your recipe lands on their weekly dinner plan</h4>
+              <p>Fern's weekly planner lets families schedule meals for the week. When they plan your Tuscan Chicken for Tuesday — your blog gets the credit, your widget earns the attribution.</p>
+            </div>
+          </div>
+          <div class="lp-app-point">
+            <div class="lp-app-point-icon">🛒</div>
+            <div class="lp-app-point-text">
+              <h4>Your ingredients go on their shopping list</h4>
+              <p>One tap and every ingredient from your recipe is on their shopping list — with your name attached. Families shop your recipe at Publix, Harris Teeter, Whole Foods. <strong>That's real-world reach.</strong></p>
+            </div>
+          </div>
+          <div class="lp-app-point">
+            <div class="lp-app-point-icon">💰</div>
+            <div class="lp-app-point-text">
+              <h4>Every save is a step toward your 30%</h4>
+              <p>Each family that saves your recipe inside Fern is a potential subscriber — and every subscriber earns you $0.90/month, forever. The app does the work. You collect the check.</p>
+            </div>
+          </div>
+          <a href="https://app.clickpickandcook.com" target="_blank" style="display:inline-flex;align-items:center;gap:.5rem;font-size:.82rem;color:var(--mid);font-weight:600;text-decoration:none;margin-top:.5rem;">
+            See the Fern consumer app live →
+          </a>
+        </div>
+
+        <!-- FERN APP MOCK -->
+        <div class="fern-mock">
+          <div class="fern-mock-nav">
+            <div class="fern-mock-logo">
+              <svg width="14" height="18" viewBox="0 0 28 36" fill="none"><path d="M14 34 Q14 20 14 6" stroke="#7DBD6A" stroke-width="2.5" stroke-linecap="round"/><path d="M14 22 Q7 15 4 18" stroke="#7DBD6A" stroke-width="2" stroke-linecap="round"/><path d="M14 17 Q6 9 3 13" stroke="#4A7C2F" stroke-width="2" stroke-linecap="round"/><path d="M14 22 Q21 15 24 18" stroke="#7DBD6A" stroke-width="2" stroke-linecap="round"/><path d="M14 17 Q22 9 25 13" stroke="#4A7C2F" stroke-width="2" stroke-linecap="round"/></svg>
+              fern
+            </div>
+            <div class="fern-mock-nav-items">
+              <div class="fern-mock-nav-item active">Home</div>
+              <div class="fern-mock-nav-item">Recipes</div>
+              <div class="fern-mock-nav-item">Planner</div>
+              <div class="fern-mock-nav-item">Shopping</div>
+            </div>
+          </div>
+          <div class="fern-mock-body">
+            <div class="fern-mock-greeting">Good evening, Sarah · <span style="color:#7DBD6A;font-weight:600;">Pro</span></div>
+            <div class="fern-mock-stats">
+              <div class="fern-mock-stat">
+                <div class="fern-mock-stat-num">33</div>
+                <div class="fern-mock-stat-label">Recipes Saved</div>
+              </div>
+              <div class="fern-mock-stat">
+                <div class="fern-mock-stat-num highlight">4</div>
+                <div class="fern-mock-stat-label">Bloggers Following</div>
+              </div>
+            </div>
+            <div class="fern-mock-week">
+              <div class="fern-mock-week-label">This week's meals</div>
+              <div class="fern-mock-days">
+                <div class="fern-mock-day"><div class="fern-mock-day-label">Sun</div><div class="fern-mock-day-circle"></div></div>
+                <div class="fern-mock-day"><div class="fern-mock-day-label">Mon</div><div class="fern-mock-day-circle"></div></div>
+                <div class="fern-mock-day"><div class="fern-mock-day-label">Tue</div><div class="fern-mock-day-circle filled">🍝</div></div>
+                <div class="fern-mock-day"><div class="fern-mock-day-label">Wed</div><div class="fern-mock-day-circle"></div></div>
+                <div class="fern-mock-day"><div class="fern-mock-day-label">Thu</div><div class="fern-mock-day-circle filled">🥗</div></div>
+                <div class="fern-mock-day"><div class="fern-mock-day-label">Fri</div><div class="fern-mock-day-circle"></div></div>
+                <div class="fern-mock-day"><div class="fern-mock-day-label">Sat</div><div class="fern-mock-day-circle filled">🍗</div></div>
+              </div>
+            </div>
+            <div class="fern-mock-saved">
+              <div class="fern-mock-saved-header">Recently saved from your bloggers</div>
+              <div class="fern-mock-recipe">
+                <div class="fern-mock-recipe-emoji">🍝</div>
+                <div class="fern-mock-recipe-info">
+                  <div class="fern-mock-recipe-title">Creamy Tuscan Chicken Pasta</div>
+                  <div class="fern-mock-recipe-blog">thekitchendiary.com</div>
+                  <div class="fern-mock-badge">📅 Planned for Tuesday</div>
+                </div>
+                <div class="fern-mock-recipe-saved">Saved ♥</div>
+              </div>
+              <div class="fern-mock-recipe">
+                <div class="fern-mock-recipe-emoji">🥗</div>
+                <div class="fern-mock-recipe-info">
+                  <div class="fern-mock-recipe-title">Greek Lemon Orzo Salad</div>
+                  <div class="fern-mock-recipe-blog">sundaytableblog.com</div>
+                </div>
+                <div class="fern-mock-recipe-saved">Saved ♥</div>
+              </div>
+              <div class="fern-mock-recipe">
+                <div class="fern-mock-recipe-emoji">🍗</div>
+                <div class="fern-mock-recipe-info">
+                  <div class="fern-mock-recipe-title">Honey Garlic Sheet Pan Chicken</div>
+                  <div class="fern-mock-recipe-blog">wholeplatelife.com</div>
+                </div>
+                <div class="fern-mock-recipe-saved">Saved ♥</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
     </div>
   </div>
 
