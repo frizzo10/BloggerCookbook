@@ -1,7 +1,14 @@
 [build]
   command = "echo 'Static site'"
   publish = "."
+  functions = "netlify/functions"
 
 [dev]
   publish = "."
-  command = "python -m http.server 8000"
+  command = "echo dev"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"

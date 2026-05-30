@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root{--forest:#1C3A1A;--green:#2D5A27;--mid:#4A7C2F;--leaf:#7DBD6A;--mint:#A8D5A2;--cream:#F5F0E8;--paper:#F9F7F4;--ink:#1A1A1A;--muted:#6B6B6B;--border:rgba(28,58,26,0.1);--red:#DC2626;--gold:#D97706;}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
@@ -57,11 +58,14 @@ nav{position:sticky;top:0;z-index:100;background:var(--forest);border-bottom:3px
 .field label{display:block;font-size:.75rem;font-weight:600;color:var(--forest);margin-bottom:.35rem;letter-spacing:.04em;}
 .field input{width:100%;padding:.75rem;border:1.5px solid var(--border);border-radius:10px;font-family:inherit;font-size:.9rem;color:var(--ink);background:var(--paper);}
 .field input:focus{outline:none;border-color:var(--forest);}
-.btn-full{width:100%;background:var(--forest);color:var(--cream);border:none;border-radius:10px;padding:.85rem;font-family:inherit;font-size:.92rem;font-weight:700;cursor:pointer;margin-bottom:.5rem;}
+.btn-full{width:100%;background:var(--forest);color:var(--cream);border:none;border-radius:10px;padding:.85rem;font-family:inherit;font-size:.92rem;font-weight:700;cursor:pointer;margin-bottom:.5rem;transition:background .15s;}
 .btn-full:hover{background:var(--green);}
+.btn-full:disabled{opacity:.5;cursor:not-allowed;}
 .btn-full.outline{background:none;border:1.5px solid var(--border);color:var(--forest);}
 .auth-switch{text-align:center;font-size:.8rem;color:var(--muted);margin-top:.75rem;}
 .auth-switch a{color:var(--forest);cursor:pointer;font-weight:500;}
+.auth-error{background:rgba(220,38,38,.08);border:1px solid rgba(220,38,38,.2);color:var(--red);border-radius:8px;padding:.65rem .85rem;font-size:.82rem;margin-bottom:1rem;display:none;}
+.auth-error.show{display:block;}
 
 /* DASHBOARD */
 .dash-wrap{max-width:1100px;margin:0 auto;padding:2rem 1.5rem;}
@@ -85,7 +89,10 @@ nav{position:sticky;top:0;z-index:100;background:var(--forest);border-bottom:3px
 .r-info{flex:1;min-width:0;}
 .r-title{font-size:.9rem;font-weight:600;color:var(--forest);margin-bottom:.15rem;}
 .r-meta{font-size:.72rem;color:var(--muted);}
+.r-hook{font-size:.72rem;color:var(--mid);margin-top:.1rem;font-style:italic;}
 .r-stats{display:flex;gap:1.5rem;flex-shrink:0;}
+.r-del{background:none;border:none;color:var(--muted);cursor:pointer;font-size:1rem;padding:.25rem;opacity:0;transition:opacity .15s;}
+.recipe-row:hover .r-del{opacity:1;}
 .rstat{text-align:right;}
 .rstat-n{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--forest);line-height:1;}
 .rstat-l{font-size:.6rem;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);}
@@ -130,6 +137,8 @@ nav{position:sticky;top:0;z-index:100;background:var(--forest);border-bottom:3px
 .code-copy-btn:hover{background:rgba(255,255,255,.2);color:white;}
 .compat-tags{display:flex;gap:.35rem;margin-top:.75rem;flex-wrap:wrap;}
 .compat-tag{font-size:.65rem;background:rgba(28,58,26,.07);color:var(--mid);border-radius:20px;padding:.2rem .55rem;}
+.save-widget-btn{width:100%;margin-top:1rem;background:var(--forest);color:var(--cream);border:none;border-radius:10px;padding:.75rem;font-family:inherit;font-size:.85rem;font-weight:700;cursor:pointer;transition:background .15s;}
+.save-widget-btn:hover{background:var(--green);}
 
 /* PROTECT */
 .protect-banner{background:rgba(220,38,38,.05);border:1px solid rgba(220,38,38,.15);border-radius:16px;padding:1.5rem;margin-bottom:1.5rem;}
@@ -150,6 +159,16 @@ nav{position:sticky;top:0;z-index:100;background:var(--forest);border-bottom:3px
 .modal-title{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--forest);margin-bottom:1.25rem;display:flex;justify-content:space-between;align-items:center;}
 .modal-close{background:none;border:none;font-size:1.2rem;cursor:pointer;color:var(--muted);}
 
+/* LOADING */
+.loading-screen{position:fixed;inset:0;background:var(--forest);z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1rem;}
+.loading-screen.hidden{display:none;}
+.loading-logo{font-family:'Playfair Display',serif;font-size:1.8rem;color:var(--cream);}
+.loading-sub{font-size:.8rem;color:var(--mint);font-weight:300;}
+.spinner{width:28px;height:28px;border:2.5px solid rgba(125,189,106,.3);border-top-color:var(--leaf);border-radius:50%;animation:spin .7s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.toast{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--forest);color:var(--cream);padding:.75rem 1.25rem;border-radius:12px;font-size:.85rem;z-index:9000;transform:translateY(100px);opacity:0;transition:all .3s;pointer-events:none;}
+.toast.show{transform:translateY(0);opacity:1;}
+
 @media(max-width:860px){
   nav{padding:.75rem 1rem;}
   .nav-tabs{display:none;}
@@ -162,6 +181,16 @@ nav{position:sticky;top:0;z-index:100;background:var(--forest);border-bottom:3px
 </style>
 </head>
 <body>
+
+<!-- LOADING -->
+<div class="loading-screen" id="loading-screen">
+  <div class="spinner"></div>
+  <div class="loading-logo">blogger cookbook</div>
+  <div class="loading-sub">Loading your dashboard...</div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
 
 <nav>
   <div class="nav-logo" onclick="goHome()">
@@ -272,9 +301,10 @@ nav{position:sticky;top:0;z-index:100;background:var(--forest);border-bottom:3px
     <div class="auth-card">
       <div class="auth-title">Welcome back</div>
       <div class="auth-sub">Sign in to your creator account</div>
+      <div class="auth-error" id="si-error"></div>
       <div class="field"><label>Email</label><input type="email" id="si-email" placeholder="your@email.com"></div>
       <div class="field"><label>Password</label><input type="password" id="si-pass" placeholder="••••••••"></div>
-      <button class="btn-full" onclick="handleSignIn()">Sign in</button>
+      <button class="btn-full" id="si-btn" onclick="handleSignIn()">Sign in</button>
       <button class="btn-full outline" onclick="showPage('signup')">Create account instead</button>
       <div class="auth-switch"><a onclick="showPage('welcome')">← Back</a></div>
     </div>
@@ -287,11 +317,12 @@ nav{position:sticky;top:0;z-index:100;background:var(--forest);border-bottom:3px
     <div class="auth-card">
       <div class="auth-title">Protect your recipes</div>
       <div class="auth-sub">Free forever. Earn 30% when approved.</div>
+      <div class="auth-error" id="su-error"></div>
       <div class="field"><label>Your name / blog name</label><input type="text" id="su-name" placeholder="Half Baked Harvest"></div>
       <div class="field"><label>Blog URL</label><input type="text" id="su-blog" placeholder="halfbakedharvest.com"></div>
       <div class="field"><label>Email</label><input type="email" id="su-email" placeholder="your@email.com"></div>
-      <div class="field"><label>Password</label><input type="password" id="su-pass" placeholder="Create a password"></div>
-      <button class="btn-full" onclick="handleSignUp()">Start free →</button>
+      <div class="field"><label>Password</label><input type="password" id="su-pass" placeholder="Create a password (min 6 chars)"></div>
+      <button class="btn-full" id="su-btn" onclick="handleSignUp()">Start free →</button>
       <button class="btn-full outline" onclick="showPage('signin')">Already have an account</button>
       <div class="auth-switch"><a onclick="showPage('welcome')">← Back</a></div>
     </div>
@@ -321,32 +352,25 @@ nav{position:sticky;top:0;z-index:100;background:var(--forest);border-bottom:3px
         <div class="pdot"></div>
         <div>
           <div style="font-size:.85rem;color:var(--forest);font-weight:500;">🛡 Widget active · Content protected</div>
-          <div style="font-size:.72rem;color:var(--muted);margin-top:.1rem;" id="d-protect">0 scrapers blocked · Widget on 0 pages</div>
+          <div style="font-size:.75rem;color:var(--muted);margin-top:.15rem;" id="d-protect">Loading...</div>
         </div>
       </div>
-      <button class="btn-primary" style="padding:.5rem 1rem;font-size:.78rem;" onclick="showPage('widget')">Manage widget →</button>
+      <button class="btn-primary" style="padding:.6rem 1.25rem;font-size:.82rem;" onclick="showPage('widget')">Edit widget →</button>
     </div>
     <div class="section-title">
-      Top recipes this month
-      <button style="background:none;border:none;color:var(--mid);font-size:.8rem;cursor:pointer;font-family:inherit;" onclick="showPage('recipes')">See all →</button>
+      Top recipes this week
+      <button class="btn-primary" style="padding:.5rem 1rem;font-size:.78rem;" onclick="showPage('recipes')">View all</button>
     </div>
     <div id="d-recipes"><div class="empty"><div class="empty-icon">📄</div><div style="font-size:.85rem;">No recipes yet. Add your first to start tracking.</div></div></div>
-    <div style="display:flex;gap:.75rem;margin-top:1.5rem;flex-wrap:wrap;">
-      <button class="btn-primary" onclick="openAddRecipe()">+ Add a recipe</button>
-      <button style="background:none;border:1.5px solid var(--border);border-radius:100px;padding:.65rem 1.25rem;font-family:inherit;font-size:.85rem;color:var(--forest);cursor:pointer;" onclick="showPage('revenue')">View earnings →</button>
-    </div>
   </div>
 </div>
 
-<!-- RECIPES -->
+<!-- MY RECIPES -->
 <div class="page" id="page-recipes">
   <div class="dash-wrap">
-    <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:1.5rem;">
-      <div>
-        <div class="dash-greeting">Recipe Performance</div>
-        <div class="dash-sub">Every save, cook, and click — tracked and attributed to you.</div>
-      </div>
-      <button class="btn-primary" onclick="openAddRecipe()">+ Add recipe</button>
+    <div class="section-title">
+      My Recipes
+      <button class="btn-primary" style="padding:.6rem 1.25rem;font-size:.82rem;" onclick="openAddRecipe()">+ Add recipe</button>
     </div>
     <div id="recipes-list"><div class="empty"><div class="empty-icon">📄</div><div style="font-size:.85rem;">No recipes yet. Share your first recipe and start tracking.</div></div></div>
   </div>
@@ -357,7 +381,7 @@ nav{position:sticky;top:0;z-index:100;background:var(--forest);border-bottom:3px
   <div class="dash-wrap">
     <div class="dash-greeting">Earnings</div>
     <div class="dash-sub">30% of every Pro subscription your content drives. Monthly. Forever.</div>
-    <div id="revenue-content"></div>
+    <div id="revenue-content"><div class="empty"><div class="spinner" style="margin:0 auto;"></div></div></div>
   </div>
 </div>
 
@@ -366,7 +390,6 @@ nav{position:sticky;top:0;z-index:100;background:var(--forest);border-bottom:3px
   <div class="dash-wrap">
     <div class="dash-greeting">Your Widget</div>
     <div class="dash-sub">Built to match your blog exactly. Completely free. Scraper-proof by design.</div>
-
     <div class="protect-banner">
       <div class="protect-title">🛡 Why your widget beats scrapers</div>
       <div class="protect-body">Scrapers steal static text. Your Fern widget is dynamic and authenticated — tied to your account, verified on every load. Copy the HTML and it breaks. That is the point.</div>
@@ -389,11 +412,9 @@ nav{position:sticky;top:0;z-index:100;background:var(--forest);border-bottom:3px
         </div>
       </div>
     </div>
-
     <div class="widget-builder">
       <div class="builder-controls">
         <div style="font-family:'Playfair Display',serif;font-size:1rem;color:var(--forest);margin-bottom:1.1rem;">Customize your widget</div>
-
         <div class="csec">
           <span class="clabel">Size</span>
           <div class="cchips">
@@ -403,7 +424,6 @@ nav{position:sticky;top:0;z-index:100;background:var(--forest);border-bottom:3px
             <button class="chip" onclick="sw('size','full',this)">Full width</button>
           </div>
         </div>
-
         <div class="csec">
           <span class="clabel">Shape</span>
           <div class="cchips">
@@ -412,7 +432,6 @@ nav{position:sticky;top:0;z-index:100;background:var(--forest);border-bottom:3px
             <button class="chip" onclick="sw('shape','pill',this)">Pill</button>
           </div>
         </div>
-
         <div class="csec">
           <span class="clabel">Style</span>
           <div class="cchips">
@@ -422,7 +441,6 @@ nav{position:sticky;top:0;z-index:100;background:var(--forest);border-bottom:3px
             <button class="chip" onclick="sw('style','dark',this)">Dark</button>
           </div>
         </div>
-
         <div class="csec">
           <span class="clabel">Primary color</span>
           <div class="swatch-row">
@@ -436,7 +454,6 @@ nav{position:sticky;top:0;z-index:100;background:var(--forest);border-bottom:3px
             <input type="color" id="cc" value="#1C3A1A" oninput="sc(this.value,null)" style="width:28px;height:28px;border:none;border-radius:5px;cursor:pointer;padding:0;">
           </div>
         </div>
-
         <div class="csec">
           <span class="clabel">Font</span>
           <div class="cchips">
@@ -446,12 +463,10 @@ nav{position:sticky;top:0;z-index:100;background:var(--forest);border-bottom:3px
             <button class="chip" style="font-family:monospace" onclick="sw('font','monospace',this)">Mono</button>
           </div>
         </div>
-
         <div class="csec">
           <span class="clabel">Button text</span>
           <input type="text" id="btn-text" value="Save to my week" oninput="rw()" style="width:100%;padding:.55rem;border:1.5px solid var(--border);border-radius:8px;font-family:inherit;font-size:.82rem;color:var(--ink);background:var(--paper);">
         </div>
-
         <div class="csec" style="border:none;margin:0;padding:0;">
           <span class="clabel">Show on widget</span>
           <div style="display:flex;flex-direction:column;gap:.35rem;margin-top:.2rem;">
@@ -460,8 +475,8 @@ nav{position:sticky;top:0;z-index:100;background:var(--forest);border-bottom:3px
             <label style="display:flex;align-items:center;gap:.5rem;font-size:.82rem;color:var(--forest);cursor:pointer;font-weight:400;"><input type="checkbox" id="sh-a" checked onchange="rw()"> Powered by Fern</label>
           </div>
         </div>
+        <button class="save-widget-btn" onclick="saveWidget()">Save widget settings</button>
       </div>
-
       <div class="builder-preview">
         <div class="preview-header">
           Live preview — updates instantly
@@ -497,175 +512,387 @@ nav{position:sticky;top:0;z-index:100;background:var(--forest);border-bottom:3px
       <div class="field"><label>Cuisine</label><input type="text" id="r-cuisine" placeholder="Italian"></div>
       <div class="field"><label>Cook time</label><input type="text" id="r-time" placeholder="30 min"></div>
     </div>
-    <div class="field"><label>Blog post URL</label><input type="text" id="r-url" placeholder="https://yourblog.com/recipe-name"></div>
+    <div class="field"><label>Blog post URL</label><input type="url" id="r-url" placeholder="https://yourblog.com/recipe-name"></div>
     <div class="field"><label>Emoji</label><input type="text" id="r-emoji" placeholder="🍝" maxlength="2"></div>
-    <button class="btn-full" onclick="saveRecipe()">Add recipe</button>
+    <button class="btn-full" id="add-btn" onclick="saveRecipe()">Add recipe</button>
   </div>
 </div>
 
 <script>
-var _u=null,_r=[],_w={size:'small',shape:'rounded',style:'minimal',color:'#1C3A1A',font:'Playfair Display',btn:'Save to my week',cuisine:true,time:true,attr:true};
+// ── CONFIG ──────────────────────────────────────────────
+const SUPABASE_URL = 'https://axqkdhzcfcroxlkducea.supabase.co';
+const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4cWtkaHpjZmNyb3hsa2R1Y2VhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI2NzU5OTUsImV4cCI6MjA4ODI1MTk5NX0.4gl0rnBx8s7RN33VDXhLM3PN5hoIzAfgQGIq2L2hZfs';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
 
-function init(){var s=localStorage.getItem('bc_u');if(s){_u=JSON.parse(s);_r=JSON.parse(localStorage.getItem('bc_r_'+_u.id)||'[]');enter();}else showPage('welcome');}
-function goHome(){_u?showPage('dashboard'):showPage('welcome');}
+// ── STATE ────────────────────────────────────────────────
+var _user = null, _profile = null, _recipes = [];
+var _w = {size:'small',shape:'rounded',style:'minimal',color:'#1C3A1A',font:'Playfair Display',btn:'Save to my week',cuisine:true,time:true,attr:true};
 
-function handleSignUp(){
-  var n=document.getElementById('su-name').value.trim(),b=document.getElementById('su-blog').value.trim(),e=document.getElementById('su-email').value.trim(),p=document.getElementById('su-pass').value;
-  if(!n||!e||!p){alert('Please fill in all fields');return;}
-  var us=JSON.parse(localStorage.getItem('bc_us')||'[]');
-  if(us.find(function(u){return u.email===e;})){alert('Email already registered');return;}
-  _u={id:Date.now(),name:n,blog:b,email:e,password:p,status:'free',joined:Date.now()};
-  us.push(_u);localStorage.setItem('bc_us',JSON.stringify(us));localStorage.setItem('bc_u',JSON.stringify(_u));
-  _r=[];enter();
+// ── INIT ─────────────────────────────────────────────────
+async function init() {
+  const { data: { session } } = await sb.auth.getSession();
+  if (session) {
+    _user = session.user;
+    await loadProfile();
+    await loadRecipesFromDB();
+    enter();
+  } else {
+    showPage('welcome');
+  }
+  document.getElementById('loading-screen').classList.add('hidden');
+
+  sb.auth.onAuthStateChange(async (event, session) => {
+    if (event === 'SIGNED_IN' && session) {
+      _user = session.user;
+      await loadProfile();
+      await loadRecipesFromDB();
+      enter();
+    } else if (event === 'SIGNED_OUT') {
+      _user = null; _profile = null; _recipes = [];
+    }
+  });
 }
 
-function handleSignIn(){
-  var e=document.getElementById('si-email').value.trim(),p=document.getElementById('si-pass').value;
-  if(!e||!p){alert('Please fill in all fields');return;}
-  var us=JSON.parse(localStorage.getItem('bc_us')||'[]');
-  var u=us.find(function(u){return u.email===e&&u.password===p;});
-  if(!u){alert('Email or password incorrect');return;}
-  _u=u;localStorage.setItem('bc_u',JSON.stringify(_u));
-  _r=JSON.parse(localStorage.getItem('bc_r_'+_u.id)||'[]');enter();
+// ── AUTH ─────────────────────────────────────────────────
+async function handleSignUp() {
+  const name = document.getElementById('su-name').value.trim();
+  const blog = document.getElementById('su-blog').value.trim();
+  const email = document.getElementById('su-email').value.trim();
+  const pass = document.getElementById('su-pass').value;
+  const errEl = document.getElementById('su-error');
+  errEl.classList.remove('show');
+
+  if (!name || !email || !pass) { showErr(errEl, 'Please fill in all required fields'); return; }
+  if (pass.length < 6) { showErr(errEl, 'Password must be at least 6 characters'); return; }
+
+  const btn = document.getElementById('su-btn');
+  btn.disabled = true; btn.textContent = 'Creating account...';
+
+  const { data, error } = await sb.auth.signUp({
+    email, password: pass,
+    options: { data: { name, blog } }
+  });
+
+  if (error) { showErr(errEl, error.message); btn.disabled = false; btn.textContent = 'Start free →'; return; }
+
+  // Create profile row
+  await sb.from('bc_profiles').upsert({
+    id: data.user.id,
+    name, blog,
+    revenue_status: 'none',
+    widget_config: JSON.stringify(_w),
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  });
+
+  _user = data.user;
+  _profile = { name, blog, revenue_status: 'none', widget_config: JSON.stringify(_w) };
+  _recipes = [];
+  btn.disabled = false; btn.textContent = 'Start free →';
+  enter();
+  toast('Welcome to Blogger Cookbook! 🎉');
 }
 
-function signOut(){if(!confirm('Sign out?'))return;_u=null;_r=[];localStorage.removeItem('bc_u');document.getElementById('nav-tabs').style.display='none';document.getElementById('nav-user').style.display='none';document.getElementById('nav-so').style.display='none';document.getElementById('nav-si').style.display='block';showPage('welcome');}
+async function handleSignIn() {
+  const email = document.getElementById('si-email').value.trim();
+  const pass = document.getElementById('si-pass').value;
+  const errEl = document.getElementById('si-error');
+  errEl.classList.remove('show');
 
-function enter(){document.getElementById('nav-tabs').style.display='flex';document.getElementById('nav-user').style.display='block';document.getElementById('nav-user').textContent='👋 '+(_u.name||'Creator');document.getElementById('nav-so').style.display='block';document.getElementById('nav-si').style.display='none';showPage('dashboard');}
+  if (!email || !pass) { showErr(errEl, 'Please fill in all fields'); return; }
 
-function showPage(n){
-  document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
-  document.getElementById('page-'+n).classList.add('active');
-  document.querySelectorAll('.nav-tab').forEach(function(t){t.classList.remove('active');});
-  var map=['dashboard','recipes','revenue','widget'];
-  var idx=map.indexOf(n);if(idx>=0){var tabs=document.querySelectorAll('.nav-tab');if(tabs[idx])tabs[idx].classList.add('active');}
-  if(n==='dashboard')loadDash();
-  if(n==='recipes')loadRecipes();
-  if(n==='revenue')loadRevenue();
-  if(n==='widget'){rw();if(_u&&_u.blog)document.getElementById('prev-url').textContent=_u.blog;}
+  const btn = document.getElementById('si-btn');
+  btn.disabled = true; btn.textContent = 'Signing in...';
+
+  const { data, error } = await sb.auth.signInWithPassword({ email, password: pass });
+
+  if (error) { showErr(errEl, error.message); btn.disabled = false; btn.textContent = 'Sign in'; return; }
+
+  _user = data.user;
+  await loadProfile();
+  await loadRecipesFromDB();
+  btn.disabled = false; btn.textContent = 'Sign in';
+  enter();
 }
 
-function loadDash(){
-  if(!_u)return;
-  var h=new Date().getHours();
-  document.getElementById('dash-greeting').textContent=(h<12?'Good morning':h<17?'Good afternoon':'Good evening')+', '+(_u.name||'Creator')+'.';
-  var s=_r.reduce(function(a,r){return a+(r.saves||0);},0);
-  var c=_r.reduce(function(a,r){return a+(r.cooks||0);},0);
-  var cl=_r.reduce(function(a,r){return a+(r.clicks||0);},0);
-  var f=Math.floor(s*0.4);
-  document.getElementById('d-cooked').textContent=c.toLocaleString();
-  document.getElementById('d-saves').textContent=s.toLocaleString();
-  document.getElementById('d-clicks').textContent=cl.toLocaleString();
-  document.getElementById('d-followers').textContent=f.toLocaleString();
-  document.getElementById('d-earned').textContent=_u.status==='approved'?'$'+(s*0.009).toFixed(2):'—';
-  document.getElementById('d-protect').textContent=Math.floor(s*0.2)+' scrapers blocked · Widget on '+Math.max(_r.length,0)+' pages';
-  var top=_r.slice().sort(function(a,b){return (b.cooks||0)-(a.cooks||0);}).slice(0,3);
-  document.getElementById('d-recipes').innerHTML=top.length?top.map(function(r){return rrow(r,true);}).join(''):'<div class="empty"><div class="empty-icon">📄</div><div style="font-size:.85rem;">No recipes yet. Add your first to start tracking.</div></div>';
+async function signOut() {
+  if (!confirm('Sign out?')) return;
+  await sb.auth.signOut();
+  _user = null; _profile = null; _recipes = [];
+  document.getElementById('nav-tabs').style.display = 'none';
+  document.getElementById('nav-user').style.display = 'none';
+  document.getElementById('nav-so').style.display = 'none';
+  document.getElementById('nav-si').style.display = 'block';
+  showPage('welcome');
 }
 
-function loadRecipes(){
-  document.getElementById('recipes-list').innerHTML=_r.length?_r.map(function(r){return rrow(r,false);}).join(''):'<div class="empty"><div class="empty-icon">📄</div><div style="font-size:.85rem;">No recipes yet.</div></div>';
-}
+function showErr(el, msg) { el.textContent = msg; el.classList.add('show'); }
 
-function rrow(r,compact){
-  var trend=(r.cooks||0)>5?'<span class="trending">↑ Trending</span>':'';
-  return '<div class="recipe-row"><div class="r-emoji">'+(r.emoji||'🍽')+'</div><div class="r-info"><div class="r-title">'+esc(r.title||'')+' '+trend+'</div><div class="r-meta">'+esc(r.cuisine||'')+(r.time?' · '+esc(r.time):'')+'</div></div><div class="r-stats"><div class="rstat"><div class="rstat-n">'+(r.cooks||0)+'</div><div class="rstat-l">Cooked</div></div><div class="rstat"><div class="rstat-n">'+(r.saves||0)+'</div><div class="rstat-l">Saves</div></div>'+(compact?'':'<div class="rstat"><div class="rstat-n">'+(r.clicks||0)+'</div><div class="rstat-l">Clicks</div></div>')+'</div></div>';
-}
-
-function loadRevenue(){
-  var el=document.getElementById('revenue-content');if(!_u)return;
-  var s=_r.reduce(function(a,r){return a+(r.saves||0);},0);
-  if(_u.status==='approved'){
-    var m=(s*0.009).toFixed(2),sub=Math.floor(s*0.01);
-    el.innerHTML='<div class="rev-hero"><div class="rev-big">$'+m+'</div><div class="rev-label">estimated this month</div><div class="rev-grid"><div class="rb"><div class="rb-label">Active subscribers</div><div class="rb-val">'+sub+'</div></div><div class="rb"><div class="rb-label">Per sub/mo</div><div class="rb-val">$0.90</div></div><div class="rb"><div class="rb-label">Your share</div><div class="rb-val">30%</div></div><div class="rb"><div class="rb-label">Paid</div><div class="rb-val">Monthly</div></div></div></div><div style="background:white;border:1px solid var(--border);border-radius:16px;padding:1.5rem;margin-top:1rem;"><p style="font-size:.88rem;color:var(--muted);line-height:1.75;font-weight:300;">You earn <strong style="color:var(--forest);">$0.90/month</strong> for every Pro subscriber who discovered Fern through your recipes. That subscription renews every month — so do your earnings.<br><br>✓ Lifetime attribution &nbsp; ✓ Paid on the 15th &nbsp; ✓ No minimums</p></div>';
-  }else if(_u.status==='pending'){
-    el.innerHTML='<div style="background:rgba(217,119,6,.08);border:1px solid rgba(217,119,6,.2);border-radius:16px;padding:2rem;text-align:center;"><div style="font-size:2rem;margin-bottom:.5rem;">⏳</div><div style="font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--forest);margin-bottom:.4rem;">Application under review</div><div style="font-size:.85rem;color:var(--muted);font-weight:300;">We typically respond within 48 hours. Keep sharing recipes in the meantime!</div></div>';
-  }else{
-    el.innerHTML='<div class="apply-card"><div class="apply-title">💰 Revenue Partner Program</div><div class="apply-text">Get approved to earn 30% lifetime commission on every Pro subscriber your recipes bring to Fern. Monthly. Recurring. The more families cook your food, the more you earn — from content you already created.</div><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.5rem;"><div style="text-align:center;padding:1rem;background:rgba(28,58,26,.05);border-radius:10px;"><div style="font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--forest);">30%</div><div style="font-size:.72rem;color:var(--muted);">Lifetime commission</div></div><div style="text-align:center;padding:1rem;background:rgba(28,58,26,.05);border-radius:10px;"><div style="font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--forest);">$0.90</div><div style="font-size:.72rem;color:var(--muted);">Per Pro sub/mo</div></div><div style="text-align:center;padding:1rem;background:rgba(28,58,26,.05);border-radius:10px;"><div style="font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--forest);">∞</div><div style="font-size:.72rem;color:var(--muted);">For life</div></div></div><button class="btn-primary" onclick="applyRev()">Apply for Revenue Partner →</button></div><div style="background:white;border:1px solid var(--border);border-radius:16px;padding:1.5rem;"><div style="font-family:'Playfair Display',serif;font-size:1rem;color:var(--forest);margin-bottom:.75rem;">How the math works</div><p style="font-size:.83rem;color:var(--muted);line-height:1.75;font-weight:300;">500 families save your Tuscan Chicken. 50 upgrade to Pro. That is <strong style="color:var(--forest);">$45/month</strong> — every month they stay subscribed. 10 recipes like that and the math gets very interesting.</p></div>';
+// ── DATA ─────────────────────────────────────────────────
+async function loadProfile() {
+  const { data } = await sb.from('bc_profiles').select('*').eq('id', _user.id).single();
+  _profile = data || {};
+  if (_profile.widget_config) {
+    try { Object.assign(_w, JSON.parse(_profile.widget_config)); } catch(e) {}
   }
 }
 
-function applyRev(){
-  _u.status='pending';
-  var us=JSON.parse(localStorage.getItem('bc_us')||'[]');
-  var idx=us.findIndex(function(u){return u.id===_u.id;});
-  if(idx>=0){us[idx]=_u;localStorage.setItem('bc_us',JSON.stringify(us));}
-  localStorage.setItem('bc_u',JSON.stringify(_u));loadRevenue();
+async function loadRecipesFromDB() {
+  const { data, error } = await sb.from('bc_recipes').select('*').eq('user_id', _user.id).order('created_at', { ascending: false });
+  _recipes = data || [];
 }
 
-// WIDGET
-function sw(k,v,btn){_w[k]=v;if(btn){var p=btn.parentElement;p.querySelectorAll('.chip').forEach(function(c){c.classList.remove('on');});btn.classList.add('on');}rw();}
-function sc(hex,sw){_w.color=hex;document.querySelectorAll('.swatch').forEach(function(s){s.classList.remove('on');});if(sw)sw.classList.add('on');document.getElementById('cc').value=hex;rw();}
+// ── NAVIGATION ───────────────────────────────────────────
+function goHome() { _user ? showPage('dashboard') : showPage('welcome'); }
 
-function rw(){
-  _w.btn=document.getElementById('btn-text').value||'Save to my week';
-  _w.cuisine=document.getElementById('sh-c').checked;
-  _w.time=document.getElementById('sh-t').checked;
-  _w.attr=document.getElementById('sh-a').checked;
+function enter() {
+  const displayName = _profile?.name || _user?.user_metadata?.name || _user?.email?.split('@')[0] || 'Creator';
+  document.getElementById('nav-tabs').style.display = 'flex';
+  document.getElementById('nav-user').style.display = 'block';
+  document.getElementById('nav-user').textContent = '👋 ' + displayName;
+  document.getElementById('nav-so').style.display = 'block';
+  document.getElementById('nav-si').style.display = 'none';
+  showPage('dashboard');
+}
 
-  var c=_w.color;
-  var w=_w;
-  var widths={small:'220px',medium:'300px',large:'380px',full:'100%'};
-  var pads={small:'.7rem',medium:'1rem',large:'1.2rem',full:'1rem'};
-  var radii={rounded:'12px',sharp:'3px',pill:'100px'};
-  var br={rounded:'8px',sharp:'2px',pill:'100px'};
+function showPage(n) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + n).classList.add('active');
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  const map = ['dashboard','recipes','revenue','widget'];
+  const idx = map.indexOf(n);
+  if (idx >= 0) { const tabs = document.querySelectorAll('.nav-tab'); if (tabs[idx]) tabs[idx].classList.add('active'); }
+  if (n === 'dashboard') loadDash();
+  if (n === 'recipes') loadRecipes();
+  if (n === 'revenue') loadRevenue();
+  if (n === 'widget') { applyWidgetState(); rw(); if (_profile?.blog) document.getElementById('prev-url').textContent = _profile.blog; }
+}
+
+// ── DASHBOARD ────────────────────────────────────────────
+function loadDash() {
+  if (!_user) return;
+  const h = new Date().getHours();
+  const displayName = _profile?.name || _user?.user_metadata?.name || 'Creator';
+  document.getElementById('dash-greeting').textContent = (h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening') + ', ' + displayName + '.';
+
+  const saves = _recipes.reduce((a, r) => a + (r.saves || 0), 0);
+  const cooks = _recipes.reduce((a, r) => a + (r.cooks || 0), 0);
+  const clicks = _recipes.reduce((a, r) => a + (r.clicks || 0), 0);
+  const followers = Math.floor(saves * 0.4);
+
+  document.getElementById('d-cooked').textContent = cooks.toLocaleString();
+  document.getElementById('d-saves').textContent = saves.toLocaleString();
+  document.getElementById('d-clicks').textContent = clicks.toLocaleString();
+  document.getElementById('d-followers').textContent = followers.toLocaleString();
+  const status = _profile?.revenue_status || 'none';
+  document.getElementById('d-earned').textContent = status === 'approved' ? '$' + (saves * 0.009).toFixed(2) : '—';
+  document.getElementById('d-protect').textContent = Math.floor(saves * 0.2) + ' scrapers blocked · Widget on ' + _recipes.length + ' pages';
+
+  const top = _recipes.slice().sort((a, b) => (b.cooks || 0) - (a.cooks || 0)).slice(0, 3);
+  document.getElementById('d-recipes').innerHTML = top.length ? top.map(r => rrow(r, true)).join('') : '<div class="empty"><div class="empty-icon">📄</div><div style="font-size:.85rem;">No recipes yet. Add your first to start tracking.</div></div>';
+}
+
+function loadRecipes() {
+  document.getElementById('recipes-list').innerHTML = _recipes.length
+    ? _recipes.map(r => rrow(r, false)).join('')
+    : '<div class="empty"><div class="empty-icon">📄</div><div style="font-size:.85rem;">No recipes yet.</div></div>';
+}
+
+function rrow(r, compact) {
+  const trend = (r.cooks || 0) > 5 ? '<span class="trending">↑ Trending</span>' : '';
+  const hook = r.hook ? '<div class="r-hook">' + esc(r.hook) + '</div>' : '';
+  const del = compact ? '' : '<button class="r-del" onclick="deleteRecipe(\'' + r.id + '\')" title="Delete">🗑</button>';
+  return '<div class="recipe-row"><div class="r-emoji">' + (r.emoji || '🍽') + '</div><div class="r-info"><div class="r-title">' + esc(r.title || '') + ' ' + trend + '</div><div class="r-meta">' + esc(r.cuisine || '') + (r.time ? ' · ' + esc(r.time) : '') + '</div>' + hook + '</div><div class="r-stats"><div class="rstat"><div class="rstat-n">' + (r.cooks || 0) + '</div><div class="rstat-l">Cooked</div></div><div class="rstat"><div class="rstat-n">' + (r.saves || 0) + '</div><div class="rstat-l">Saves</div></div>' + (compact ? '' : '<div class="rstat"><div class="rstat-n">' + (r.clicks || 0) + '</div><div class="rstat-l">Clicks</div></div>') + '</div>' + del + '</div>';
+}
+
+// ── REVENUE ──────────────────────────────────────────────
+function loadRevenue() {
+  const el = document.getElementById('revenue-content');
+  if (!_user) return;
+  const saves = _recipes.reduce((a, r) => a + (r.saves || 0), 0);
+  const status = _profile?.revenue_status || 'none';
+
+  if (status === 'approved') {
+    const m = (saves * 0.009).toFixed(2), sub = Math.floor(saves * 0.01);
+    el.innerHTML = '<div class="rev-hero"><div class="rev-big">$' + m + '</div><div class="rev-label">estimated this month</div><div class="rev-grid"><div class="rb"><div class="rb-label">Active subscribers</div><div class="rb-val">' + sub + '</div></div><div class="rb"><div class="rb-label">Per sub/mo</div><div class="rb-val">$0.90</div></div><div class="rb"><div class="rb-label">Your share</div><div class="rb-val">30%</div></div><div class="rb"><div class="rb-label">Paid</div><div class="rb-val">Monthly</div></div></div></div><div style="background:white;border:1px solid var(--border);border-radius:16px;padding:1.5rem;margin-top:1rem;"><p style="font-size:.88rem;color:var(--muted);line-height:1.75;font-weight:300;">You earn <strong style="color:var(--forest);">$0.90/month</strong> for every Pro subscriber who discovered Fern through your recipes. That subscription renews every month — so do your earnings.<br><br>✓ Lifetime attribution &nbsp; ✓ Paid on the 15th &nbsp; ✓ No minimums</p></div>';
+  } else if (status === 'pending') {
+    el.innerHTML = '<div style="background:rgba(217,119,6,.08);border:1px solid rgba(217,119,6,.2);border-radius:16px;padding:2rem;text-align:center;"><div style="font-size:2rem;margin-bottom:.5rem;">⏳</div><div style="font-family:\'Playfair Display\',serif;font-size:1.2rem;color:var(--forest);margin-bottom:.4rem;">Application under review</div><div style="font-size:.85rem;color:var(--muted);font-weight:300;">We typically respond within 48 hours. Keep sharing recipes in the meantime!</div></div>';
+  } else {
+    el.innerHTML = '<div class="apply-card"><div class="apply-title">💰 Revenue Partner Program</div><div class="apply-text">Get approved to earn 30% lifetime commission on every Pro subscriber your recipes bring to Fern. Monthly. Recurring. The more families cook your food, the more you earn — from content you already created.</div><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.5rem;"><div style="text-align:center;padding:1rem;background:rgba(28,58,26,.05);border-radius:10px;"><div style="font-family:\'Playfair Display\',serif;font-size:1.5rem;color:var(--forest);">30%</div><div style="font-size:.72rem;color:var(--muted);">Lifetime commission</div></div><div style="text-align:center;padding:1rem;background:rgba(28,58,26,.05);border-radius:10px;"><div style="font-family:\'Playfair Display\',serif;font-size:1.5rem;color:var(--forest);">$0.90</div><div style="font-size:.72rem;color:var(--muted);">Per Pro sub/mo</div></div><div style="text-align:center;padding:1rem;background:rgba(28,58,26,.05);border-radius:10px;"><div style="font-family:\'Playfair Display\',serif;font-size:1.5rem;color:var(--forest);">∞</div><div style="font-size:.72rem;color:var(--muted);">For life</div></div></div><button class="btn-primary" onclick="applyRev()">Apply for Revenue Partner →</button></div><div style="background:white;border:1px solid var(--border);border-radius:16px;padding:1.5rem;"><div style="font-family:\'Playfair Display\',serif;font-size:1rem;color:var(--forest);margin-bottom:.75rem;">How the math works</div><p style="font-size:.83rem;color:var(--muted);line-height:1.75;font-weight:300;">500 families save your Tuscan Chicken. 50 upgrade to Pro. That is <strong style="color:var(--forest);">$45/month</strong> — every month they stay subscribed. 10 recipes like that and the math gets very interesting.</p></div>';
+  }
+}
+
+async function applyRev() {
+  const { error } = await sb.from('bc_profiles').upsert({ id: _user.id, revenue_status: 'pending', updated_at: new Date().toISOString() });
+  if (!error) { _profile.revenue_status = 'pending'; loadRevenue(); toast('Application submitted! We\'ll review within 48 hours.'); }
+}
+
+// ── RECIPES ──────────────────────────────────────────────
+function openAddRecipe() { document.getElementById('modal-recipe').classList.add('active'); }
+function cm(id) { document.getElementById(id).classList.remove('active'); }
+
+async function saveRecipe() {
+  const title = document.getElementById('r-title').value.trim();
+  if (!title) { alert('Recipe title required'); return; }
+
+  const btn = document.getElementById('add-btn');
+  btn.disabled = true; btn.textContent = 'Adding...';
+
+  const recipe = {
+    user_id: _user.id,
+    title,
+    cuisine: document.getElementById('r-cuisine').value.trim(),
+    time: document.getElementById('r-time').value.trim(),
+    url: document.getElementById('r-url').value.trim(),
+    emoji: document.getElementById('r-emoji').value || '🍽',
+    saves: 0, cooks: 0, clicks: 0
+  };
+
+  const { data, error } = await sb.from('bc_recipes').insert(recipe).select().single();
+
+  if (error) { alert('Error saving recipe: ' + error.message); btn.disabled = false; btn.textContent = 'Add recipe'; return; }
+
+  _recipes.unshift(data);
+  cm('modal-recipe');
+  ['r-title','r-cuisine','r-time','r-url','r-emoji'].forEach(id => document.getElementById(id).value = '');
+  btn.disabled = false; btn.textContent = 'Add recipe';
+  loadRecipes(); loadDash();
+  toast('Recipe added! ✓');
+
+  // AI enhance in background
+  enhanceRecipe(data);
+}
+
+async function enhanceRecipe(recipe) {
+  try {
+    const res = await fetch('/.netlify/functions/enhance', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ title: recipe.title, cuisine: recipe.cuisine, time: recipe.time })
+    });
+    const { hook } = await res.json();
+    if (hook) {
+      await sb.from('bc_recipes').update({ hook }).eq('id', recipe.id);
+      const idx = _recipes.findIndex(r => r.id === recipe.id);
+      if (idx >= 0) { _recipes[idx].hook = hook; loadRecipes(); loadDash(); }
+    }
+  } catch(e) { /* silent fail */ }
+}
+
+async function deleteRecipe(id) {
+  if (!confirm('Delete this recipe?')) return;
+  const { error } = await sb.from('bc_recipes').delete().eq('id', id).eq('user_id', _user.id);
+  if (!error) {
+    _recipes = _recipes.filter(r => r.id !== id);
+    loadRecipes(); loadDash();
+    toast('Recipe deleted');
+  }
+}
+
+// ── WIDGET ───────────────────────────────────────────────
+function applyWidgetState() {
+  // sync chip UI to _w state
+  document.querySelectorAll('.cchips').forEach(group => {
+    group.querySelectorAll('.chip').forEach(chip => chip.classList.remove('on'));
+  });
+  document.querySelector(`[onclick*="'size','${_w.size}'"]`)?.classList.add('on');
+  document.querySelector(`[onclick*="'shape','${_w.shape}'"]`)?.classList.add('on');
+  document.querySelector(`[onclick*="'style','${_w.style}'"]`)?.classList.add('on');
+  document.querySelectorAll('.swatch').forEach(s => s.classList.remove('on'));
+  const btnTxt = document.getElementById('btn-text');
+  if (btnTxt) btnTxt.value = _w.btn;
+  document.getElementById('sh-c').checked = _w.cuisine;
+  document.getElementById('sh-t').checked = _w.time;
+  document.getElementById('sh-a').checked = _w.attr;
+}
+
+function sw(k, v, btn) {
+  _w[k] = v;
+  if (btn) { var p = btn.parentElement; p.querySelectorAll('.chip').forEach(c => c.classList.remove('on')); btn.classList.add('on'); }
+  rw();
+}
+
+function sc(hex, swEl) {
+  _w.color = hex;
+  document.querySelectorAll('.swatch').forEach(s => s.classList.remove('on'));
+  if (swEl) swEl.classList.add('on');
+  document.getElementById('cc').value = hex;
+  rw();
+}
+
+function rw() {
+  _w.btn = document.getElementById('btn-text')?.value || 'Save to my week';
+  _w.cuisine = document.getElementById('sh-c')?.checked;
+  _w.time = document.getElementById('sh-t')?.checked;
+  _w.attr = document.getElementById('sh-a')?.checked;
+
+  const c = _w.color, w = _w;
+  const widths = {small:'220px',medium:'300px',large:'380px',full:'100%'};
+  const pads = {small:'.7rem',medium:'1rem',large:'1.2rem',full:'1rem'};
+  const radii = {rounded:'12px',sharp:'3px',pill:'100px'};
+  const br = {rounded:'8px',sharp:'2px',pill:'100px'};
 
   var bg='#fff',tc=c,mc='#888',ab='rgba(0,0,0,.2)',sh='';
-  if(w.style==='card')sh='box-shadow:0 4px 14px rgba(0,0,0,.09);';
-  if(w.style==='bold'){bg=c;tc='#fff';mc='rgba(255,255,255,.6)';ab='rgba(255,255,255,.25)';}
-  if(w.style==='dark'){bg='#111';tc='#fff';mc='rgba(255,255,255,.5)';ab='rgba(255,255,255,.2)';}
-  var bBg=(w.style==='bold'||w.style==='dark')?'#fff':c;
-  var bC=(w.style==='bold')?c:(w.style==='dark')?'#111':'#fff';
-  var bdr=w.style==='minimal'?'border:1px solid '+h2a(c,.18)+';':'';
+  if (w.style==='card') sh='box-shadow:0 4px 14px rgba(0,0,0,.09);';
+  if (w.style==='bold') {bg=c;tc='#fff';mc='rgba(255,255,255,.6)';ab='rgba(255,255,255,.25)';}
+  if (w.style==='dark') {bg='#111';tc='#fff';mc='rgba(255,255,255,.5)';ab='rgba(255,255,255,.2)';}
+  var bBg = (w.style==='bold'||w.style==='dark') ? '#fff' : c;
+  var bC = (w.style==='bold') ? c : (w.style==='dark') ? '#111' : '#fff';
+  var bdr = w.style==='minimal' ? 'border:1px solid '+h2a(c,.18)+';' : '';
 
-  var meta=[];if(w.cuisine)meta.push('Italian');if(w.time)meta.push('30 min');
+  var meta = []; if (w.cuisine) meta.push('Italian'); if (w.time) meta.push('30 min');
 
-  var html='<div style="width:'+widths[w.size]+';background:'+bg+';border-radius:'+radii[w.shape]+';padding:'+pads[w.size]+';'+bdr+sh+'">'
-    +'<div style="font-family:''+w.font+'',serif;font-size:'+(w.size==='small'?'.88rem':'.95rem')+';font-weight:600;color:'+tc+';margin-bottom:.2rem;">Creamy Tuscan Chicken</div>'
+  var html = '<div style="width:'+widths[w.size]+';background:'+bg+';border-radius:'+radii[w.shape]+';padding:'+pads[w.size]+';'+bdr+sh+'">'
+    +'<div style="font-family:\''+w.font+'\',serif;font-size:'+(w.size==='small'?'.88rem':'.95rem')+';font-weight:600;color:'+tc+';margin-bottom:.2rem;">Creamy Tuscan Chicken</div>'
     +(meta.length?'<div style="font-size:.68rem;color:'+mc+';margin-bottom:.55rem;">'+meta.join(' · ')+'</div>':'')
     +'<button style="width:100%;background:'+bBg+';color:'+bC+';border:none;border-radius:'+br[w.shape]+';padding:.5rem;font-family:inherit;font-size:.78rem;font-weight:700;cursor:pointer;">'+esc(w.btn)+'</button>'
     +(w.attr?'<div style="font-size:.52rem;color:'+ab+';text-align:center;margin-top:.35rem;">Powered by Fern · Links back to your site</div>':'')
     +'</div>';
 
-  document.getElementById('live-widget').innerHTML=html;
+  document.getElementById('live-widget').innerHTML = html;
 
-  var blog=(_u&&_u.blog)?_u.blog.replace(/https?:\/\//,'').split('/')[0]:'yourblog.com';
-  var code='<script src="https://cdn.myfernai.com/widget.js"
-  data-blog="'+blog+'"
-  data-color="'+c+'"
-  data-shape="'+w.shape+'"
-  data-size="'+w.size+'"
-  data-style="'+w.style+'"&gt;&lt;/scri'+'pt>';
-  document.getElementById('wcode').innerHTML=code+'<button class="code-copy-btn" onclick="cpCode()">Copy</button>';
+  const blog = (_profile?.blog || 'yourblog.com').replace(/https?:\/\//, '').split('/')[0];
+  const code = '<script src="https://cdn.myfernai.com/widget.js"\n  data-blog="'+blog+'"\n  data-color="'+c+'"\n  data-shape="'+w.shape+'"\n  data-size="'+w.size+'"\n  data-style="'+w.style+'">\x3c/script>';
+  document.getElementById('wcode').innerHTML = code + '<button class="code-copy-btn" onclick="cpCode()">Copy</button>';
 }
 
-function h2a(hex,a){var r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);return 'rgba('+r+','+g+','+b+','+a+')';}
-
-function cpCode(){
-  var t=document.getElementById('wcode').textContent.replace('Copy','').trim();
-  navigator.clipboard.writeText(t).then(function(){var b=document.querySelector('.code-copy-btn');if(b){b.textContent='Copied!';setTimeout(function(){b.textContent='Copy';},2000);}});
+async function saveWidget() {
+  const { error } = await sb.from('bc_profiles').upsert({
+    id: _user.id,
+    widget_config: JSON.stringify(_w),
+    updated_at: new Date().toISOString()
+  });
+  if (!error) toast('Widget settings saved ✓');
 }
 
-function openAddRecipe(){document.getElementById('modal-recipe').classList.add('active');}
-function cm(id){document.getElementById(id).classList.remove('active');}
-
-function saveRecipe(){
-  var t=document.getElementById('r-title').value.trim();
-  if(!t){alert('Recipe title required');return;}
-  var recipe={id:Date.now(),title:t,cuisine:document.getElementById('r-cuisine').value.trim(),time:document.getElementById('r-time').value.trim(),url:document.getElementById('r-url').value.trim(),emoji:document.getElementById('r-emoji').value||'🍽',saves:Math.floor(Math.random()*80)+5,cooks:Math.floor(Math.random()*30)+1,clicks:Math.floor(Math.random()*20)+1,added:Date.now()};
-  _r.push(recipe);
-  localStorage.setItem('bc_r_'+_u.id,JSON.stringify(_r));
-  cm('modal-recipe');
-  ['r-title','r-cuisine','r-time','r-url','r-emoji'].forEach(function(id){document.getElementById(id).value='';});
-  loadRecipes();loadDash();
+function cpCode() {
+  var t = document.getElementById('wcode').textContent.replace('Copy','').trim();
+  navigator.clipboard.writeText(t).then(() => {
+    var b = document.querySelector('.code-copy-btn');
+    if (b) { b.textContent = 'Copied!'; setTimeout(() => b.textContent = 'Copy', 2000); }
+  });
 }
 
-function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function h2a(hex, a) {
+  var r=parseInt(hex.slice(1,3),16), g=parseInt(hex.slice(3,5),16), b=parseInt(hex.slice(5,7),16);
+  return 'rgba('+r+','+g+','+b+','+a+')';
+}
 
-document.addEventListener('keydown',function(e){if(e.key==='Escape')document.querySelectorAll('.modal.active').forEach(function(m){m.classList.remove('active');});});
+// ── UTILS ────────────────────────────────────────────────
+function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 3000);
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') document.querySelectorAll('.modal.active').forEach(m => m.classList.remove('active'));
+});
 
 init();
-rw();
 </script>
 </body>
 </html>
