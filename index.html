@@ -1273,27 +1273,12 @@ var _w = {size:'small',shape:'rounded',style:'minimal',color:'#1C3A1A',font:'Pla
 
 // ── INIT ─────────────────────────────────────────────────
 async function init() {
-  const { data: { session } } = await sb.auth.getSession();
-  if (session) {
-    _user = session.user;
-    await loadProfile();
-    await loadRecipesFromDB();
-    enter();
-  } else {
-    showPage('welcome');
-  }
+  // AUTH DISABLED — demo mode
+  _user = { id: 'demo', email: 'demo@bloggercookbook.com', user_metadata: { name: 'Demo Blogger' } };
+  _profile = { name: 'Demo Blogger', blog: 'yourblog.com', revenue_status: 'none', widget_config: null };
+  _recipes = JSON.parse(localStorage.getItem('bc_demo_recipes') || '[]');
   document.getElementById('loading-screen').classList.add('hidden');
-
-  sb.auth.onAuthStateChange(async (event, session) => {
-    if (event === 'SIGNED_IN' && session) {
-      _user = session.user;
-      await loadProfile();
-      await loadRecipesFromDB();
-      enter();
-    } else if (event === 'SIGNED_OUT') {
-      _user = null; _profile = null; _recipes = [];
-    }
-  });
+  enter();
 }
 
 // ── AUTH ─────────────────────────────────────────────────
@@ -1591,33 +1576,29 @@ function cm(id) { document.getElementById(id).classList.remove('active'); }
 async function saveRecipe() {
   const title = document.getElementById('r-title').value.trim();
   if (!title) { alert('Recipe title required'); return; }
-
   const btn = document.getElementById('add-btn');
   btn.disabled = true; btn.textContent = 'Adding...';
 
   const recipe = {
+    id: Date.now().toString(),
     user_id: _user.id,
     title,
     cuisine: document.getElementById('r-cuisine').value.trim(),
     time: document.getElementById('r-time').value.trim(),
     url: document.getElementById('r-url').value.trim(),
     emoji: document.getElementById('r-emoji').value || '🍽',
-    saves: 0, cooks: 0, clicks: 0
+    saves: 0, cooks: 0, clicks: 0,
+    created_at: new Date().toISOString()
   };
 
-  const { data, error } = await sb.from('bc_recipes').insert(recipe).select().single();
-
-  if (error) { alert('Error saving recipe: ' + error.message); btn.disabled = false; btn.textContent = 'Add recipe'; return; }
-
-  _recipes.unshift(data);
+  _recipes.unshift(recipe);
+  localStorage.setItem('bc_demo_recipes', JSON.stringify(_recipes));
   cm('modal-recipe');
   ['r-title','r-cuisine','r-time','r-url','r-emoji'].forEach(id => document.getElementById(id).value = '');
   btn.disabled = false; btn.textContent = 'Add recipe';
   loadRecipes(); loadDash();
   toast('Recipe added! ✓');
-
-  // AI enhance in background
-  enhanceRecipe(data);
+  enhanceRecipe(recipe);
 }
 
 async function enhanceRecipe(recipe) {
@@ -1629,21 +1610,22 @@ async function enhanceRecipe(recipe) {
     });
     const { hook } = await res.json();
     if (hook) {
-      await sb.from('bc_recipes').update({ hook }).eq('id', recipe.id);
       const idx = _recipes.findIndex(r => r.id === recipe.id);
-      if (idx >= 0) { _recipes[idx].hook = hook; loadRecipes(); loadDash(); }
+      if (idx >= 0) {
+        _recipes[idx].hook = hook;
+        localStorage.setItem('bc_demo_recipes', JSON.stringify(_recipes));
+        loadRecipes(); loadDash();
+      }
     }
   } catch(e) { /* silent fail */ }
 }
 
 async function deleteRecipe(id) {
   if (!confirm('Delete this recipe?')) return;
-  const { error } = await sb.from('bc_recipes').delete().eq('id', id).eq('user_id', _user.id);
-  if (!error) {
-    _recipes = _recipes.filter(r => r.id !== id);
-    loadRecipes(); loadDash();
-    toast('Recipe deleted');
-  }
+  _recipes = _recipes.filter(r => r.id !== id);
+  localStorage.setItem('bc_demo_recipes', JSON.stringify(_recipes));
+  loadRecipes(); loadDash();
+  toast('Recipe deleted');
 }
 
 // ── BRAND STUDIO ─────────────────────────────────────────
