@@ -2013,7 +2013,7 @@ function rw() {
     +'<div style="font-family:\''+w.font+'\',serif;font-size:'+(w.size==='small'?'.88rem':'.95rem')+';font-weight:600;color:'+wText+';margin-bottom:.2rem;">Creamy Tuscan Chicken</div>'
     +(meta.length?'<div style="font-size:.68rem;color:'+wMeta+';margin-bottom:.55rem;">'+meta.join(' · ')+'</div>':'')
     +'<button style="width:100%;background:'+wBtnBg+';color:'+wBtnText+';border:none;border-radius:'+br[w.shape]+';padding:.5rem;font-family:inherit;font-size:.78rem;font-weight:700;cursor:pointer;">'+esc(w.btn)+'</button>'
-    +(w.attr?'<div style="font-size:.52rem;color:'+attrColor+';text-align:center;margin-top:.35rem;">Powered by Fern · Links back to your site</div>':'')
+    +(w.attr?'<a href="https://myaifern.com" target="_blank" rel="noopener" style="display:block;font-size:.52rem;color:'+attrColor+';text-align:center;margin-top:.35rem;text-decoration:none;">Powered by Fern</a>':'')
     +'</div>';
 
   const lw=document.getElementById('live-widget');
