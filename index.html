@@ -1413,12 +1413,22 @@ var _w = {size:'small',shape:'rounded',style:'minimal',color:'#1C3A1A',font:'Pla
 
 // ── INIT ─────────────────────────────────────────────────
 async function init() {
-  // AUTH DISABLED — demo mode
-  _user = { id: 'demo', email: 'demo@bloggercookbook.com', user_metadata: { name: 'Demo Blogger' } };
-  _profile = { name: 'Demo Blogger', blog: 'yourblog.com', revenue_status: 'none', widget_config: null };
-  _recipes = JSON.parse(localStorage.getItem('bc_demo_recipes') || '[]');
-  document.getElementById('loading-screen').classList.add('hidden');
-  enter();
+  // Was: "AUTH DISABLED — demo mode" -- every visitor got dropped into a
+  // shared fake account regardless of whether they signed up or logged
+  // in, with zero connection to their real bc_profiles/bc_recipes rows.
+  // Now checks for a genuine Supabase session, same completion pattern
+  // already used in handleSignIn()/handleSignUp() below. No session ->
+  // stay on the welcome/landing page (already the default active page).
+  const { data: { session } } = await sb.auth.getSession();
+  if (session && session.user) {
+    _user = session.user;
+    await loadProfile();
+    await loadRecipesFromDB();
+    document.getElementById('loading-screen').classList.add('hidden');
+    enter();
+  } else {
+    document.getElementById('loading-screen').classList.add('hidden');
+  }
 }
 
 // ── AUTH ─────────────────────────────────────────────────
@@ -1823,23 +1833,32 @@ async function saveRecipe() {
   const btn = document.getElementById('add-btn');
   btn.disabled = true; btn.textContent = 'Adding...';
 
-  const recipe = {
-    id: Date.now().toString(),
+  // Was: built a recipe object and only ever wrote it to
+  // localStorage('bc_demo_recipes') -- never reached bc_recipes in
+  // Supabase at all, for any user, real or demo. That's why recipes never
+  // showed up in the directory or synced across devices/browsers. Now
+  // actually inserts, same pattern as loadRecipesFromDB() already uses.
+  const { data: recipe, error } = await sb.from('bc_recipes').insert({
     user_id: _user.id,
     title,
     cuisine: document.getElementById('r-cuisine').value.trim(),
     time: document.getElementById('r-time').value.trim(),
     url: document.getElementById('r-url').value.trim(),
     emoji: document.getElementById('r-emoji').value || '🍽',
-    saves: 0, cooks: 0, clicks: 0,
-    created_at: new Date().toISOString()
-  };
+    saves: 0, cooks: 0, clicks: 0
+  }).select().single();
+
+  btn.disabled = false; btn.textContent = 'Add recipe';
+
+  if (error) {
+    toast('Could not add recipe — try again');
+    console.error('[saveRecipe]', error.message);
+    return;
+  }
 
   _recipes.unshift(recipe);
-  localStorage.setItem('bc_demo_recipes', JSON.stringify(_recipes));
   cm('modal-recipe');
   ['r-title','r-cuisine','r-time','r-url','r-emoji'].forEach(id => document.getElementById(id).value = '');
-  btn.disabled = false; btn.textContent = 'Add recipe';
   loadRecipes(); loadDash();
   toast('Recipe added! ✓');
   enhanceRecipe(recipe);
@@ -1857,7 +1876,10 @@ async function enhanceRecipe(recipe) {
       const idx = _recipes.findIndex(r => r.id === recipe.id);
       if (idx >= 0) {
         _recipes[idx].hook = hook;
-        localStorage.setItem('bc_demo_recipes', JSON.stringify(_recipes));
+        // Best-effort persist -- if the bc_recipes table doesn't have a
+        // hook column yet, this fails silently and the hook just won't
+        // survive a reload, which is a minor gap, not a crash.
+        try { await sb.from('bc_recipes').update({ hook }).eq('id', recipe.id); } catch(e) {}
         loadRecipes(); loadDash();
       }
     }
@@ -1866,8 +1888,13 @@ async function enhanceRecipe(recipe) {
 
 async function deleteRecipe(id) {
   if (!confirm('Delete this recipe?')) return;
+  const { error } = await sb.from('bc_recipes').delete().eq('id', id).eq('user_id', _user.id);
+  if (error) {
+    toast('Could not delete — try again');
+    console.error('[deleteRecipe]', error.message);
+    return;
+  }
   _recipes = _recipes.filter(r => r.id !== id);
-  localStorage.setItem('bc_demo_recipes', JSON.stringify(_recipes));
   loadRecipes(); loadDash();
   toast('Recipe deleted');
 }
