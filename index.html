@@ -1527,6 +1527,79 @@ async function handleSignUp() {
 // account, build widget, add recipes & apply"). Every step does the real
 // thing (real recipe insert, real embed code, real revenue application),
 // nothing here is a mockup of a step that doesn't actually work.
+// ── WIDGET TOUR ──────────────────────────────────────────
+// A real, spotlight-style guided tour of the actual Brand Studio page --
+// not a cold code dump. Highlights genuine elements with genuine
+// functionality: the real color pickers, the real live preview, the real
+// embed code output. Hides the wizard overlay temporarily, shows the real
+// Brand Studio page underneath, then restores the wizard once the tour
+// ends or is skipped.
+function startWidgetTour(onComplete) {
+  var wizOverlay = document.getElementById('bc-wizard');
+  if (wizOverlay) wizOverlay.style.display = 'none';
+  showPage('widget'); // this already triggers applyWidgetState()/rw() via showPage's own hook
+
+  var TOUR_STEPS = [
+    { target: '.bs-color-grid', text: 'Pick colors that match your blog. Everything updates live as you customize.' },
+    { target: '#bs-btn-text', text: 'Customize the button text \u2014 this is what visitors click to save your recipe.' },
+    { target: '#live-widget', text: "Here's exactly how it'll look inside a real blog post." },
+    { target: '.bs-code-panel', text: "This is your embed code \u2014 copy this one line into your blog once, and you're done." },
+  ];
+  var i = 0;
+  var tourCard, highlightEl;
+
+  function clearHighlight() {
+    if (highlightEl) {
+      highlightEl.style.outline = '';
+      highlightEl.style.outlineOffset = '';
+      highlightEl.style.zIndex = '';
+      highlightEl.style.position = highlightEl.getAttribute('data-orig-pos') || '';
+      highlightEl.removeAttribute('data-orig-pos');
+      highlightEl = null;
+    }
+  }
+
+  function showStep() {
+    clearHighlight();
+    if (tourCard) tourCard.remove();
+    var s = TOUR_STEPS[i];
+    var el = document.querySelector(s.target);
+    if (el) {
+      highlightEl = el;
+      el.setAttribute('data-orig-pos', el.style.position || '');
+      if (!el.style.position) el.style.position = 'relative';
+      el.style.zIndex = '10001';
+      el.style.outline = '3px solid #E8651A';
+      el.style.outlineOffset = '4px';
+      el.style.borderRadius = el.style.borderRadius || '8px';
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    tourCard = document.createElement('div');
+    tourCard.style.cssText = 'position:fixed;left:50%;bottom:2rem;transform:translateX(-50%);z-index:10002;background:#1C3A1A;color:#fff;border-radius:14px;padding:1.1rem 1.25rem;max-width:360px;width:90%;box-shadow:0 8px 32px rgba(0,0,0,.3)';
+    tourCard.innerHTML = '<div style="font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#A8D5A2;margin-bottom:.4rem">Widget tour · ' + (i + 1) + ' of ' + TOUR_STEPS.length + '</div>'
+      + '<div style="font-size:.85rem;line-height:1.5;margin-bottom:1rem">' + s.text + '</div>'
+      + '<div style="display:flex;gap:.5rem;justify-content:space-between;align-items:center">'
+      + '<button id="tour-skip" style="background:none;border:none;color:rgba(255,255,255,.6);font-size:.75rem;cursor:pointer;font-family:inherit">Skip tour</button>'
+      + '<button id="tour-next" style="background:#E8651A;color:#fff;border:none;border-radius:8px;padding:.5rem 1.1rem;font-size:.8rem;font-weight:700;cursor:pointer;font-family:inherit">' + (i === TOUR_STEPS.length - 1 ? 'Done' : 'Next') + ' →</button>'
+      + '</div>';
+    document.body.appendChild(tourCard);
+    document.getElementById('tour-skip').addEventListener('click', endTour);
+    document.getElementById('tour-next').addEventListener('click', function() {
+      i++;
+      if (i >= TOUR_STEPS.length) endTour(); else showStep();
+    });
+  }
+
+  function endTour() {
+    clearHighlight();
+    if (tourCard) tourCard.remove();
+    if (wizOverlay) wizOverlay.style.display = 'flex';
+    onComplete();
+  }
+
+  showStep();
+}
+
 function showBloggerWizard() {
   var overlay = document.createElement('div');
   overlay.id = 'bc-wizard';
@@ -1604,21 +1677,15 @@ function showBloggerWizard() {
   }
 
   function renderWidget() {
-    var blog = (_profile && _profile.blog || 'yourblog.com').replace(/https?:\/\//, '').split('/')[0];
-    var code = '<script src="https://cdn.myfernai.com/widget.js"\n  data-blog="' + blog + '"\n  data-color="#1C3A1A"\n  data-bg="#ffffff"\n  data-text="#1A1A1A"\n  data-border="#E5E1D8"\n  data-shape="rounded"\n  data-size="small"\n  data-style="minimal">\x3c/script>';
     shell(''
-      + '<div style="font-family:\'Playfair Display\',serif;font-size:1.15rem;color:#1C3A1A;margin-bottom:.3rem">Your widget code</div>'
-      + '<div style="font-size:.82rem;color:#6B6B6B;margin-bottom:1rem">Paste this one line into your blog. Scraper protection is live the moment it\'s on the page. Customize the look anytime in Brand Studio.</div>'
-      + '<pre id="bc-wiz-code" style="background:#F5F0E8;border-radius:8px;padding:.85rem;font-size:.68rem;line-height:1.5;overflow-x:auto;white-space:pre-wrap;word-break:break-all;color:#1A1A1A;margin-bottom:.9rem;font-family:monospace">' + code.replace(/</g, '&lt;') + '</pre>'
-      + '<button id="bc-wiz-copy" style="width:100%;background:none;border:1.5px solid #1C3A1A;color:#1C3A1A;border-radius:10px;padding:.75rem;font-size:.85rem;font-weight:700;cursor:pointer;margin-bottom:.6rem;font-family:inherit">Copy code</button>'
-      + '<button id="bc-wiz-next" style="width:100%;background:#1C3A1A;color:#fff;border:none;border-radius:10px;padding:.85rem;font-size:.92rem;font-weight:700;cursor:pointer;font-family:inherit">Got it, next →</button>',
+      + '<div style="font-family:\'Playfair Display\',serif;font-size:1.15rem;color:#1C3A1A;margin-bottom:.3rem">Build your widget</div>'
+      + '<div style="font-size:.82rem;color:#6B6B6B;margin-bottom:1.1rem;line-height:1.5">Instead of dumping default code on you, let\'s walk through the real Brand Studio together \u2014 pick colors, see the live preview, grab your actual embed code.</div>'
+      + '<button id="bc-wiz-next" style="width:100%;background:#1C3A1A;color:#fff;border:none;border-radius:10px;padding:.85rem;font-size:.92rem;font-weight:700;cursor:pointer;font-family:inherit">Take the 30-second tour →</button>',
       { showSkip: true }
     );
-    document.getElementById('bc-wiz-copy').addEventListener('click', function() {
-      var btn = this;
-      navigator.clipboard.writeText(code).then(function() { btn.textContent = '✓ Copied!'; setTimeout(function() { btn.textContent = 'Copy code'; }, 1500); }).catch(function() {});
+    document.getElementById('bc-wiz-next').addEventListener('click', function() {
+      startWidgetTour(function() { step++; render(); });
     });
-    document.getElementById('bc-wiz-next').addEventListener('click', function() { step++; render(); });
   }
 
   function renderRevenue() {
