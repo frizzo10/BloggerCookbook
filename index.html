@@ -665,7 +665,7 @@ nav{position:sticky;top:0;z-index:100;background:var(--forest);border-bottom:3px
       <button class="lp-cta-main" onclick="showPage('signup')">Get credited — it's free →</button>
       <button class="lp-cta-ghost" onclick="showPage('signin')">Sign in</button>
     </div>
-    <p class="lp-cta-note">No credit card. Setup takes under 2 minutes. Free forever.</p>
+    <p class="lp-cta-note">No credit card. Setup takes under 2 minutes. Free forever. <a href="#" onclick="showPage('directory');return false;" style="color:inherit;text-decoration:underline;">Browse bloggers already on Fern →</a></p>
     <div class="lp-ticker">
       <div class="lp-ticker-inner">
         <span class="lp-ticker-item">🔴 ChatGPT used your recipe — your name wasn't mentioned once</span>
@@ -1122,6 +1122,15 @@ nav{position:sticky;top:0;z-index:100;background:var(--forest);border-bottom:3px
     </div>
   </div>
 
+  <!-- PUBLIC DIRECTORY OPT-IN -->
+  <div style="background:#fff;border:1px solid rgba(0,0,0,.06);border-radius:12px;padding:1.25rem 1.5rem;margin:1.5rem 2.5rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;">
+    <div>
+      <div style="font-weight:700;font-size:.95rem;margin-bottom:.25rem;">📖 Public Blogger Directory</div>
+      <div style="font-size:.82rem;color:var(--muted);font-weight:300;max-width:480px;">Get listed alongside other Blogger Cookbook bloggers — browsable by anyone, no account needed. Shows your name, blog, cuisine, and your 3 most-saved recipes. Off by default.</div>
+    </div>
+    <label class="bs-toggle"><input type="checkbox" id="directory-opt-in-toggle" onchange="toggleDirectoryOptIn(this.checked)"><div class="bs-toggle-track"></div><div class="bs-toggle-thumb"></div></label>
+  </div>
+
   <!-- BRAND MATCHER -->
   <div class="bs-matcher">
     <div class="bs-matcher-inner">
@@ -1350,6 +1359,19 @@ nav{position:sticky;top:0;z-index:100;background:var(--forest);border-bottom:3px
 </div>
 </div>
 
+<!-- BLOGGER DIRECTORY (public, no login required) -->
+<div class="page" id="page-directory">
+  <div style="max-width:1100px;margin:0 auto;padding:2.5rem 1.5rem 4rem;">
+    <button class="lp-cta-ghost" onclick="showPage('welcome')" style="margin-bottom:1.5rem;">← Back</button>
+    <div class="lp-section-label" style="color:var(--mint);">Blogger Directory</div>
+    <h2 style="margin-bottom:.5rem;">Bloggers already on Fern.</h2>
+    <p style="color:var(--muted);font-weight:300;margin-bottom:2rem;max-width:600px;">Opted-in bloggers, sorted by how many recipes they've published. Every recipe here links straight back to the original blog.</p>
+    <div id="directory-content">
+      <div class="empty"><div class="spinner" style="margin:0 auto;"></div></div>
+    </div>
+  </div>
+</div>
+
 <!-- ADD RECIPE MODAL -->
 <div class="modal" id="modal-recipe">
   <div class="modal-card">
@@ -1500,6 +1522,22 @@ async function loadProfile() {
       Object.assign(_w, saved);
     } catch(e) {}
   }
+  const dirToggle = document.getElementById('directory-opt-in-toggle');
+  if (dirToggle) dirToggle.checked = !!_profile.directory_opt_in;
+}
+
+async function toggleDirectoryOptIn(checked) {
+  const prev = _profile.directory_opt_in;
+  _profile.directory_opt_in = checked;
+  const { error } = await sb.from('bc_profiles').update({ directory_opt_in: checked }).eq('id', _user.id);
+  if (error) {
+    _profile.directory_opt_in = prev;
+    const dirToggle = document.getElementById('directory-opt-in-toggle');
+    if (dirToggle) dirToggle.checked = prev;
+    toast('Could not update — try again');
+    return;
+  }
+  toast(checked ? '📖 You\'re now listed in the public directory!' : 'Removed from the public directory');
 }
 
 async function loadRecipesFromDB() {
@@ -1536,6 +1574,7 @@ function showPage(n) {
   if (n === 'recipes') loadRecipes();
   if (n === 'revenue') loadRevenue();
   if (n === 'widget') { applyWidgetState(); rw(); }
+  if (n === 'directory') loadDirectory();
 }
 
 // ── DASHBOARD ────────────────────────────────────────────
@@ -1721,6 +1760,38 @@ function loadRevenue() {
       </div>
     </div>
     ${referralCard}`;
+  }
+}
+
+// ── DIRECTORY (public) ──────────────────────────────────
+let _directoryLoaded = false;
+async function loadDirectory() {
+  const el = document.getElementById('directory-content');
+  if (_directoryLoaded) return; // static data for the session, no need to refetch on every visit to the page
+  try {
+    const res = await fetch('/.netlify/functions/directory');
+    const data = await res.json();
+    const bloggers = data.bloggers || [];
+    if (bloggers.length === 0) {
+      el.innerHTML = '<div class="empty" style="text-align:center;padding:3rem;color:var(--muted);">No bloggers have joined the public directory yet — be the first! Turn it on in Brand Studio.</div>';
+      return;
+    }
+    el.innerHTML = '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.25rem;">' + bloggers.map(function(b) {
+      var tags = (b.cuisineTags || []).map(function(t){ return '<span style="background:rgba(45,90,39,.08);color:var(--leaf);font-size:.7rem;font-weight:600;padding:.2rem .55rem;border-radius:20px;">'+t+'</span>'; }).join(' ');
+      var recipes = (b.topRecipes || []).map(function(r) {
+        return '<a href="'+(r.url||'#')+'" target="_blank" style="display:flex;align-items:center;gap:.5rem;padding:.5rem 0;text-decoration:none;color:inherit;border-top:1px solid rgba(0,0,0,.05);">'
+          + '<span>'+(r.emoji||'🍽')+'</span><span style="font-size:.82rem;font-weight:500;">'+(r.title||'')+'</span></a>';
+      }).join('');
+      return '<div style="background:#fff;border:1px solid rgba(0,0,0,.06);border-radius:12px;padding:1.25rem;">'
+        + '<div style="font-weight:700;font-size:1rem;margin-bottom:.15rem;">'+(b.name||'A Blogger Cookbook blogger')+'</div>'
+        + '<a href="https://'+(b.blog||'').replace(/^https?:\/\//,'')+'" target="_blank" style="font-size:.78rem;color:var(--mid);text-decoration:none;">'+(b.blog||'')+' →</a>'
+        + (tags ? '<div style="display:flex;flex-wrap:wrap;gap:.35rem;margin:.75rem 0;">'+tags+'</div>' : '<div style="height:.5rem;"></div>')
+        + (recipes || '<div style="font-size:.78rem;color:var(--muted);padding-top:.5rem;">No recipes published yet</div>')
+        + '</div>';
+    }).join('') + '</div>';
+    _directoryLoaded = true;
+  } catch (e) {
+    el.innerHTML = '<div class="empty" style="text-align:center;padding:3rem;color:var(--muted);">Couldn\'t load the directory right now — try refreshing.</div>';
   }
 }
 
