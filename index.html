@@ -1093,10 +1093,14 @@ nav{position:sticky;top:0;z-index:100;background:var(--forest);border-bottom:3px
       <div class="recipes-filters">
         <button class="r-filter on" onclick="filterRecipes('all',this)">All</button>
         <button class="r-filter" onclick="filterRecipes('trending',this)">Trending</button>
+        <button class="r-filter" onclick="filterRecipes('top',this)">Top performers</button>
+        <button class="r-filter" onclick="filterRecipes('missing_widget',this)">Missing widget</button>
       </div>
+      <button class="btn-ghost" style="padding:.6rem 1.1rem;font-size:.82rem;" onclick="openBulkImport()">↑ Bulk import</button>
       <button class="btn-primary" style="padding:.6rem 1.25rem;font-size:.82rem;" onclick="openAddRecipe()">+ Add recipe</button>
     </div>
   </div>
+  <div id="recipes-summary" style="display:flex;gap:1.5rem;padding:0 2.5rem 1rem;flex-wrap:wrap;"></div>
   <div class="recipes-body">
     <div id="recipes-list">
       <div class="recipes-empty-state">
@@ -1157,6 +1161,15 @@ nav{position:sticky;top:0;z-index:100;background:var(--forest);border-bottom:3px
       <div style="font-size:.82rem;color:var(--muted);font-weight:300;max-width:480px;">Get listed alongside other Blogger Cookbook bloggers — browsable by anyone, no account needed. Shows your name, blog, cuisine, and your 3 most-saved recipes. Off by default.</div>
     </div>
     <label class="bs-toggle"><input type="checkbox" id="directory-opt-in-toggle" onchange="toggleDirectoryOptIn(this.checked)"><div class="bs-toggle-track"></div><div class="bs-toggle-thumb"></div></label>
+  </div>
+
+  <!-- DATA EXPORT -->
+  <div style="background:#fff;border:1px solid rgba(0,0,0,.06);border-radius:12px;padding:1.25rem 1.5rem;margin:0 2.5rem 1.5rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;">
+    <div>
+      <div style="font-weight:700;font-size:.95rem;margin-bottom:.25rem;">📦 Export your data</div>
+      <div style="font-size:.82rem;color:var(--muted);font-weight:300;max-width:480px;">Every recipe and every stat, as a plain JSON file. No lock-in — take it with you whenever you want.</div>
+    </div>
+    <button class="btn-ghost" style="white-space:nowrap;" onclick="exportMyData()">Download →</button>
   </div>
 
   <!-- BRAND MATCHER -->
@@ -1411,6 +1424,19 @@ nav{position:sticky;top:0;z-index:100;background:var(--forest);border-bottom:3px
     <div class="field"><label>Blog post URL</label><input type="url" id="r-url" placeholder="https://yourblog.com/recipe-name"></div>
     <div class="field"><label>Emoji</label><input type="text" id="r-emoji" placeholder="🍝" maxlength="2"></div>
     <button class="btn-full" id="add-btn" onclick="saveRecipe()">Add recipe</button>
+  </div>
+</div>
+
+<div class="modal" id="modal-bulk-import">
+  <div class="modal-card">
+    <div class="modal-title">Bulk import recipes <button class="modal-close" onclick="cm('modal-bulk-import')">✕</button></div>
+    <div style="font-size:.82rem;color:var(--muted);font-weight:300;margin-bottom:1rem;line-height:1.5;">
+      A CSV with columns <code style="background:var(--cream);padding:.1rem .3rem;border-radius:4px;">title, cuisine, time, url</code> (in that order, one recipe per row, header row optional). Have 200 recipes on your blog? This beats adding them one at a time.
+    </div>
+    <input type="file" id="bulk-csv-file" accept=".csv,text/csv" style="width:100%;margin-bottom:1rem;font-size:.82rem;">
+    <div id="bulk-import-preview" style="max-height:220px;overflow-y:auto;margin-bottom:1rem;"></div>
+    <div id="bulk-import-status" style="font-size:.8rem;margin-bottom:.75rem;"></div>
+    <button class="btn-full" id="bulk-import-btn" onclick="runBulkImport()" disabled>Select a file first</button>
   </div>
 </div>
 
@@ -1781,6 +1807,46 @@ async function loadProfile() {
   if (dirToggle) dirToggle.checked = !!_profile.directory_opt_in;
 }
 
+async function savePayoutEmail() {
+  const val = document.getElementById('payout-email-input').value.trim();
+  if (!val || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)) { toast('Enter a valid email address'); return; }
+  const { error } = await sb.from('bc_profiles').update({ payout_email: val }).eq('id', _user.id);
+  if (error) { toast('Could not save — try again'); console.error('[savePayoutEmail]', error.message); return; }
+  if (_profile) _profile.payout_email = val;
+  toast('✓ Payout method saved');
+  loadRevenue();
+}
+
+// ── DATA EXPORT ──────────────────────────────────────────
+// Deliberately makes it easy to leave with everything, no lock-in.
+// Reduces the "too good to be true" skepticism the FAQ already
+// anticipates -- a platform confident enough to not lock you in reads as
+// more trustworthy, not less.
+function exportMyData() {
+  const payload = {
+    exported_at: new Date().toISOString(),
+    profile: {
+      name: _profile?.name || null,
+      blog: _profile?.blog || null,
+      revenue_status: _profile?.revenue_status || 'none',
+      referral_count: _profile?.referral_count || 0,
+    },
+    recipes: _recipes.map(r => ({
+      title: r.title, cuisine: r.cuisine, time: r.time, url: r.url, emoji: r.emoji,
+      saves: r.saves || 0, cooks: r.cooks || 0, clicks: r.clicks || 0,
+      widget_confirmed_at: r.widget_confirmed_at || null,
+    })),
+  };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'blogger-cookbook-export-' + new Date().toISOString().slice(0,10) + '.json';
+  document.body.appendChild(a); a.click(); a.remove();
+  URL.revokeObjectURL(url);
+  toast('✓ Export downloaded');
+}
+
 async function toggleDirectoryOptIn(checked) {
   const prev = _profile.directory_opt_in;
   _profile.directory_opt_in = checked;
@@ -1880,12 +1946,36 @@ function loadDash() {
 }
 
 function loadRecipes() {
-  const filtered = _currentFilter === 'trending'
-    ? _recipes.filter(r => (r.cooks||0) > 0)
-    : _recipes;
+  let filtered = _recipes;
+  if (_currentFilter === 'trending') filtered = _recipes.filter(r => (r.cooks||0) > 0);
+  else if (_currentFilter === 'top') filtered = [..._recipes].sort((a,b) => (b.saves||0)+(b.cooks||0)+(b.clicks||0) - ((a.saves||0)+(a.cooks||0)+(a.clicks||0)));
+  else if (_currentFilter === 'missing_widget') {
+    filtered = _recipes.filter(r => {
+      const daysOld = r.created_at ? (Date.now() - new Date(r.created_at).getTime()) / 86400000 : 0;
+      return !r.widget_confirmed_at && daysOld > 2;
+    });
+  }
   document.getElementById('recipes-list').innerHTML = filtered.length
     ? filtered.map(r => recipeCard(r)).join('')
-    : '<div class="recipes-empty-state"><div class="recipes-empty-icon">🍳</div><div class="recipes-empty-title">Add your first recipe</div><div class="recipes-empty-sub">Every recipe you add gets tracked, protected, and distributed to 50,000+ families.</div><button class="btn-primary" onclick="openAddRecipe()">Add my first recipe →</button></div>';
+    : (_currentFilter === 'missing_widget'
+        ? '<div class="recipes-empty-state"><div class="recipes-empty-icon">✓</div><div class="recipes-empty-title">Widget confirmed on everything</div><div class="recipes-empty-sub">Every recipe with a URL has a confirmed-live widget, or was added too recently to check yet.</div></div>'
+        : '<div class="recipes-empty-state"><div class="recipes-empty-icon">🍳</div><div class="recipes-empty-title">Add your first recipe</div><div class="recipes-empty-sub">Every recipe you add gets tracked, protected, and distributed to 50,000+ families.</div><button class="btn-primary" onclick="openAddRecipe()">Add my first recipe →</button></div>');
+
+  // Real aggregate summary -- this data already existed per-recipe, just
+  // never rolled up anywhere. Gives a reason to check the page beyond the
+  // once-a-month payout number.
+  const totalSaves = _recipes.reduce((a,r) => a + (r.saves||0), 0);
+  const totalCooks = _recipes.reduce((a,r) => a + (r.cooks||0), 0);
+  const top = [..._recipes].sort((a,b) => (b.saves||0) - (a.saves||0))[0];
+  const summaryEl = document.getElementById('recipes-summary');
+  if (summaryEl) {
+    summaryEl.innerHTML = _recipes.length ? [
+      '<div><div style="font-family:\'Playfair Display\',serif;font-size:1.4rem;color:var(--forest);">'+_recipes.length+'</div><div style="font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;">Recipes tracked</div></div>',
+      '<div><div style="font-family:\'Playfair Display\',serif;font-size:1.4rem;color:var(--forest);">'+totalSaves+'</div><div style="font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;">Total saves</div></div>',
+      '<div><div style="font-family:\'Playfair Display\',serif;font-size:1.4rem;color:var(--forest);">'+totalCooks+'</div><div style="font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;">Total cooked</div></div>',
+      top && (top.saves||0) > 0 ? '<div><div style="font-family:\'Playfair Display\',serif;font-size:1rem;color:var(--forest);">'+(top.emoji||'🍽')+' '+esc(top.title||'')+'</div><div style="font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;">Your top recipe</div></div>' : ''
+    ].join('') : '';
+  }
 }
 
 var _currentFilter = 'all';
@@ -1905,12 +1995,22 @@ function rrow(r, compact) {
 function recipeCard(r) {
   const trend = (r.cooks||0) > 5 ? '<span class="trending" style="margin-left:.4rem;">↑ Trending</span>' : '';
   const hook = r.hook ? '<div class="rc-hook">'+esc(r.hook)+'</div>' : '';
+  // Real signal, not a guess: widget_confirmed_at only gets set when the
+  // widget script actually loaded on this exact recipe's URL (see
+  // widget-data.js). No confirmation yet -- and the recipe's been around
+  // more than a couple days -- means the embed code likely never made it
+  // onto that post at all.
+  const daysOld = r.created_at ? (Date.now() - new Date(r.created_at).getTime()) / 86400000 : 0;
+  const missingWidget = !r.widget_confirmed_at && daysOld > 2;
+  const widgetBadge = missingWidget
+    ? '<div class="rc-widget-warn" style="font-size:.7rem;color:#D97706;background:rgba(217,119,6,.08);border-radius:6px;padding:.3rem .55rem;margin-top:.4rem;display:inline-block;">⚠ Widget not detected on this post yet</div>'
+    : (r.widget_confirmed_at ? '<div style="font-size:.68rem;color:#2D5A27;margin-top:.4rem;">✓ Widget confirmed live</div>' : '');
   return '<div class="recipe-card">'
     +'<div class="rc-emoji">'+(r.emoji||'🍽')+'</div>'
     +'<div class="rc-info">'
       +'<div class="rc-title">'+esc(r.title||'')+trend+'</div>'
       +'<div class="rc-meta">'+esc(r.cuisine||'')+(r.time?' · '+esc(r.time):'')+(r.url?' · <a href="'+esc(r.url)+'" target="_blank" style="color:var(--mid);">View post ↗</a>':'')+'</div>'
-      +hook
+      +hook + widgetBadge
     +'</div>'
     +'<div class="rc-stats">'
       +'<div class="rcstat"><div class="rcstat-n">'+(r.cooks||0)+'</div><div class="rcstat-l">Cooked</div></div>'
@@ -1962,6 +2062,25 @@ function loadRevenue() {
       </div>
     </div>`;
 
+  // Real gap this closes: the whole pitch is "we pay you real money," but
+  // there was nowhere to actually tell us where to send it. Kept as its
+  // own card, separate from the revenue_status application, since a
+  // blogger might reasonably want this set up before their first payout
+  // is even due, not scrambling once it is.
+  const payoutSet = !!(_profile && _profile.payout_email);
+  const payoutCard = `
+    <div class="earn-card">
+      <div class="earn-card-header"><div class="earn-card-title">💳 Payout method</div></div>
+      <div class="earn-card-body">
+        <p style="font-size:.85rem;color:var(--muted);font-weight:300;margin-bottom:1rem;">Where should we send your earnings on the 15th? PayPal or a bank-linked email both work.</p>
+        <div style="display:flex;gap:.6rem;">
+          <input type="email" id="payout-email-input" placeholder="you@paypal.com" value="${payoutSet ? esc(_profile.payout_email) : ''}" style="flex:1;padding:.6rem .75rem;border:1.5px solid var(--border);border-radius:8px;font-size:.85rem;font-family:inherit;">
+          <button class="btn-primary" style="padding:.6rem 1.1rem;font-size:.82rem;white-space:nowrap;" onclick="savePayoutEmail()">${payoutSet ? 'Update' : 'Save'}</button>
+        </div>
+        ${payoutSet ? '<div style="font-size:.75rem;color:var(--leaf);margin-top:.5rem;">✓ Payouts go to this address</div>' : '<div style="font-size:.75rem;color:#D97706;margin-top:.5rem;">⚠ Not set yet — required before your first payout can go out</div>'}
+      </div>
+    </div>`;
+
   if (status === 'approved') {
     el.innerHTML = `
       <div class="earn-card">
@@ -1984,7 +2103,8 @@ function loadRevenue() {
           </div>
         </div>
       </div>
-      ${referralCard}`;
+      ${referralCard}
+      ${payoutCard}`;
   } else if (status === 'pending') {
     el.innerHTML = `<div class="earn-card" style="border-color:rgba(217,119,6,.2);">
       <div class="earn-card-body" style="text-align:center;padding:3rem;">
@@ -1992,7 +2112,8 @@ function loadRevenue() {
         <div style="font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--forest);margin-bottom:.5rem;">Application under review</div>
         <div style="font-size:.88rem;color:var(--muted);font-weight:300;max-width:400px;margin:0 auto;">We typically respond within 48 hours. Keep adding recipes in the meantime — they'll start earning the moment you're approved.</div>
       </div></div>
-      ${referralCard}`;
+      ${referralCard}
+      ${payoutCard}`;
   } else {
     el.innerHTML = `<div class="earn-apply">
       <div class="earn-apply-title">Apply to the Revenue Partner Program</div>
@@ -2014,7 +2135,8 @@ function loadRevenue() {
         </div>
       </div>
     </div>
-    ${referralCard}`;
+    ${referralCard}
+    ${payoutCard}`;
   }
 }
 
@@ -2071,6 +2193,101 @@ async function applyRev() {
 // ── RECIPES ──────────────────────────────────────────────
 function openAddRecipe() { document.getElementById('modal-recipe').classList.add('active'); }
 function cm(id) { document.getElementById(id).classList.remove('active'); }
+
+// ── BULK IMPORT ──────────────────────────────────────────
+// Real gap this closes: someone with 200 existing blog posts faced actual
+// manual labor -- one modal, one recipe -- before this platform had any
+// value to them. A CSV beats that without needing a new integration.
+let _bulkParsed = [];
+
+function openBulkImport() {
+  _bulkParsed = [];
+  document.getElementById('bulk-csv-file').value = '';
+  document.getElementById('bulk-import-preview').innerHTML = '';
+  document.getElementById('bulk-import-status').innerHTML = '';
+  document.getElementById('bulk-import-btn').disabled = true;
+  document.getElementById('bulk-import-btn').textContent = 'Select a file first';
+  document.getElementById('modal-bulk-import').classList.add('active');
+  document.getElementById('bulk-csv-file').addEventListener('change', handleBulkFile, { once: false });
+}
+
+// Minimal CSV parser -- handles quoted fields with embedded commas, which
+// a plain split(',') would silently mangle. Not a full RFC 4180 parser,
+// but real recipe titles/blog descriptions commonly contain commas, so
+// this much is necessary, not overkill.
+function parseCsv(text) {
+  const rows = [];
+  let row = [], field = '', inQuotes = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i], next = text[i + 1];
+    if (inQuotes) {
+      if (c === '"' && next === '"') { field += '"'; i++; }
+      else if (c === '"') { inQuotes = false; }
+      else field += c;
+    } else {
+      if (c === '"') inQuotes = true;
+      else if (c === ',') { row.push(field); field = ''; }
+      else if (c === '\n' || c === '\r') {
+        if (field !== '' || row.length) { row.push(field); rows.push(row); row = []; field = ''; }
+        if (c === '\r' && next === '\n') i++;
+      } else field += c;
+    }
+  }
+  if (field !== '' || row.length) { row.push(field); rows.push(row); }
+  return rows.filter(r => r.some(f => f.trim() !== ''));
+}
+
+function handleBulkFile(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function() {
+    let rows = parseCsv(String(reader.result));
+    // Drop a header row if the first cell looks like a label, not real data
+    if (rows.length && /^title$/i.test((rows[0][0] || '').trim())) rows = rows.slice(1);
+    _bulkParsed = rows
+      .map(r => ({ title: (r[0]||'').trim(), cuisine: (r[1]||'').trim(), time: (r[2]||'').trim(), url: (r[3]||'').trim() }))
+      .filter(r => r.title);
+
+    const previewEl = document.getElementById('bulk-import-preview');
+    const statusEl = document.getElementById('bulk-import-status');
+    const btnEl = document.getElementById('bulk-import-btn');
+    if (_bulkParsed.length === 0) {
+      previewEl.innerHTML = '';
+      statusEl.innerHTML = '<span style="color:#DC2626;">No valid rows found — each row needs at least a title in the first column.</span>';
+      btnEl.disabled = true; btnEl.textContent = 'Select a file first';
+      return;
+    }
+    previewEl.innerHTML = _bulkParsed.slice(0, 8).map(r =>
+      '<div style="font-size:.78rem;padding:.4rem 0;border-bottom:1px solid var(--border);">'+esc(r.title)+(r.cuisine?' · '+esc(r.cuisine):'')+(r.time?' · '+esc(r.time):'')+'</div>'
+    ).join('') + (_bulkParsed.length > 8 ? '<div style="font-size:.75rem;color:var(--muted);padding-top:.4rem;">+ '+(_bulkParsed.length-8)+' more</div>' : '');
+    statusEl.innerHTML = '<strong>'+_bulkParsed.length+' recipe'+(_bulkParsed.length===1?'':'s')+'</strong> ready to import.';
+    btnEl.disabled = false; btnEl.textContent = 'Import ' + _bulkParsed.length + ' recipe' + (_bulkParsed.length===1?'':'s');
+  };
+  reader.readAsText(file);
+}
+
+async function runBulkImport() {
+  if (!_bulkParsed.length) return;
+  const btn = document.getElementById('bulk-import-btn');
+  btn.disabled = true; btn.textContent = 'Importing…';
+  const rows = _bulkParsed.map(r => ({
+    user_id: _user.id, title: r.title, cuisine: r.cuisine, time: r.time, url: r.url,
+    emoji: '🍽', saves: 0, cooks: 0, clicks: 0
+  }));
+  const { data, error } = await sb.from('bc_recipes').insert(rows).select();
+  btn.disabled = false;
+  if (error) {
+    document.getElementById('bulk-import-status').innerHTML = '<span style="color:#DC2626;">Import failed — try again, or import a smaller batch.</span>';
+    btn.textContent = 'Import ' + _bulkParsed.length + ' recipes';
+    console.error('[bulk import]', error.message);
+    return;
+  }
+  _recipes = [...(data || []), ..._recipes];
+  cm('modal-bulk-import');
+  loadRecipes();
+  toast('✓ Imported ' + (data ? data.length : 0) + ' recipes!');
+}
 
 async function saveRecipe() {
   const title = document.getElementById('r-title').value.trim();
