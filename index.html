@@ -1093,7 +1093,7 @@ nav{position:sticky;top:0;z-index:100;background:var(--forest);border-bottom:3px
       <div class="earn-metrics">
         <div class="earn-metric"><div class="earn-metric-num" id="earn-subs">0</div><div class="earn-metric-label">Active subscribers</div></div>
         <div class="earn-metric"><div class="earn-metric-num">$0.90</div><div class="earn-metric-label">Per sub / month</div></div>
-        <div class="earn-metric"><div class="earn-metric-num">30%</div><div class="earn-metric-label">Your cut — forever</div></div>
+        <div class="earn-metric"><div class="earn-metric-num" id="earn-rate">30%</div><div class="earn-metric-label" id="earn-rate-label">Your cut — forever</div></div>
         <div class="earn-metric"><div class="earn-metric-num">15th</div><div class="earn-metric-label">Paid monthly</div></div>
       </div>
     </div>
@@ -1371,6 +1371,20 @@ const SUPABASE_URL = 'https://axqkdhzcfcroxlkducea.supabase.co';
 const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4cWtkaHpjZmNyb3hsa2R1Y2VhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI2NzU5OTUsImV4cCI6MjA4ODI1MTk5NX0.4gl0rnBx8s7RN33VDXhLM3PN5hoIzAfgQGIq2L2hZfs';
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
 
+// Referral link capture -- runs on every page load. Stores the referring
+// blogger's user id from ?ref=<uuid> in localStorage so it survives
+// through to signup. Actually converts into a reward in handleSignup()
+// below -- see apply_referral in api.js for what happens server-side.
+(function _captureReferral() {
+  try {
+    var params = new URLSearchParams(window.location.search);
+    var ref = (params.get('ref') || '').trim();
+    if (ref && /^[0-9a-f-]{20,40}$/i.test(ref)) {
+      localStorage.setItem('bc_pending_referral', ref);
+    }
+  } catch (e) {}
+})();
+
 // ── STATE ────────────────────────────────────────────────
 var _user = null, _profile = null, _recipes = [];
 var _w = {size:'small',shape:'rounded',style:'minimal',color:'#1C3A1A',font:'Playfair Display',btn:'Save to my week',cuisine:true,time:true,attr:true};
@@ -1423,6 +1437,21 @@ async function handleSignUp() {
   btn.disabled = false; btn.textContent = 'Start free →';
   enter();
   toast('Welcome to Blogger Cookbook! 🎉');
+
+  // Referral reward -- "new blogger just signs up" is the qualifying
+  // event, so this fires right here, not gated behind any later step.
+  try {
+    var pendingRef = localStorage.getItem('bc_pending_referral');
+    if (pendingRef && data.session && data.session.access_token) {
+      fetch('/.netlify/functions/api', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ action: 'apply_referral', token: data.session.access_token, data: { referrerId: pendingRef } })
+      }).then(function(r){ return r.json(); }).finally(function(){
+        localStorage.removeItem('bc_pending_referral');
+      });
+    }
+  } catch(e) {}
 }
 
 async function handleSignIn() {
@@ -1605,15 +1634,39 @@ function loadRevenue() {
   const el = document.getElementById('revenue-content');
   const bigEl = document.getElementById('earn-big');
   const subsEl = document.getElementById('earn-subs');
+  const rateEl = document.getElementById('earn-rate');
+  const rateLabelEl = document.getElementById('earn-rate-label');
   if (!_user) return;
 
   const saves  = _recipes.reduce((a,r) => a + (r.saves||0), 0);
   const status = _profile?.revenue_status || 'none';
-  const earned = (saves * 0.009).toFixed(2);
+
+  // Referral boost: 35% (up from 30%) for 90 days per successful referral,
+  // stacking if more than one lands while a prior boost is still active.
+  const boostActive = _profile?.revenue_boost_until && new Date(_profile.revenue_boost_until).getTime() > Date.now();
+  const rate = boostActive ? 0.35 : 0.30;
+  const perSub = boostActive ? 1.05 : 0.90; // 35%/30% of the ~$3 Pro subscription
+  const earned = (saves * perSub * 0.01).toFixed(2);
   const subs   = Math.floor(saves * 0.01);
 
   if (bigEl) bigEl.textContent = status === 'approved' ? '$' + earned : '$0.00';
   if (subsEl) subsEl.textContent = status === 'approved' ? subs : '0';
+  if (rateEl) rateEl.textContent = (rate * 100) + '%';
+  if (rateLabelEl) rateLabelEl.textContent = boostActive ? 'Your cut (boosted!)' : 'Your cut — forever';
+
+  const referralCard = `
+    <div class="earn-card" style="border-color:rgba(45,90,39,.25);">
+      <div class="earn-card-header"><div class="earn-card-title">🎁 Invite bloggers, earn more</div></div>
+      <div class="earn-card-body">
+        <p style="font-size:.85rem;color:var(--muted);font-weight:300;margin-bottom:1rem;">Every blogger who signs up through your link bumps your cut to <strong>35%</strong> for 3 months — stacks if more than one joins while a boost is active.</p>
+        <div class="earn-breakdown" style="margin-bottom:1rem;">
+          <div class="earn-br-item"><div class="earn-br-num">${_profile?.referral_count || 0}</div><div class="earn-br-label">Bloggers referred</div></div>
+          <div class="earn-br-item"><div class="earn-br-num">${boostActive ? '35%' : '30%'}</div><div class="earn-br-label">Current rate</div></div>
+        </div>
+        ${boostActive ? '<div style="font-size:.78rem;color:var(--leaf);font-weight:600;margin-bottom:1rem;">✓ Boost active until ' + new Date(_profile.revenue_boost_until).toLocaleDateString() + '</div>' : ''}
+        <button class="btn-primary" style="width:100%;" onclick="shareReferralLink()">Share your invite link →</button>
+      </div>
+    </div>`;
 
   if (status === 'approved') {
     el.innerHTML = `
@@ -1622,7 +1675,7 @@ function loadRevenue() {
         <div class="earn-card-body">
           <div class="earn-breakdown">
             <div class="earn-br-item"><div class="earn-br-num">${subs}</div><div class="earn-br-label">Active subscribers</div></div>
-            <div class="earn-br-item"><div class="earn-br-num">$0.90</div><div class="earn-br-label">Per subscriber / mo</div></div>
+            <div class="earn-br-item"><div class="earn-br-num">$${perSub.toFixed(2)}</div><div class="earn-br-label">Per subscriber / mo</div></div>
             <div class="earn-br-item"><div class="earn-br-num">$${earned}</div><div class="earn-br-label">Your earnings this month</div></div>
           </div>
         </div>
@@ -1633,17 +1686,19 @@ function loadRevenue() {
           <div class="earn-timeline">
             <div class="earn-tl-item"><div class="earn-tl-icon">👨‍👩‍👧</div><div class="earn-tl-info"><div class="earn-tl-title">Family saves your recipe</div><div class="earn-tl-sub">Via your widget — tracked to your account</div></div></div>
             <div class="earn-tl-item"><div class="earn-tl-icon">⭐</div><div class="earn-tl-info"><div class="earn-tl-title">They upgrade to Fern Pro</div><div class="earn-tl-sub">Attributed to you, permanently</div></div></div>
-            <div class="earn-tl-item"><div class="earn-tl-icon">💰</div><div class="earn-tl-info"><div class="earn-tl-title">You earn 30% every month</div><div class="earn-tl-sub">$0.90/sub · Paid on the 15th · No minimums</div></div><div class="earn-tl-amount">$0.90/mo</div></div>
+            <div class="earn-tl-item"><div class="earn-tl-icon">💰</div><div class="earn-tl-info"><div class="earn-tl-title">You earn ${(rate*100)}% every month</div><div class="earn-tl-sub">$${perSub.toFixed(2)}/sub · Paid on the 15th · No minimums</div></div><div class="earn-tl-amount">$${perSub.toFixed(2)}/mo</div></div>
           </div>
         </div>
-      </div>`;
+      </div>
+      ${referralCard}`;
   } else if (status === 'pending') {
     el.innerHTML = `<div class="earn-card" style="border-color:rgba(217,119,6,.2);">
       <div class="earn-card-body" style="text-align:center;padding:3rem;">
         <div style="font-size:2.5rem;margin-bottom:1rem;">⏳</div>
         <div style="font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--forest);margin-bottom:.5rem;">Application under review</div>
         <div style="font-size:.88rem;color:var(--muted);font-weight:300;max-width:400px;margin:0 auto;">We typically respond within 48 hours. Keep adding recipes in the meantime — they'll start earning the moment you're approved.</div>
-      </div></div>`;
+      </div></div>
+      ${referralCard}`;
   } else {
     el.innerHTML = `<div class="earn-apply">
       <div class="earn-apply-title">Apply to the Revenue Partner Program</div>
@@ -1664,7 +1719,21 @@ function loadRevenue() {
           <div class="earn-tl-item"><div class="earn-tl-icon">💰</div><div class="earn-tl-info"><div class="earn-tl-title">$45/month from that one recipe</div><div class="earn-tl-sub">10 recipes like that = $450/mo recurring</div></div><div class="earn-tl-amount">$45/mo</div></div>
         </div>
       </div>
-    </div>`;
+    </div>
+    ${referralCard}`;
+  }
+}
+
+function shareReferralLink() {
+  if (!_user) return;
+  var link = window.location.origin + '/?ref=' + _user.id;
+  var text = "I've been using Blogger Cookbook to protect and monetize my recipes \u2014 thought you'd like it. Sign up with my link and I get a 35% revenue share for 3 months:";
+  if (navigator.share) {
+    navigator.share({ title: 'Try Blogger Cookbook', text: text, url: link }).catch(function(){});
+  } else if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text + ' ' + link).then(function(){ toast('🔗 Referral link copied!'); }).catch(function(){ window.prompt('Copy your referral link:', link); });
+  } else {
+    window.prompt('Copy your referral link:', link);
   }
 }
 
