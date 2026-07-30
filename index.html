@@ -1503,7 +1503,7 @@ async function handleSignUp() {
   _recipes = [];
   btn.disabled = false; btn.textContent = 'Start free →';
   enter();
-  toast('Welcome to Blogger Cookbook! 🎉');
+  showBloggerWizard();
 
   // Referral reward -- "new blogger just signs up" is the qualifying
   // event, so this fires right here, not gated behind any later step.
@@ -1519,6 +1519,146 @@ async function handleSignUp() {
       });
     }
   } catch(e) {}
+}
+
+// ── ONBOARDING WIZARD ────────────────────────────────────
+// Shows once, right after a fresh signup -- guides through the same 3
+// steps the marketing site already promises ("under 2 minutes: create
+// account, build widget, add recipes & apply"). Every step does the real
+// thing (real recipe insert, real embed code, real revenue application),
+// nothing here is a mockup of a step that doesn't actually work.
+function showBloggerWizard() {
+  var overlay = document.createElement('div');
+  overlay.id = 'bc-wizard';
+  overlay.style.cssText = 'position:fixed;inset:0;z-index:10000;background:linear-gradient(160deg,#0F2010 0%,#1C3A1A 60%,#2D5A27 100%);display:flex;align-items:flex-start;justify-content:center;padding:3rem 1.25rem 2rem;overflow-y:auto';
+  document.body.appendChild(overlay);
+
+  var step = 0;
+  var TOTAL = 4;
+
+  function shell(inner, opts) {
+    opts = opts || {};
+    var dots = '';
+    for (var i = 0; i < TOTAL; i++) {
+      dots += '<div style="height:5px;width:' + (i === step ? '22px' : '7px') + ';border-radius:3px;background:' + (i <= step ? '#1C3A1A' : '#E5E1D8') + ';transition:width .2s"></div>';
+    }
+    overlay.innerHTML = '<div style="background:#fff;border-radius:20px;max-width:420px;width:100%;padding:2rem 1.75rem;">'
+      + '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem">'
+      + '<div style="display:flex;gap:.3rem">' + dots + '</div>'
+      + (opts.showSkip ? '<button id="bc-wiz-skip" style="background:none;border:none;color:#6B6B6B;font-size:.78rem;cursor:pointer;font-family:inherit">Skip for now</button>' : '')
+      + '</div>' + inner + '</div>';
+    var skipBtn = document.getElementById('bc-wiz-skip');
+    if (skipBtn) skipBtn.addEventListener('click', function() { step++; render(); });
+  }
+
+  function render() {
+    if (step === 0) renderWelcome();
+    else if (step === 1) renderAddRecipe();
+    else if (step === 2) renderWidget();
+    else if (step === 3) renderRevenue();
+    else renderDone();
+  }
+
+  function renderWelcome() {
+    shell(''
+      + '<div style="text-align:center;padding:.5rem 0 1rem">'
+      + '<div style="font-size:2rem;margin-bottom:.75rem">👋</div>'
+      + '<div style="font-family:\'Playfair Display\',serif;font-size:1.3rem;color:#1C3A1A;margin-bottom:.5rem">Welcome to Blogger Cookbook!</div>'
+      + '<div style="font-size:.85rem;color:#6B6B6B;line-height:1.5">Three quick things and you\'re fully set up — add a recipe, grab your widget code, and apply to start earning. Under 2 minutes.</div>'
+      + '</div>'
+      + '<button id="bc-wiz-next" style="width:100%;background:#1C3A1A;color:#fff;border:none;border-radius:10px;padding:.85rem;font-size:.92rem;font-weight:700;cursor:pointer;font-family:inherit">Let\'s go →</button>'
+    );
+    document.getElementById('bc-wiz-next').addEventListener('click', function() { step++; render(); });
+  }
+
+  function renderAddRecipe() {
+    shell(''
+      + '<div style="font-family:\'Playfair Display\',serif;font-size:1.15rem;color:#1C3A1A;margin-bottom:.3rem">Add your first recipe</div>'
+      + '<div style="font-size:.82rem;color:#6B6B6B;margin-bottom:1.1rem">This is what shows up in Fern, protected by your widget, credited to you.</div>'
+      + wizField('wr-title', 'Recipe title', 'Creamy Tuscan Chicken Pasta')
+      + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem">' + wizField('wr-cuisine', 'Cuisine', 'Italian') + wizField('wr-time', 'Cook time', '30 min') + '</div>'
+      + wizField('wr-url', 'Blog post URL', 'https://yourblog.com/tuscan-chicken')
+      + '<div id="bc-wiz-err" style="color:#DC2626;font-size:.78rem;margin-bottom:.6rem;display:none"></div>'
+      + '<button id="bc-wiz-next" style="width:100%;background:#1C3A1A;color:#fff;border:none;border-radius:10px;padding:.85rem;font-size:.92rem;font-weight:700;cursor:pointer;font-family:inherit">Add recipe →</button>',
+      { showSkip: true }
+    );
+    document.getElementById('bc-wiz-next').addEventListener('click', async function() {
+      var title = document.getElementById('wr-title').value.trim();
+      var errEl = document.getElementById('bc-wiz-err');
+      if (!title) { errEl.textContent = 'Recipe title is required.'; errEl.style.display = 'block'; return; }
+      var btn = this;
+      btn.disabled = true; btn.textContent = 'Adding…';
+      var { data: recipe, error } = await sb.from('bc_recipes').insert({
+        user_id: _user.id, title,
+        cuisine: document.getElementById('wr-cuisine').value.trim(),
+        time: document.getElementById('wr-time').value.trim(),
+        url: document.getElementById('wr-url').value.trim(),
+        emoji: '🍽', saves: 0, cooks: 0, clicks: 0
+      }).select().single();
+      btn.disabled = false; btn.textContent = 'Add recipe →';
+      if (error) { errEl.textContent = 'Could not add recipe — try again.'; errEl.style.display = 'block'; console.error('[wizard add recipe]', error.message); return; }
+      _recipes.unshift(recipe);
+      if (typeof loadDash === 'function') loadDash();
+      step++; render();
+    });
+  }
+
+  function renderWidget() {
+    var blog = (_profile && _profile.blog || 'yourblog.com').replace(/https?:\/\//, '').split('/')[0];
+    var code = '<script src="https://cdn.myfernai.com/widget.js"\n  data-blog="' + blog + '"\n  data-color="#1C3A1A"\n  data-bg="#ffffff"\n  data-text="#1A1A1A"\n  data-border="#E5E1D8"\n  data-shape="rounded"\n  data-size="small"\n  data-style="minimal">\x3c/script>';
+    shell(''
+      + '<div style="font-family:\'Playfair Display\',serif;font-size:1.15rem;color:#1C3A1A;margin-bottom:.3rem">Your widget code</div>'
+      + '<div style="font-size:.82rem;color:#6B6B6B;margin-bottom:1rem">Paste this one line into your blog. Scraper protection is live the moment it\'s on the page. Customize the look anytime in Brand Studio.</div>'
+      + '<pre id="bc-wiz-code" style="background:#F5F0E8;border-radius:8px;padding:.85rem;font-size:.68rem;line-height:1.5;overflow-x:auto;white-space:pre-wrap;word-break:break-all;color:#1A1A1A;margin-bottom:.9rem;font-family:monospace">' + code.replace(/</g, '&lt;') + '</pre>'
+      + '<button id="bc-wiz-copy" style="width:100%;background:none;border:1.5px solid #1C3A1A;color:#1C3A1A;border-radius:10px;padding:.75rem;font-size:.85rem;font-weight:700;cursor:pointer;margin-bottom:.6rem;font-family:inherit">Copy code</button>'
+      + '<button id="bc-wiz-next" style="width:100%;background:#1C3A1A;color:#fff;border:none;border-radius:10px;padding:.85rem;font-size:.92rem;font-weight:700;cursor:pointer;font-family:inherit">Got it, next →</button>',
+      { showSkip: true }
+    );
+    document.getElementById('bc-wiz-copy').addEventListener('click', function() {
+      var btn = this;
+      navigator.clipboard.writeText(code).then(function() { btn.textContent = '✓ Copied!'; setTimeout(function() { btn.textContent = 'Copy code'; }, 1500); }).catch(function() {});
+    });
+    document.getElementById('bc-wiz-next').addEventListener('click', function() { step++; render(); });
+  }
+
+  function renderRevenue() {
+    shell(''
+      + '<div style="font-family:\'Playfair Display\',serif;font-size:1.15rem;color:#1C3A1A;margin-bottom:.3rem">Apply to earn</div>'
+      + '<div style="font-size:.82rem;color:#6B6B6B;margin-bottom:1rem;line-height:1.5">30% commission on every Fern Pro subscriber your recipes drive. Recurring, every month, for as long as they stay subscribed. We typically respond within 48 hours.</div>'
+      + '<button id="bc-wiz-apply" style="width:100%;background:#1C3A1A;color:#fff;border:none;border-radius:10px;padding:.85rem;font-size:.92rem;font-weight:700;cursor:pointer;font-family:inherit">Apply now — it\'s free →</button>',
+      { showSkip: true }
+    );
+    document.getElementById('bc-wiz-apply').addEventListener('click', async function() {
+      var btn = this;
+      btn.disabled = true; btn.textContent = 'Submitting…';
+      var { error } = await sb.from('bc_profiles').upsert({ id: _user.id, revenue_status: 'pending', updated_at: new Date().toISOString() });
+      if (!error && _profile) _profile.revenue_status = 'pending';
+      step++; render();
+    });
+  }
+
+  function renderDone() {
+    shell(''
+      + '<div style="text-align:center;padding:.5rem 0 1rem">'
+      + '<div style="font-size:2rem;margin-bottom:.75rem">✓</div>'
+      + '<div style="font-family:\'Playfair Display\',serif;font-size:1.3rem;color:#1C3A1A;margin-bottom:.5rem">You\'re all set.</div>'
+      + '<div style="font-size:.85rem;color:#6B6B6B;line-height:1.5">Add more recipes anytime, and check Earnings once your application clears.</div>'
+      + '</div>'
+      + '<button id="bc-wiz-close" style="width:100%;background:#1C3A1A;color:#fff;border:none;border-radius:10px;padding:.85rem;font-size:.92rem;font-weight:700;cursor:pointer;font-family:inherit">Go to my dashboard →</button>'
+    );
+    document.getElementById('bc-wiz-close').addEventListener('click', function() {
+      overlay.remove();
+      if (typeof loadDash === 'function') loadDash();
+      toast('Welcome to Blogger Cookbook! 🎉');
+    });
+  }
+
+  function wizField(id, label, placeholder) {
+    return '<div style="margin-bottom:.8rem"><label style="display:block;font-size:.7rem;font-weight:700;color:#4A7C2F;text-transform:uppercase;letter-spacing:.04em;margin-bottom:.25rem">' + label + '</label>'
+      + '<input type="text" id="' + id + '" placeholder="' + placeholder + '" style="width:100%;padding:.6rem .7rem;border:1.5px solid #E5E1D8;border-radius:8px;font-size:.85rem;font-family:inherit;color:#1A1A1A;background:#F9F7F4"></div>';
+  }
+
+  render();
 }
 
 async function handleSignIn() {
