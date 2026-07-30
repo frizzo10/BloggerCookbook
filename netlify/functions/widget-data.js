@@ -81,11 +81,20 @@ exports.handler = async (event) => {
     if (pageUrl) {
       const { data: recipes, error: recipeErr } = await supabase
         .from('bc_recipes')
-        .select('title, cuisine, time, emoji, url')
+        .select('id, title, cuisine, time, emoji, url')
         .eq('user_id', profile.id);
       if (recipeErr) throw recipeErr;
       const match = (recipes || []).find(r => normalizeUrl(r.url) === pageUrl);
-      if (match) recipe = { title: match.title, cuisine: match.cuisine, time: match.time, emoji: match.emoji };
+      if (match) {
+        recipe = { title: match.title, cuisine: match.cuisine, time: match.time, emoji: match.emoji };
+        // Real confirmation signal for the "missing widget" nudge on the
+        // dashboard: this only runs when the widget script actually loaded
+        // on a page whose URL matches a recipe -- i.e. proof the widget is
+        // genuinely live there, not just a guess based on recipe age.
+        // Fire-and-forget: a failure here shouldn't break serving the
+        // recipe data itself.
+        supabase.from('bc_recipes').update({ widget_confirmed_at: new Date().toISOString() }).eq('id', match.id).then(() => {}, () => {});
+      }
     }
 
     let widgetConfig = null;
