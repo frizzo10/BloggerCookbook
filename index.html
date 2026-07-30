@@ -1266,8 +1266,7 @@ nav{position:sticky;top:0;z-index:100;background:var(--forest);border-bottom:3px
         </div>
       </div>
 
-      <div class="bs-control-section">
-        <div class="bs-cs-label">Shape</div>
+      <div class="bs-control-section" id="bs-section-shape">
         <div class="bs-chips">
           <button class="bs-chip on" onclick="bsw('shape','rounded',this)">Rounded</button>
           <button class="bs-chip" onclick="bsw('shape','sharp',this)">Sharp</button>
@@ -1275,7 +1274,7 @@ nav{position:sticky;top:0;z-index:100;background:var(--forest);border-bottom:3px
         </div>
       </div>
 
-      <div class="bs-control-section">
+      <div class="bs-control-section" id="bs-section-size">
         <div class="bs-cs-label">Size</div>
         <div class="bs-chips">
           <button class="bs-chip on" onclick="bsw('size','small',this)">Compact</button>
@@ -1285,7 +1284,7 @@ nav{position:sticky;top:0;z-index:100;background:var(--forest);border-bottom:3px
         </div>
       </div>
 
-      <div class="bs-control-section">
+      <div class="bs-control-section" id="bs-section-font">
         <div class="bs-cs-label">Font</div>
         <div class="bs-chips">
           <button class="bs-chip on" style="font-family:'Playfair Display',serif" onclick="bsw('font','Playfair Display',this)">Playfair</button>
@@ -1300,7 +1299,7 @@ nav{position:sticky;top:0;z-index:100;background:var(--forest);border-bottom:3px
         <input type="text" class="bs-input" id="bs-btn-text" value="Save to my week" oninput="rw()" placeholder="Save to my week">
       </div>
 
-      <div class="bs-control-section">
+      <div class="bs-control-section" id="bs-section-show">
         <div class="bs-cs-label">Show on widget</div>
         <div>
           <div class="bs-toggle-row">
@@ -1541,8 +1540,12 @@ function startWidgetTour(onComplete) {
 
   var TOUR_STEPS = [
     { target: '.bs-color-grid', text: 'Pick colors that match your blog. Everything updates live as you customize.' },
-    { target: '#bs-btn-text', text: 'Customize the button text \u2014 this is what visitors click to save your recipe.' },
-    { target: '#live-widget', text: "Here's exactly how it'll look inside a real blog post." },
+    { target: '#bs-section-shape', text: 'Rounded, sharp, or pill-shaped \u2014 pick whatever fits your blog\'s existing style.' },
+    { target: '#bs-section-size', text: 'Compact card, full-width banner, or anywhere in between. Fits into a sidebar or spans the whole post.' },
+    { target: '#bs-section-font', text: "Match your blog's own typography, or pick something different to make the widget stand out from the page." },
+    { target: '#bs-btn-text', text: 'Customize the button text \u2014 this is what visitors click to save your recipe. Defaults to "Save to my week."' },
+    { target: '#bs-section-show', text: 'Choose what shows on the widget itself: cuisine type, cook time, and the "Powered by Fern" credit line \u2014 all optional, all your call.' },
+    { target: '#live-widget', text: "Here's exactly how it'll look inside a real blog post, updating as you go." },
     { target: '.bs-code-panel', text: "This is your embed code \u2014 copy this one line into your blog once, and you're done." },
   ];
   var i = 0;
@@ -1680,7 +1683,7 @@ function showBloggerWizard() {
     shell(''
       + '<div style="font-family:\'Playfair Display\',serif;font-size:1.15rem;color:#1C3A1A;margin-bottom:.3rem">Build your widget</div>'
       + '<div style="font-size:.82rem;color:#6B6B6B;margin-bottom:1.1rem;line-height:1.5">Instead of dumping default code on you, let\'s walk through the real Brand Studio together \u2014 pick colors, see the live preview, grab your actual embed code.</div>'
-      + '<button id="bc-wiz-next" style="width:100%;background:#1C3A1A;color:#fff;border:none;border-radius:10px;padding:.85rem;font-size:.92rem;font-weight:700;cursor:pointer;font-family:inherit">Take the 30-second tour →</button>',
+      + '<button id="bc-wiz-next" style="width:100%;background:#1C3A1A;color:#fff;border:none;border-radius:10px;padding:.85rem;font-size:.92rem;font-weight:700;cursor:pointer;font-family:inherit">Take the guided tour →</button>',
       { showSkip: true }
     );
     document.getElementById('bc-wiz-next').addEventListener('click', function() {
