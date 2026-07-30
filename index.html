@@ -1539,14 +1539,14 @@ function startWidgetTour(onComplete) {
   showPage('widget'); // this already triggers applyWidgetState()/rw() via showPage's own hook
 
   var TOUR_STEPS = [
-    { target: '.bs-color-grid', text: 'Pick colors that match your blog. Everything updates live as you customize.' },
-    { target: '#bs-section-shape', text: 'Rounded, sharp, or pill-shaped \u2014 pick whatever fits your blog\'s existing style.' },
-    { target: '#bs-section-size', text: 'Compact card, full-width banner, or anywhere in between. Fits into a sidebar or spans the whole post.' },
-    { target: '#bs-section-font', text: "Match your blog's own typography, or pick something different to make the widget stand out from the page." },
-    { target: '#bs-btn-text', text: 'Customize the button text \u2014 this is what visitors click to save your recipe. Defaults to "Save to my week."' },
-    { target: '#bs-section-show', text: 'Choose what shows on the widget itself: cuisine type, cook time, and the "Powered by Fern" credit line \u2014 all optional, all your call.' },
-    { target: '#live-widget', text: "Here's exactly how it'll look inside a real blog post, updating as you go." },
-    { target: '.bs-code-panel', text: "This is your embed code \u2014 copy this one line into your blog once, and you're done." },
+    { target: '.bs-color-grid', text: "Match these to your blog's own palette, or use them to make the widget pop against your layout. Background, button, text, and border \u2014 change any of them and the live preview updates instantly, so you always know exactly what visitors are about to see." },
+    { target: '#bs-section-shape', text: "Rounded corners feel soft and approachable \u2014 most food blogs use this. Sharp corners read more editorial and modern. Pill-shaped works well for a compact, button-like feel in a sidebar. Pick whichever already matches how the rest of your site looks." },
+    { target: '#bs-section-size', text: "Compact fits neatly inside a paragraph or sidebar without disrupting your post's flow. Medium and Large give it more visual weight if you want it to stand out. Full width spans the entire content area \u2014 good for a strong call-to-action at the end of a post." },
+    { target: '#bs-section-font', text: "Playfair Display feels warm and editorial, close to a lot of food blog headlines. Georgia is a classic, readable serif. Modern (DM Sans) is clean and sans-serif if your blog leans minimal. Mono is a distinctive choice if you want the widget to stand apart from your body text on purpose." },
+    { target: '#bs-btn-text', text: "The default is \u201cSave to my week\u201d \u2014 but this is exactly what shows on the button, word for word, so make it match your own voice. Something like \u201cAdd to Fern\u201d or \u201cSave this recipe\u201d works just as well. Keep it short enough to sit comfortably on one line." },
+    { target: '#bs-section-show', text: "Cuisine type and cook time give visitors a quick sense of the recipe before they click through. The Fern credit line is a small \u201cPowered by Fern\u201d link at the bottom \u2014 optional, but it's also how new families discover Fern in the first place, so most bloggers leave it on." },
+    { target: '#live-widget', text: "This mock blog post shows exactly how your widget will sit inside a real article \u2014 right where a reader would expect a call-to-action \u2014 without you needing to publish anything just to check it." },
+    { target: '.bs-code-panel', text: "This single script tag is the entire integration \u2014 no plugin, no separate account linking on your CMS side. Paste it once into any blog post, or into your theme if you want it on every post automatically, and it's live immediately. Works on WordPress, Squarespace, Substack, Ghost, Wix, or any custom HTML." },
   ];
   var i = 0;
   var tourCard, highlightEl;
