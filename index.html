@@ -1456,6 +1456,13 @@ async function init() {
     enter();
   } else {
     document.getElementById('loading-screen').classList.add('hidden');
+    // Deep-link support -- lets the marketing site's CTA send bloggers
+    // straight to the signup form instead of just the landing page,
+    // e.g. app.bloggercookbook.com/?page=signup
+    try {
+      var deepLinkPage = new URLSearchParams(window.location.search).get('page');
+      if (deepLinkPage === 'signup' || deepLinkPage === 'signin') showPage(deepLinkPage);
+    } catch (e) {}
   }
 }
 
