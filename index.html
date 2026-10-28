@@ -2221,10 +2221,11 @@ async function runCookbook() {
       title: document.getElementById('cb-title').value, author: document.getElementById('cb-author').value,
       trim: document.getElementById('cb-trim').value, rights: true, recipes: recipes
     });
-    var t0 = Date.now(), misses = 0;
+    var t0 = Date.now(), misses = 0, errs = 0;
     while (Date.now() - t0 < 170000) {
       await new Promise(function(r){ setTimeout(r, 3000); });
-      var s2 = await cbCall('pdf_status', { jobId: job.jobId });
+      var s2;
+      try { s2 = await cbCall('pdf_status', { jobId: job.jobId }); } catch (pe) { if (++errs > 8) throw pe; continue; }
       if (s2.status === 'done' && s2.result && s2.result.url) {
         st.innerHTML = '<strong>Your cookbook is ready</strong> (' + s2.result.pages + ' pages, ' + s2.result.recipes + ' recipes).<br><a href="' + esc(s2.result.url) + '" target="_blank" rel="noopener" style="color:var(--forest);font-weight:700;">Open the PDF ↗</a>' +
           (skipped.length ? '<br><span style="color:var(--muted);">Left out (could not read): ' + esc(skipped.join(', ')) + '</span>' : '') +

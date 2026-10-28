@@ -52,7 +52,13 @@ exports.handler = async (event) => {
 
     // Hand the finished recipes to the shared PDF engine. Returns a jobId to poll.
     if (action === 'start_pdf') {
-      const recipes = Array.isArray(data.recipes) ? data.recipes.slice(0, MAX_RECIPES) : [];
+      // Only the known recipe fields, trimmed, are passed on (the browser could send anything).
+      const recipes = (Array.isArray(data.recipes) ? data.recipes : []).slice(0, MAX_RECIPES).map((x) => x && typeof x === 'object' ? ({
+        title: txt(x.title, 120), emoji: txt(x.emoji, 8), cuisine: txt(x.cuisine, 40), mealType: txt(x.mealType, 30),
+        time: txt(x.time, 30), difficulty: txt(x.difficulty, 20), description: txt(x.description, 400),
+        ingredients: list(x.ingredients), instructions: list(x.instructions), notes: txt(x.notes, 400),
+        photo: /^https?:\/\//i.test(x.photo || '') ? txt(x.photo, 800) : ''
+      }) : null).filter((x) => x && x.title && x.ingredients.length && x.instructions.length);
       if (recipes.length < 3) return reply(400, { error: 'Pick at least 3 recipes.' });
       if (data.rights !== true) return reply(400, { error: 'Please confirm these are your own recipes.' });
       const title = txt(data.title, 80) || 'My Cookbook';

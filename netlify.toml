@@ -12,3 +12,7 @@
   [headers.values]
     X-Frame-Options = "DENY"
     X-Content-Type-Options = "nosniff"
+
+# Cookbook maker bridge: Fern reads recipe pages and builds covers, which can take longer than the 10 s default.
+[functions."cookbook"]
+  timeout = 26
