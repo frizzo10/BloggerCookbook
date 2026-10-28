@@ -74,6 +74,19 @@ exports.handler = async (event) => {
       return reply(200, { jobId });
     }
 
+    // Amazon KDP full-wrap cover, sized from the interior's page count (Fern's cookbook-kdp-cover).
+    if (action === 'kdp_cover') {
+      const urls = (Array.isArray(data.photoUrls) ? data.photoUrls : []).filter((u) => /^https?:\/\//i.test(u)).slice(0, 6);
+      const r = await fetch(`${FERN}/cookbook-kdp-cover`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token, title: txt(data.title, 90), author: txt(data.author, 60), pages: data.pages,
+          paper: data.paper, trim: data.trim, blurb: txt(data.blurb, 420), photoUrls: urls })
+      });
+      const j = await r.json().catch(() => ({}));
+      if (!r.ok) return reply(502, { error: j.error || 'Could not make the cover.' });
+      return reply(200, j);
+    }
+
     if (action === 'pdf_status') {
       const jobId = txt(data.jobId, 60);
       if (!/^[0-9a-f-]{36}$/i.test(jobId)) return reply(400, { error: 'Bad job.' });

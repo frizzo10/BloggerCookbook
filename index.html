@@ -1398,6 +1398,7 @@ nav{position:sticky;top:0;z-index:100;background:var(--forest);border-bottom:3px
     <label style="display:flex;gap:.5rem;font-size:.78rem;line-height:1.4;margin-bottom:.8rem;"><input type="checkbox" id="cb-rights"> <span>These recipes and their text are my own, and I have the right to put them in a book.</span></label>
     <div id="cb-status" style="font-size:.8rem;margin-bottom:.75rem;line-height:1.5;"></div>
     <button class="btn-full" id="cb-btn" onclick="runCookbook()">Make my cookbook PDF</button>
+    <div id="cb-kdp"></div>
   </div>
 </div>
 
@@ -2190,6 +2191,7 @@ function openCookbookMaker() {
   var withUrl = _recipes.filter(function(r){ return r.url; });
   document.getElementById('cb-author').value = (_profile && _profile.name) || '';
   document.getElementById('cb-status').innerHTML = '';
+  document.getElementById('cb-kdp').innerHTML = '';
   document.getElementById('cb-btn').disabled = false;
   document.getElementById('cb-list').innerHTML = withUrl.length
     ? withUrl.map(function(r){
@@ -2226,7 +2228,15 @@ async function runCookbook() {
       if (s2.status === 'done' && s2.result && s2.result.url) {
         st.innerHTML = '<strong>Your cookbook is ready</strong> (' + s2.result.pages + ' pages, ' + s2.result.recipes + ' recipes).<br><a href="' + esc(s2.result.url) + '" target="_blank" rel="noopener" style="color:var(--forest);font-weight:700;">Open the PDF ↗</a>' +
           (skipped.length ? '<br><span style="color:var(--muted);">Left out (could not read): ' + esc(skipped.join(', ')) + '</span>' : '') +
-          '<br><span style="color:var(--muted);">Save it to your computer now. Next: upload it to Lemon Squeezy or Amazon KDP to sell it.</span>';
+          '<br><span style="color:var(--muted);">Save it to your computer now. Next: upload it to Lemon Squeezy, or make a cover below for Amazon KDP.</span>';
+        window._cbLast = { pages: s2.result.pages, color: !!s2.result.color, trim: s2.result.trim, title: document.getElementById('cb-title').value, author: document.getElementById('cb-author').value, photos: recipes.map(function(x){ return x.photo; }).filter(Boolean) };
+        var opts = window._cbLast.color
+          ? '<option value="premium">Premium color paper</option><option value="standard">Standard color paper</option>'
+          : '<option value="white">White paper (black &amp; white)</option><option value="cream">Cream paper (black &amp; white)</option>';
+        document.getElementById('cb-kdp').innerHTML = '<div style="font-size:.78rem;font-weight:700;margin:.8rem 0 .35rem;">Amazon KDP paperback cover</div>' +
+          '<div style="font-size:.76rem;color:var(--muted);margin-bottom:.5rem;line-height:1.4;">Pick the paper you will choose on KDP. The spine width depends on it, so it must match.</div>' +
+          '<select id="cb-paper" style="width:100%;margin-bottom:.5rem;padding:.6rem;border:1px solid var(--border);border-radius:8px;font-family:inherit;">' + opts + '</select>' +
+          '<button class="btn-full" id="cb-kdp-btn" onclick="runKdpCover()">Make my KDP cover</button><div id="cb-kdp-out" style="font-size:.8rem;line-height:1.5;"></div>';
         btn.disabled = false; return;
       }
       if (s2.status === 'error') throw new Error(s2.error || 'The PDF failed.');
@@ -2237,6 +2247,19 @@ async function runCookbook() {
     st.innerHTML = '<span style="color:#DC2626;">' + esc(e.message) + '</span>';
     btn.disabled = false;
   }
+}
+
+
+async function runKdpCover() {
+  var L = window._cbLast, out = document.getElementById('cb-kdp-out'), b = document.getElementById('cb-kdp-btn');
+  if (!L) return;
+  b.disabled = true; out.textContent = 'Making your cover…';
+  try {
+    var r = await cbCall('kdp_cover', { title: L.title, author: L.author, pages: L.pages, trim: L.trim, paper: document.getElementById('cb-paper').value, photoUrls: L.photos });
+    out.innerHTML = '<strong>Cover ready</strong> (' + r.widthIn + ' × ' + r.heightIn + ' in, spine ' + r.spineIn + ' in' + (r.spineText ? '' : '; too few pages for spine text') + ').<br><a href="' + esc(r.url) + '" target="_blank" rel="noopener" style="color:var(--forest);font-weight:700;">Open the cover PDF ↗</a>' +
+      '<br><span style="color:var(--muted);">Upload it as your cover on KDP. If you change the paper or the page count later, make a new one. The lower-right of the back is left empty for the barcode KDP adds. The file is RGB; KDP converts it.</span>';
+  } catch (e) { out.innerHTML = '<span style="color:#DC2626;">' + esc(e.message) + '</span>'; }
+  b.disabled = false;
 }
 
 // ── BULK IMPORT ──────────────────────────────────────────
