@@ -1051,6 +1051,7 @@ nav{position:sticky;top:0;z-index:100;background:var(--forest);border-bottom:3px
         <button class="r-filter" onclick="filterRecipes('missing_widget',this)">Missing widget</button>
       </div>
       <button class="btn-ghost" style="padding:.6rem 1.1rem;font-size:.82rem;" onclick="openBulkImport()">↑ Bulk import</button>
+      <button class="btn-ghost" style="padding:.6rem 1.1rem;font-size:.82rem;" onclick="openCookbookMaker()">📘 Make a cookbook</button>
       <button class="btn-primary" style="padding:.6rem 1.25rem;font-size:.82rem;" onclick="openAddRecipe()">+ Add recipe</button>
     </div>
   </div>
@@ -1378,6 +1379,25 @@ nav{position:sticky;top:0;z-index:100;background:var(--forest);border-bottom:3px
     <div class="field"><label>Blog post URL</label><input type="url" id="r-url" placeholder="https://yourblog.com/recipe-name"></div>
     <div class="field"><label>Emoji</label><input type="text" id="r-emoji" placeholder="🍝" maxlength="2"></div>
     <button class="btn-full" id="add-btn" onclick="saveRecipe()">Add recipe</button>
+  </div>
+</div>
+
+<div class="modal" id="modal-cookbook">
+  <div class="modal-card">
+    <div class="modal-title">Make a cookbook <button class="modal-close" onclick="cm('modal-cookbook')">✕</button></div>
+    <div style="font-size:.82rem;color:var(--muted);font-weight:300;margin-bottom:1rem;line-height:1.5;">
+      Turn your recipes into a print-ready PDF with a designed cover. You sell it yourself (Lemon Squeezy, Amazon KDP, your own site) and keep everything you earn. Fern reads the full recipe from each of your blog links, so allow about 10 seconds per recipe.
+    </div>
+    <input id="cb-title" placeholder="Cookbook title" maxlength="80" style="width:100%;margin-bottom:.6rem;padding:.65rem;border:1px solid var(--border);border-radius:8px;font-family:inherit;">
+    <input id="cb-author" placeholder="By (your name)" maxlength="80" style="width:100%;margin-bottom:.6rem;padding:.65rem;border:1px solid var(--border);border-radius:8px;font-family:inherit;">
+    <select id="cb-trim" style="width:100%;margin-bottom:.8rem;padding:.65rem;border:1px solid var(--border);border-radius:8px;font-family:inherit;">
+      <option value="8x10">8 × 10 in (recommended)</option><option value="6x9">6 × 9 in</option><option value="8.5x11">8.5 × 11 in</option>
+    </select>
+    <div style="font-size:.78rem;font-weight:700;margin-bottom:.35rem;">Pick 3 to 40 recipes <span id="cb-count" style="font-weight:400;color:var(--muted);"></span></div>
+    <div id="cb-list" style="max-height:200px;overflow-y:auto;border:1px solid var(--border);border-radius:8px;padding:.4rem .6rem;margin-bottom:.8rem;"></div>
+    <label style="display:flex;gap:.5rem;font-size:.78rem;line-height:1.4;margin-bottom:.8rem;"><input type="checkbox" id="cb-rights"> <span>These recipes and their text are my own, and I have the right to put them in a book.</span></label>
+    <div id="cb-status" style="font-size:.8rem;margin-bottom:.75rem;line-height:1.5;"></div>
+    <button class="btn-full" id="cb-btn" onclick="runCookbook()">Make my cookbook PDF</button>
   </div>
 </div>
 
@@ -2147,6 +2167,77 @@ async function applyRev() {
 // ── RECIPES ──────────────────────────────────────────────
 function openAddRecipe() { document.getElementById('modal-recipe').classList.add('active'); }
 function cm(id) { document.getElementById(id).classList.remove('active'); }
+
+
+// ── MAKE A COOKBOOK (shared engine with Fern: see netlify/functions/cookbook.js) ──
+async function cbCall(action, data) {
+  const { data: sess } = await sb.auth.getSession();
+  const token = sess && sess.session && sess.session.access_token;
+  const r = await fetch('/.netlify/functions/cookbook', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ action: action, token: token, data: data })
+  });
+  const j = await r.json().catch(function(){ return {}; });
+  if (!r.ok) throw new Error(j.error || 'Something went wrong');
+  return j;
+}
+function cbSelected() { return Array.prototype.slice.call(document.querySelectorAll('#cb-list input:checked')); }
+function cbCount() {
+  var n = cbSelected().length;
+  document.getElementById('cb-count').textContent = '(' + n + ' picked)';
+}
+function openCookbookMaker() {
+  var withUrl = _recipes.filter(function(r){ return r.url; });
+  document.getElementById('cb-author').value = (_profile && _profile.name) || '';
+  document.getElementById('cb-status').innerHTML = '';
+  document.getElementById('cb-btn').disabled = false;
+  document.getElementById('cb-list').innerHTML = withUrl.length
+    ? withUrl.map(function(r){
+        return '<label style="display:flex;gap:.5rem;font-size:.82rem;padding:.3rem 0;"><input type="checkbox" value="' + esc(r.url).replace(/"/g,'&quot;') + '" data-title="' + esc(r.title).replace(/"/g,'&quot;') + '" onchange="cbCount()"> <span>' + esc(r.title) + '</span></label>';
+      }).join('')
+    : '<div style="font-size:.8rem;color:var(--muted);padding:.5rem 0;">Add recipes with a blog link first (My Recipes, + Add recipe or Bulk import).</div>';
+  cbCount();
+  document.getElementById('modal-cookbook').classList.add('active');
+}
+async function runCookbook() {
+  var st = document.getElementById('cb-status'), btn = document.getElementById('cb-btn');
+  var picks = cbSelected();
+  if (picks.length < 3) { st.innerHTML = '<span style="color:#DC2626;">Pick at least 3 recipes.</span>'; return; }
+  if (picks.length > 40) { st.innerHTML = '<span style="color:#DC2626;">Pick 40 or fewer for now.</span>'; return; }
+  if (!document.getElementById('cb-rights').checked) { st.innerHTML = '<span style="color:#DC2626;">Please confirm these are your own recipes.</span>'; return; }
+  btn.disabled = true;
+  try {
+    var recipes = [], skipped = [];
+    for (var i = 0; i < picks.length; i++) {
+      st.textContent = 'Reading recipe ' + (i + 1) + ' of ' + picks.length + '… keep this tab open.';
+      try { recipes.push((await cbCall('read_recipe', { url: picks[i].value })).recipe); }
+      catch (e) { skipped.push(picks[i].getAttribute('data-title')); }
+    }
+    if (recipes.length < 3) throw new Error('Only ' + recipes.length + ' recipe pages could be read. Check the blog links and try again.');
+    st.textContent = 'Building your PDF… this takes about a minute.';
+    var job = await cbCall('start_pdf', {
+      title: document.getElementById('cb-title').value, author: document.getElementById('cb-author').value,
+      trim: document.getElementById('cb-trim').value, rights: true, recipes: recipes
+    });
+    var t0 = Date.now(), misses = 0;
+    while (Date.now() - t0 < 170000) {
+      await new Promise(function(r){ setTimeout(r, 3000); });
+      var s2 = await cbCall('pdf_status', { jobId: job.jobId });
+      if (s2.status === 'done' && s2.result && s2.result.url) {
+        st.innerHTML = '<strong>Your cookbook is ready</strong> (' + s2.result.pages + ' pages, ' + s2.result.recipes + ' recipes).<br><a href="' + esc(s2.result.url) + '" target="_blank" rel="noopener" style="color:var(--forest);font-weight:700;">Open the PDF ↗</a>' +
+          (skipped.length ? '<br><span style="color:var(--muted);">Left out (could not read): ' + esc(skipped.join(', ')) + '</span>' : '') +
+          '<br><span style="color:var(--muted);">Save it to your computer now. Next: upload it to Lemon Squeezy or Amazon KDP to sell it.</span>';
+        btn.disabled = false; return;
+      }
+      if (s2.status === 'error') throw new Error(s2.error || 'The PDF failed.');
+      if (s2.status === 'not_found' && ++misses > 15) throw new Error('The PDF never started. Please try again.');
+    }
+    throw new Error('The PDF took too long. Please try again.');
+  } catch (e) {
+    st.innerHTML = '<span style="color:#DC2626;">' + esc(e.message) + '</span>';
+    btn.disabled = false;
+  }
+}
 
 // ── BULK IMPORT ──────────────────────────────────────────
 // Real gap this closes: someone with 200 existing blog posts faced actual
