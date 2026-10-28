@@ -45,7 +45,8 @@ exports.handler = async (event) => {
       return reply(200, { recipe: {
         title: txt(rec.title || own[0].title, 120), emoji: txt(rec.emoji, 8), cuisine: txt(rec.cuisine, 40),
         mealType: txt(rec.mealType, 30), time: txt(rec.time, 30), difficulty: txt(rec.difficulty, 20),
-        description: txt(rec.description, 400), ingredients, instructions, notes: txt(rec.notes, 400)
+        description: txt(rec.description, 400), ingredients, instructions, notes: txt(rec.notes, 400),
+        photo: /^https?:\/\//i.test(rec.image || '') ? txt(rec.image, 800) : ''
       } });
     }
 
